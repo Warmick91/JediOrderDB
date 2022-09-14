@@ -31,5 +31,4 @@ public class MainPanel extends JPanel {
 	this.setBackground(Color.red);
 	this.setLayout(null);
     }
-
 }
