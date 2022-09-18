@@ -6,9 +6,12 @@ CREATE TABLE Beings (
 	beingID BIGINT NOT NULL AUTO_INCREMENT,
 	LastName VARCHAR(30) NOT NULL,
 	FirstName VARCHAR(250) NOT NULL,
-	Birth VARCHAR(250);
-	Death VARCHAR(250);
-	beingClass ENUM('Jedi', 'Sith', 'BountyHunter', 'Smuggler')
+	BirthDate VARCHAR(250),
+	BirthPlace VARCHAR(250),
+	DeathDate VARCHAR(250),
+	DeathPlace VARCHAR(250),
+	beingClass ENUM('Jedi', 'Sith', 'BountyHunter', 'Smuggler'),
+    PRIMARY KEY (beingID)
 );
 
 CREATE TABLE Jedi (
@@ -25,11 +28,10 @@ CREATE TABLE Sith (
 	SithID BIGINT NOT NULL AUTO_INCREMENT,
 	TitleAtDeath VARCHAR(15) NOT NULL,
 	SaberType VARCHAR(10) NOT NULL,
-	SaberColor VARCHAR() NOT NULL,
+	SaberColor VARCHAR(25) NOT NULL,
 	PRIMARY KEY (SithID),
 	FOREIGN KEY (SithID) REFERENCES beings (beingID)
 );
-
 
 CREATE TABLE BountyHunters (
 	HunterID BIGINT NOT NULL AUTO_INCREMENT,
@@ -40,7 +42,7 @@ CREATE TABLE BountyHunters (
 
 CREATE TABLE Smugglers (
 	SmugglerID BIGINT NOT NULL AUTO_INCREMENT,
-	Organisation VARCHAR(250);
+	Organisation VARCHAR(250),
 	PRIMARY KEY (SmugglerID),
 	FOREIGN KEY (SmugglerID) REFERENCES beings (beingID)
 );
@@ -59,4 +61,3 @@ CREATE TABLE Battles (
 	FOREIGN KEY (FighterB1) REFERENCES beings (beingID),
 	FOREIGN KEY (FighterB2) REFERENCES beings (beingID)
 );
-
