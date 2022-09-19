@@ -1,35 +1,44 @@
 USE jediarchives;
 
 INSERT INTO Beings
-VALUES ('Yoda', 'Unknown', 'Unknown', 'Unknown', '4 ABY', 'Dagobah', 'Jedi'),
-VALUES ('Windu', 'Mace', '72 BBY', 'Haruun Kal', '19 BBY', 'Coruscant', 'Jedi'),
-VALUES ('Mundi', 'Ki-Adi', 'Unknown', 'Unknown', '19 BBY', 'Mygeeto', 'Jedi');
+VALUES 
+(NULL, 'Yoda', 'Unknown', 'Unknown', 'Unknown', '4 ABY', 'Dagobah', 'Jedi'),
+(NULL, 'Windu', 'Mace', '72 BBY', 'Haruun Kal', '19 BBY', 'Coruscant', 'Jedi'),
+(NULL, 'Mundi', 'Ki-Adi', 'Unknown', 'Unknown', '19 BBY', 'Mygeeto', 'Jedi'),
+(NULL, 'Bridger', 'Ezra', '19 BBY', 'Lothal', NULL, NULL, 'Jedi'),
+(NULL, 'Tano', 'Ahsoka', '36 BBY', 'Shili', NULL, NULL, 'Jedi'), 
+
+(NULL, 'Maul', 'Unknown', '54 BBY', 'Dathomir', '2 BBY', 'Tatooine', 'Sith'),
+(NULL, 'Palpatine', 'Sheev', '82 BBY', 'Naboo', '35 ABY', 'Exegol', 'Sith'),
+(NULL, 'Damask II', 'Hego', '147 BBY', 'Mygeeto', '32 BBY', 'Coruscant', 'Sith'),
+
+(NULL, 'Fett', 'Boba', '32 BBY', 'Kamino', NULL, NULL, 'BountyHunter'),
+(NULL, 'Sing', 'Aurra', '51 BBY', 'Nar Shaddaa', '10 BBY', 'Unknown', 'BountyHunter'),
+(NULL, 'Bane', 'Cad', '62 BBY', 'Duro', '9 ABY', 'Tatooine', 'BountyHunter'),
+
+(NULL, 'Solo', 'Han', '32 BBY', 'Corellia', '34 ABY', 'Ilum', 'Smuggler'),
+(NULL, 'Chewbacca', NULL, '200 BBY', 'Kashyyyk', NULL, NULL, 'Smuggler'),
+(NULL, 'Calrissian', 'Lando', '43 BBY', 'Socorro', NULL, NULL, 'Smuggler');
 
 
-CREATE TABLE Beings (
-	beingID BIGINT NOT NULL AUTO_INCREMENT,
-	LastName VARCHAR(30) NOT NULL,
-	FirstName VARCHAR(250) NOT NULL,
-	BirthDate VARCHAR(250),
-	BirthPlace VARCHAR(250),
-	DeathDate VARCHAR(250),
-	DeathPlace VARCHAR(250),
-	beingClass ENUM('Jedi', 'Sith', 'BountyHunter', 'Smuggler'),
-    PRIMARY KEY (beingID)
-);
+INSERT INTO Jedi
+VALUES 
+(NULL, 'Yoda', 'Grand Master', 'Consular', 'shoto, single', 'green'),
+(NULL, 'Windu', 'Master', 'Guardian', 'regular, single', 'amethyst'),
+(NULL, 'Mundi', 'Master', 'Guardian', 'regular, single', 'blue'),
+(NULL, 'Bridger', 'Padawan', 'Sentinel', 'regular, single', 'blue'),
+(NULL, 'Tano', 'Padawan', 'Guardian', 'regular, two', 'white');
 
-CREATE TABLE Jedi (
-	JediID BIGINT NOT NULL AUTO_INCREMENT,		
-	JediRank VARCHAR(15) NOT NULL,
-	JediSpecialization VARCHAR(15),
-	SaberType VARCHAR(10) NOT NULL,
-	SaberColor VARCHAR(30) NOT NULL,
-	PRIMARY KEY (JediID),
-	FOREIGN KEY (JediID) REFERENCES beings (beingID)
-);
+
+INSERT INTO Sith
+VALUES
+(NULL, ),
+(NULL, ),
+(NULL, );
 
 CREATE TABLE Sith (
 	SithID BIGINT NOT NULL AUTO_INCREMENT,
+	SithName VARCHAR(15) NOT NULL,
 	TitleAtDeath VARCHAR(15) NOT NULL,
 	SaberType VARCHAR(10) NOT NULL,
 	SaberColor VARCHAR(25) NOT NULL,
