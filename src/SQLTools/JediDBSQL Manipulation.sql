@@ -6,7 +6,9 @@ VALUES
 (NULL, 'Windu', 'Mace', '72 BBY', 'Haruun Kal', '19 BBY', 'Coruscant', 'Jedi'),
 (NULL, 'Mundi', 'Ki-Adi', 'Unknown', 'Unknown', '19 BBY', 'Mygeeto', 'Jedi'),
 (NULL, 'Bridger', 'Ezra', '19 BBY', 'Lothal', NULL, NULL, 'Jedi'),
-(NULL, 'Tano', 'Ahsoka', '36 BBY', 'Shili', NULL, NULL, 'Jedi'), 
+(NULL, 'Tano', 'Ahsoka', '36 BBY', 'Shili', NULL, NULL, 'Jedi'),
+(NULL, 'Kenobi', 'Obi-Wan', '57 BBY', 'Stewjon', '0 BBY', 'Death Start', 'Jedi'),
+(NULL, 'Jinn', 'Qui-Gon', '80 BBY', 'Coruscant', '32 BBY', 'Naboo', 'Jedi'), 
 
 (NULL, 'Maul', 'Unknown', '54 BBY', 'Dathomir', '2 BBY', 'Tatooine', 'Sith'),
 (NULL, 'Palpatine', 'Sheev', '82 BBY', 'Naboo', '35 ABY', 'Exegol', 'Sith'),
@@ -27,50 +29,31 @@ VALUES
 (NULL, 'Windu', 'Master', 'Guardian', 'regular, single', 'amethyst'),
 (NULL, 'Mundi', 'Master', 'Guardian', 'regular, single', 'blue'),
 (NULL, 'Bridger', 'Padawan', 'Sentinel', 'regular, single', 'blue'),
-(NULL, 'Tano', 'Padawan', 'Guardian', 'regular, two', 'white');
+(NULL, 'Tano', 'Padawan', 'Guardian', 'regular, two', 'white'),
+(NULL, 'Kenobi', 'Master', 'Guardian', 'regular, single', 'blue'),
+(NULL, 'Jinn', 'Master', 'Sentinel', 'regular, single', 'green');
 
 
 INSERT INTO Sith
 VALUES
-(NULL, ),
-(NULL, ),
-(NULL, );
+(NULL, 'Maul', 'Apprentice', 'Assassin', 'lightstaff', 'red'),
+(NULL, 'Palpatine', 'Master', 'Lord', 'regular, single', 'red'),
+(NULL, 'Damask II', 'Master', 'Lord', 'regular, single', 'red');
 
-CREATE TABLE Sith (
-	SithID BIGINT NOT NULL AUTO_INCREMENT,
-	SithName VARCHAR(15) NOT NULL,
-	TitleAtDeath VARCHAR(15) NOT NULL,
-	SaberType VARCHAR(10) NOT NULL,
-	SaberColor VARCHAR(25) NOT NULL,
-	PRIMARY KEY (SithID),
-	FOREIGN KEY (SithID) REFERENCES beings (beingID)
-);
 
-CREATE TABLE BountyHunters (
-	HunterID BIGINT NOT NULL AUTO_INCREMENT,
-	Organisation VARCHAR(250) NOT NULL,
-	PRIMARY KEY (HunterID),
-	FOREIGN KEY (HunterID) REFERENCES beings (beingID)
-);
+INSERT INTO BountyHunters
+VALUES
+(NULL, 'Fett', 'Fett gotra'),
+(NULL, 'Sing', 'Hutt Clan'),
+(NULL, 'Bane', 'Pyke Syndicate');
 
-CREATE TABLE Smugglers (
-	SmugglerID BIGINT NOT NULL AUTO_INCREMENT,
-	Organisation VARCHAR(250),
-	PRIMARY KEY (SmugglerID),
-	FOREIGN KEY (SmugglerID) REFERENCES beings (beingID)
-);
+INSERT INTO Smugglers
+VALUES
+(NULL, 'Solo', 'Rebel Alliance'),
+(NULL, 'Chewbacca', 'Rebel Alliance'),
+(NULL, 'Calrissian', 'Rebel Alliance');
 
-CREATE TABLE Battles (
-	BattleID BIGINT NOT NULL,
-	Location VARCHAR(250) NOT NULL,
-	FighterA1 BIGINT NOT NULL,
-	FighterA2 BIGINT,
-	FighterB1 BIGINT NOT NULL,
-	FighterB2 BIGINT,
-	Outcome VARCHAR(250) NOT NULL,
-	PRIMARY KEY (BattleID),
-	FOREIGN KEY (FighterA1) REFERENCES beings (beingID),
-	FOREIGN KEY (FighterA2) REFERENCES beings (beingID),
-	FOREIGN KEY (FighterB1) REFERENCES beings (beingID),
-	FOREIGN KEY (FighterB2) REFERENCES beings (beingID)
-);
+INSERT INTO Battles
+VALUES
+(NULL, 'Naboo', '32 BBY', 'Jinn', 'Kenobi', 'Maul', NULL, 'Death of Qui-Gon and Darth Maul'),
+(NULL, 'Tatooine', '4 ABY', 'Solo', NULL, 'Fett', NULL, 'Apparent death of Boba Fett');

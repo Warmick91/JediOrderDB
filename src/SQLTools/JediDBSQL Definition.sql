@@ -18,8 +18,8 @@ CREATE TABLE Beings (
 CREATE TABLE Jedi (
 	JediID BIGINT NOT NULL AUTO_INCREMENT,
 	JediLastName VARCHAR(250) NOT NULL,
-	JediRank VARCHAR(15) NOT NULL,
-	JediSpecialization VARCHAR(15),
+	JediRank ENUM('Grand Master', 'Master', 'Knight', 'Padawan'),
+	JediSpecialization ENUM ('Guardian', 'Consular', 'Sentinel'),
 	SaberType VARCHAR(30) NOT NULL,
 	SaberColor VARCHAR(30) NOT NULL,
 	UNIQUE (JediID),
@@ -30,8 +30,9 @@ CREATE TABLE Jedi (
 CREATE TABLE Sith (
 	SithID BIGINT NOT NULL AUTO_INCREMENT,
 	SithLastName VARCHAR(250) NOT NULL,
-	TitleAtDeath VARCHAR(15) NOT NULL,
-	SaberType VARCHAR(10) NOT NULL,
+	TitleAtDeath ENUM ('Master', 'Apprentice'),
+	SithSpecialization ENUM ('Marauder', 'Assassin', 'Lord'),
+	SaberType VARCHAR(30) NOT NULL,
 	SaberColor VARCHAR(25) NOT NULL,
 	UNIQUE (SithID),
 	PRIMARY KEY (SithLastName),
@@ -57,8 +58,9 @@ CREATE TABLE Smugglers (
 );
 
 CREATE TABLE Battles (
-	BattleID BIGINT NOT NULL,
+	BattleID BIGINT NOT NULL AUTO_INCREMENT,
 	Location VARCHAR(250) NOT NULL,
+	BattleDate VARCHAR(30) NOT NULL,
 	FighterA1 VARCHAR(250) NOT NULL,
 	FighterA2 VARCHAR(250),
 	FighterB1 VARCHAR(250) NOT NULL,
