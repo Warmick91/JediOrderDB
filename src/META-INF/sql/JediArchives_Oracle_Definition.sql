@@ -1,14 +1,14 @@
 DROP SEQUENCE BeingsSequence;
-DROP SEQUENCE JediSequence;
-DROP SEQUENCE SithSequence;
-DROP SEQUENCE BountyHuntersSequence;
+DROP SEQUENCE Jedi_Index;
+DROP SEQUENCE Sith_Index;
+DROP SEQUENCE BH_Index;
 DROP SEQUENCE SmugglersSequence;
-DROP TABLE Beings;
 DROP TABLE Jedi;
 DROP TABLE Sith;
 DROP TABLE BountyHunters;
 DROP TABLE Smugglers;
 DROP TABLE Battles;
+DROP TABLE Beings;
 
 
 CREATE TABLE Beings (
@@ -61,14 +61,12 @@ CREATE TABLE Smugglers (
 	FOREIGN KEY (SmugglerLastName) REFERENCES beings (LastName) ON DELETE CASCADE
 );
 
------------
-
 CREATE TABLE Battles (
 	BattleID INTEGER NOT NULL,
 	Location VARCHAR(250) NOT NULL,
 	BattleDate VARCHAR(30) NOT NULL,
 	FighterA1 VARCHAR(250) NOT NULL,
-	FighterA2 VARCHAR(250),
+	FighterA2 VARCHAR(250),	
 	FighterB1 VARCHAR(250) NOT NULL,
 	FighterB2 VARCHAR(250),
 	Outcome VARCHAR(250) NOT NULL,
@@ -78,3 +76,68 @@ CREATE TABLE Battles (
 	FOREIGN KEY (FighterB1) REFERENCES beings (LastName) ON DELETE CASCADE,
 	FOREIGN KEY (FighterB2) REFERENCES beings (LastName) ON DELETE CASCADE
 );
+
+
+-- Sequence for Beings
+
+CREATE SEQUENCE Beings_Index INCREMENT BY 1 START WITH 1;
+
+CREATE OR REPLACE TRIGGER Beings_Index_TR
+BEFORE INSERT ON Beings
+FOR EACH ROW
+DECLARE id NUMBER;
+BEGIN
+SELECT Beings_Index.NEXTVAL INTO id FROM DUAL;
+:new.beingID := id;
+END;
+
+-- Sequence for Jedi
+
+CREATE SEQUENCE Jedi_Index INCREMENT BY 1 START WITH 1;
+
+CREATE OR REPLACE TRIGGER Jedi_Index_TR
+BEFORE INSERT ON Jedi
+FOR EACH ROW
+DECLARE id NUMBER;
+BEGIN
+SELECT Jedi_Index.NEXTVAL INTO id FROM DUAL;
+:new.JediID := id;
+END;
+/
+
+-- Sequence for Sith
+
+CREATE SEQUENCE Sith_Index INCREMENT BY 1 START WITH 1;
+
+CREATE OR REPLACE TRIGGER Sith_Index_TR
+BEFORE INSERT ON Sith
+FOR EACH ROW
+DECLARE id NUMBER;
+BEGIN
+SELECT Sith_Index.NEXTVAL INTO id FROM DUAL;
+:new.SithID := id;
+END;
+/
+
+-- Sequence for BountyHunters
+
+CREATE SEQUENCE BH_Index INCREMENT BY 1 START WITH 1;
+
+
+-- Sequence for Smugglers
+
+CREATE SEQUENCE Smugglers_Index INCREMENT BY 1 START WITH 1;
+
+
+
+
+-----
+CREATE OR REPLACE PROCEDURE addBeingToClass (
+	in_being_class IN CHAR(12),
+	in_
+)
+IS
+BEGIN
+SELECT 
+IF
+END addBeingToSpecClass;
