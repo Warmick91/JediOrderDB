@@ -6,26 +6,9 @@ import GUI_JediDB.Frame;
 
 
 public class JediOrderDB {
-<<<<<<< HEAD
-    static private enum DatabaseType { MYSQL, ORACLE_DB }
-    private static final String SELECT_ALL_BEINGS = "SELECT * FROM Beings ORDER BY beingID";
-    private static final String SELECT_ALL_JEDI = "SELECT * FROM Jedi ORDER BY JediID";
-    
-    public static void main(String[] args) throws SQLException {
-	
-	Frame frame = new Frame();
-	
-	try (Connection connection = newJdbcConnection(DatabaseType.MYSQL)) {
-	    System.out.println("Connected: " + connection.getMetaData().getDatabaseProductName());
-	    
-	    
-	    try (PreparedStatement sql = connection.prepareStatement(SELECT_ALL_JEDI)) {
-		try (ResultSet rs = sql.executeQuery()) {
-=======
 	static private enum DatabaseType {
 		MYSQL, ORACLE_DB
 	}
->>>>>>> branch 'master' of https://github.com/Warmick91/JediOrderDB
 
 
 	private static final String SELECT_ALL_BEINGS = "SELECT * FROM Beings ORDER BY beingID";
@@ -36,10 +19,14 @@ public class JediOrderDB {
 
 		Frame frame = new Frame();
 
-		try (Connection connection = newJdbcConnection(DatabaseType.ORACLE_DB)) {
+		try (Connection connection = newJdbcConnection(DatabaseType.MYSQL)) {
 			System.out.println("Connected: " + connection.getMetaData().getDatabaseProductName());
 
-			
+			try (PreparedStatement sql = connection.prepareStatement(SELECT_ALL_JEDI)) {
+				try (ResultSet rs = sql.executeQuery()) {
+
+				}
+			}
 		}
 	}
 

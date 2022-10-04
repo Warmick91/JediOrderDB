@@ -22,12 +22,8 @@ public class Frame extends JFrame {
 
 		this.add(mainPanel);
 		setJMenuBar(mBar);
-<<<<<<< HEAD
-		
-=======
-		JTable table = new JTable();
 
->>>>>>> branch 'master' of https://github.com/Warmick91/JediOrderDB
+		JTable table = new JTable();
 		this.setVisible(true);
 	}
 }
