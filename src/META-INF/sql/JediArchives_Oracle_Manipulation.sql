@@ -37,24 +37,23 @@ SELECT * FROM dual;
 
 -----
 
+INSERT ALL
+INTO BountyHunters (BountyHunterLastName, Organisation) VALUES ('Fett', 'Fett gotra')
+INTO BountyHunters (BountyHunterLastName, Organisation) VALUES ('Sing', 'Hutt Clan')
+INTO BountyHunters (BountyHunterLastName, Organisation) VALUES ('Bane', 'Pyke Syndicate')
+SELECT * FROM dual;
 
+-----
 
+INSERT ALL
+INTO Smugglers (SmugglerLastName, Organisation) VALUES ('Solo', 'Rebel Alliance')
+INTO Smugglers (SmugglerLastName, Organisation) VALUES ('Chewbacca', 'Rebel Alliance')
+INTO Smugglers (SmugglerLastName, Organisation) VALUES ('Calrissian', 'Rebel Alliance')
+SELECT * FROM dual;
 
-INSERT INTO BountyHunters
-VALUES
-(NULL, 'Fett', 'Fett gotra'),
-(NULL, 'Sing', 'Hutt Clan'),
-(NULL, 'Bane', 'Pyke Syndicate');
+-----
 
-INSERT INTO Smugglers
-VALUES
-(NULL, 'Solo', 'Rebel Alliance'),
-(NULL, 'Chewbacca', 'Rebel Alliance'),
-(NULL, 'Calrissian', 'Rebel Alliance');
-
-INSERT INTO Battles
-VALUES
-(NULL, 'Naboo', '32 BBY', 'Jinn', 'Kenobi', 'Maul', NULL, 'Death of Qui-Gon and Darth Maul'),
-(NULL, 'Tatooine', '4 ABY', 'Solo', NULL, 'Fett', NULL, 'Apparent death of Boba Fett');
-
-COMMIT;
+INSERT ALL
+INTO Battles (Location, BattleDate, FighterA1, FighterA2, FighterB1, FighterB2, Outcome) VALUES ('Naboo', '32 BBY', 'Jinn', 'Kenobi', 'Maul', NULL, 'Death of Qui-Gon and Darth Maul') 
+INTO Battles (Location, BattleDate, FighterA1, FighterA2, FighterB1, FighterB2, Outcome) VALUES ('Tatooine', '4 ABY', 'Solo', NULL, 'Fett', NULL, 'An Apparent death of Boba Fett')
+SELECT * FROM dual;

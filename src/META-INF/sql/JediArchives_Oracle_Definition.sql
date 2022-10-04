@@ -90,6 +90,7 @@ BEGIN
 SELECT Beings_Index.NEXTVAL INTO id FROM DUAL;
 :new.beingID := id;
 END;
+/
 
 -- Sequence for Jedi
 
@@ -123,21 +124,40 @@ END;
 
 CREATE SEQUENCE BH_Index INCREMENT BY 1 START WITH 1;
 
+CREATE OR REPLACE TRIGGER BH_Index_TR
+BEFORE INSERT ON BountyHunters
+FOR EACH ROW
+DECLARE id NUMBER;
+BEGIN
+SELECT BH_Index.NEXTVAL INTO id FROM DUAL;
+:new.HunterID := id;
+END;
+/
 
 -- Sequence for Smugglers
 
 CREATE SEQUENCE Smugglers_Index INCREMENT BY 1 START WITH 1;
 
-
-
-
------
-CREATE OR REPLACE PROCEDURE addBeingToClass (
-	in_being_class IN CHAR(12),
-	in_
-)
-IS
+CREATE OR REPLACE TRIGGER Smugglers_Index_TR
+BEFORE INSERT ON Smugglers
+FOR EACH ROW
+DECLARE id NUMBER;
 BEGIN
-SELECT 
-IF
-END addBeingToSpecClass;
+SELECT Smugglers_Index.NEXTVAL INTO id FROM DUAL;
+:new.SmugglerID := id;
+END;
+/
+
+-- Sequence for Battles
+
+CREATE SEQUENCE Battles_Index INCREMENT BY 1 START WITH 1;
+
+CREATE OR REPLACE TRIGGER Battles_Index_TR
+BEFORE INSERT ON Battles
+FOR EACH ROW
+DECLARE id NUMBER;
+BEGIN
+SELECT Battles_Index.NEXTVAL INTO id FROM DUAL;
+:new.BattleID := id;
+END;
+/
