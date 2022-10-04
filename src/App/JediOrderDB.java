@@ -13,7 +13,7 @@ public class JediOrderDB {
 	
 	Frame frame = new Frame();
 	
-	try (Connection connection = newJdbcConnection(DatabaseType.ORACLE_DB)) {
+	try (Connection connection = newJdbcConnection(DatabaseType.MYSQL)) {
 	    System.out.println("Connected: " + connection.getMetaData().getDatabaseProductName());
 	    
 	    
