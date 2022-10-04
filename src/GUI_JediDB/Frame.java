@@ -20,7 +20,6 @@ public class Frame extends JFrame {
 								
 		this.add(mainPanel);
 		setJMenuBar(mBar);
-		JTable table = new JTable();
 		
 		this.setVisible(true);
 		

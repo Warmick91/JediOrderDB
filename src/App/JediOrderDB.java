@@ -11,7 +11,7 @@ public class JediOrderDB {
     
     public static void main(String[] args) throws SQLException {
 	
-	// Frame frame = new Frame();
+	Frame frame = new Frame();
 	
 	try (Connection connection = newJdbcConnection(DatabaseType.ORACLE_DB)) {
 	    System.out.println("Connected: " + connection.getMetaData().getDatabaseProductName());
