@@ -10,20 +10,20 @@ public class Frame extends JFrame {
 	public final int FRAME_HEIGHT = 600;
 
 	MenuBar mBar = new MenuBar();
-	MainPanel mainPanel = new MainPanel(FRAME_WIDTH, FRAME_HEIGHT);
-	
+	MainPanel gui;
 
-	public Frame () {
+
+	public Frame () throws Exception {
 		super("Jedi Order's Data Archives");
+		gui = new MainPanel(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setLocationRelativeTo(null);
 
-		this.add(mainPanel);
+		this.add(gui);
 		setJMenuBar(mBar);
 
-		JTable table = new JTable();
 		this.setVisible(true);
 	}
 }

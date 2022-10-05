@@ -1,5 +1,6 @@
 package GUI_JediDB;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,22 +9,27 @@ import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import App.ConnectionFactory;
+import App.Operation;
 
 
 @SuppressWarnings("serial")
-public class MainPanel extends JPanel {
+public class MainPanel extends JPanel implements ActionListener {
 
 	private JPanel tablePanel = new JPanel();
-	private JTable table = new JTable();
-	private String[][] data;
 
 	JLabel textTitle = new JLabel();
 
@@ -34,9 +40,25 @@ public class MainPanel extends JPanel {
 
 	Font swFont;
 
+	//Buttons
+	JButton jediButton = new JButton("Jedi");
+	JButton sithButton = new JButton("Sith");
+	JButton bhButton = new JButton("Bounty Hunters");
+	JButton smugglersButton = new JButton("Smugglers");
+	JButton battlesButton = new JButton("Battles");
+	JButton planetsButton = new JButton("Planets");
 
-	public MainPanel (int width, int height) {
+	private static JScrollPane scrollPane = new JScrollPane();
 
+	Connection connection;
+
+
+	public MainPanel (int width, int height) throws Exception {
+		connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+		JButton[] buttons = { jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton };
+		for(int i = 0; i<buttons.length; i++) {
+			buttons[0].addActionListener(this);
+		}
 		try {
 			setPanelToMain(width, height);
 		} catch (IOException ioe) {
@@ -53,9 +75,13 @@ public class MainPanel extends JPanel {
 			e.printStackTrace();
 		}
 
-		this.tablePanel.setBackground(Color.blue);
+		//this.tablePanel.setBackground(Color.blue);
 		this.tablePanel.setSize(new Dimension(600, 350));
 		this.tablePanel.setLocation(width / 2 - tablePanel.getWidth() / 2, height / 2 - tablePanel.getHeight() / 2 - 50);
+		this.tablePanel.setLayout(new BorderLayout());
+		//this.scrollPane.setOpaque(true);
+		this.tablePanel.add(scrollPane, BorderLayout.CENTER);
+		//scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, connection));
 		this.add(tablePanel);
 
 		textTitle = new JLabel("Root location", SwingConstants.CENTER);
@@ -69,14 +95,12 @@ public class MainPanel extends JPanel {
 		buttonsLabel.setBackground(Color.green);
 		buttonsLabel.setBounds(tablePanel.getX(), tablePanel.getY() + tablePanel.getHeight() + 20, 600, 75);
 		buttonsLabel.setLayout(new GridLayout(0, 2, 5, 5));
-		//buttonsLabel.setOpaque(true);
-		buttonsLabel.add(new JButton("Jedi"));
-		buttonsLabel.add(new JButton("Sith"));
-		buttonsLabel.add(new JButton("Bounty Hunters"));
-		buttonsLabel.add(new JButton("Smugglers"));
-		buttonsLabel.add(new JButton("Battles"));
-		buttonsLabel.add(new JButton("Planets"));
-
+		buttonsLabel.add(jediButton);
+		buttonsLabel.add(sithButton);
+		buttonsLabel.add(bhButton);
+		buttonsLabel.add(smugglersButton);
+		buttonsLabel.add(battlesButton);
+		buttonsLabel.add(planetsButton);
 		this.add(buttonsLabel);
 
 	}
@@ -91,11 +115,43 @@ public class MainPanel extends JPanel {
 	}
 
 
+	public static JScrollPane getScrollPane () {
+		return scrollPane;
+	}
+
+
+	public static void setScrollPane (String data, Connection con) throws SQLException {
+		switch (data) {
+			case "beings":
+				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, con));
+				break;
+			case "jedi":
+				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_JEDI, con));
+				break;
+		}
+	}
+
+
 	@Override
 	protected void paintComponent (Graphics g) {
 		super.paintComponent(g);
 
 		g.drawImage(bgImage, 0, 0, null);
+	}
+
+
+	@Override
+	public void actionPerformed (ActionEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getSource() == jediButton) {
+			try {
+				setScrollPane("jedi", connection);
+				System.out.println("y");
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 
 }
