@@ -20,8 +20,6 @@ public class ConnectionFactory {
 				con = newJdbcConnection(type);
 				return con;
 
-				//				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jediarchives", "root", "root");
-				//				return con;
 			}
 
 		} catch (SQLException e) {

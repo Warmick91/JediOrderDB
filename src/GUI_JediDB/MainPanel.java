@@ -27,43 +27,39 @@ import App.Operation;
 
 
 @SuppressWarnings("serial")
-public class MainPanel extends JPanel implements ActionListener {
+public class MainPanel extends JPanel {
 
 	private JPanel tablePanel = new JPanel();
 
 	JLabel textTitle = new JLabel();
 
-	File pathToFile = new File("src/images/Jedi_Archives.jpg");
-	Image bgImage;
+	static File generalBG = new File("src/images/Jedi_Archives.jpg");
+	static File jediBG = new File("src/images/hyperspacejump.jpg");
+	static File sithBG = new File("src/images/Korriban.jpg");
+	static Image bgImage;
 
 	JLabel buttonsLabel = new JLabel();
 
 	Font swFont;
 
 	//Buttons
-	JButton jediButton = new JButton("Jedi");
-	JButton sithButton = new JButton("Sith");
+	public static JButton jediButton = new JButton("Jedi");
+	public static JButton sithButton = new JButton("Sith");
 	JButton bhButton = new JButton("Bounty Hunters");
 	JButton smugglersButton = new JButton("Smugglers");
 	JButton battlesButton = new JButton("Battles");
 	JButton planetsButton = new JButton("Planets");
 
-	private static JScrollPane scrollPane = new JScrollPane();
-
-	Connection connection;
+	static JScrollPane scrollPane = new JScrollPane();
 
 
 	public MainPanel (int width, int height) throws Exception {
-		connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 		JButton[] buttons = { jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton };
-		for(int i = 0; i<buttons.length; i++) {
-			buttons[0].addActionListener(this);
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i].addActionListener(new ActionListenerClass());
 		}
-		try {
-			setPanelToMain(width, height);
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		
+		setPanelToMain();
 
 		//Registering font
 		try {
@@ -74,6 +70,10 @@ public class MainPanel extends JPanel implements ActionListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		this.setPreferredSize(new Dimension(width, height));
+		this.setBackground(Color.red);
+		this.setLayout(null);
 
 		//this.tablePanel.setBackground(Color.blue);
 		this.tablePanel.setSize(new Dimension(600, 350));
@@ -106,27 +106,37 @@ public class MainPanel extends JPanel implements ActionListener {
 	}
 
 
-	public void setPanelToMain (int width, int height) throws IOException {
-		this.setPreferredSize(new Dimension(width, height));
-		this.setBackground(Color.red);
-		this.setLayout(null);
-		bgImage = ImageIO.read(pathToFile).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+	public static void setPanelToMain () throws IOException {
+
+		bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 
 	}
 
 
-	public static JScrollPane getScrollPane () {
-		return scrollPane;
+	public static void setPanelToJedi () throws IOException {
+		bgImage = ImageIO.read(jediBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 	}
 
 
-	public static void setScrollPane (String data, Connection con) throws SQLException {
+	public static void setPanelToSith () throws IOException {
+		bgImage = ImageIO.read(sithBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+	}
+
+
+	public static void setScrollPane (String data, Connection connection) throws Exception {
+		Connection con = connection;
 		switch (data) {
 			case "beings":
 				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, con));
+				MainPanel.setPanelToMain();
 				break;
 			case "jedi":
 				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_JEDI, con));
+				MainPanel.setPanelToJedi();
+				break;
+			case "sith":
+				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SITH, con));
+				MainPanel.setPanelToSith();
 				break;
 		}
 	}
@@ -137,21 +147,6 @@ public class MainPanel extends JPanel implements ActionListener {
 		super.paintComponent(g);
 
 		g.drawImage(bgImage, 0, 0, null);
+		
 	}
-
-
-	@Override
-	public void actionPerformed (ActionEvent e) {
-		// TODO Auto-generated method stub
-		if (e.getSource() == jediButton) {
-			try {
-				setScrollPane("jedi", connection);
-				System.out.println("y");
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-	}
-
 }
