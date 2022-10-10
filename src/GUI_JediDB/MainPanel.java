@@ -36,6 +36,7 @@ public class MainPanel extends JPanel {
 	static File generalBG = new File("src/images/Jedi_Archives.jpg");
 	static File jediBG = new File("src/images/hyperspacejump.jpg");
 	static File sithBG = new File("src/images/Korriban.jpg");
+	static File bountyHuntersBG = new File("src/images/BountyHunters.jpg");
 	static Image bgImage;
 
 	JLabel buttonsLabel = new JLabel();
@@ -45,7 +46,7 @@ public class MainPanel extends JPanel {
 	//Buttons
 	public static JButton jediButton = new JButton("Jedi");
 	public static JButton sithButton = new JButton("Sith");
-	JButton bhButton = new JButton("Bounty Hunters");
+	public static JButton bhButton = new JButton("Bounty Hunters");
 	JButton smugglersButton = new JButton("Smugglers");
 	JButton battlesButton = new JButton("Battles");
 	JButton planetsButton = new JButton("Planets");
@@ -121,6 +122,10 @@ public class MainPanel extends JPanel {
 	public static void setPanelToSith () throws IOException {
 		bgImage = ImageIO.read(sithBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 	}
+	
+	public static void setPanelToBountyHunters () throws IOException {
+		bgImage = ImageIO.read(bountyHuntersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+	}
 
 
 	public static void setScrollPane (String data, Connection connection) throws Exception {
@@ -137,6 +142,10 @@ public class MainPanel extends JPanel {
 			case "sith":
 				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SITH, con));
 				MainPanel.setPanelToSith();
+				break;
+			case "bountyHunters":
+				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BOUNTYHUNTERS, con));
+				MainPanel.setPanelToBountyHunters();
 				break;
 		}
 	}

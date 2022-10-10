@@ -36,10 +36,16 @@ public class ActionListenerClass implements ActionListener {
 				e1.printStackTrace();
 			}
 			System.out.println("SITH RULE");
+		} else if (e.getSource() == MainPanel.bhButton) {
+			try {
+				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+				MainPanel.setScrollPane("bountyHunters", connection);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 	}
-
-
 
 }
