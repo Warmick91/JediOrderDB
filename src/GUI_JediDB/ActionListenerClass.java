@@ -23,27 +23,47 @@ public class ActionListenerClass implements ActionListener {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.setScrollPane("jedi", connection);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			System.out.println("JEDI RULE");
+			
 		} else if (e.getSource() == MainPanel.sithButton) {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.setScrollPane("sith", connection);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			System.out.println("SITH RULE");
+			
 		} else if (e.getSource() == MainPanel.bhButton) {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.setScrollPane("bountyHunters", connection);
 			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("BOUNTY HUNTERS RULE");
+			
+		} else if (e.getSource() == MainPanel.smugglersButton) {
+			try {
+				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+				MainPanel.setScrollPane("smugglers", connection);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("SMUGGLERS RULE");
+			
+		} else if (e.getSource() == MainPanel.battlesButton) {
+			Connection connection;
+			try {
+				connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+				MainPanel.setScrollPane("battles", connection);
+			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			System.out.println("STAR WARS BATTLES ARE AWESOME");
 		}
 
 	}

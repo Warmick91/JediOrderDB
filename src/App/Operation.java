@@ -11,6 +11,8 @@ public class Operation {
 	public static final String SELECT_ALL_JEDI = "SELECT * FROM Jedi ORDER BY JediID";
 	public static final String SELECT_ALL_SITH = "SELECT * FROM Sith ORDER BY SithID";
 	public static final String SELECT_ALL_BOUNTYHUNTERS = "SELECT * FROM BountyHunters ORDER BY HunterID";
+	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
+	public static final String SELECT_ALL_BATTLES = "SELECT * FROM Battles ORDER BY BattleID";
 
 	private static PreparedStatement ps;
 	private static ResultSet rs;
@@ -19,7 +21,9 @@ public class Operation {
 	private static final String[] beingsColumns = { "ID", "Last Name", "First Name", "Birth Date", "Birtplace", "Death Date", "Deathplace", "Class" };
 	private static final String[] jediColumns = { "ID", "Last Name", "Rank", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] sithColumns = { "ID", "Last Name", "Title at death", "Specialization", "Saber Type", "Saber Color" };
-	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation"};
+	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation" };
+	private static final String[] smugglersColumns = { "ID", "Last Name", "Organisation" };
+	private static final String[] battlesColumns = { "ID", "Location", "Event Date", "Opponent A1", "Opponent A2", "Opponent B1", "Opponent B2", "Outcome" };
 
 	static JTable queryTable = null;
 
@@ -97,7 +101,7 @@ public class Operation {
 				}
 				queryTable = new JTable(data, sithColumns);
 				break;
-				
+
 			case SELECT_ALL_BOUNTYHUNTERS:
 				ps = con.prepareStatement("SELECT COUNT(*) FROM Bountyhunters");
 				rs = ps.executeQuery();
@@ -116,6 +120,50 @@ public class Operation {
 				}
 				queryTable = new JTable(data, bountyHuntersColumns);
 				break;
+
+			case SELECT_ALL_SMUGGLERS:
+				ps = con.prepareStatement("SELECT COUNT(*) FROM Smugglers");
+				rs = ps.executeQuery();
+				if (rs.next()) {
+					data = new String[rs.getInt(1)][3];
+				}
+
+				ps = con.prepareStatement(SELECT_ALL_SMUGGLERS);
+				rs = ps.executeQuery();
+				i = 0;
+				while (rs.next()) {
+					data[i][0] = rs.getString(1);
+					data[i][1] = rs.getString(2);
+					data[i][2] = rs.getString(3);
+					i++;
+				}
+				queryTable = new JTable(data, smugglersColumns);
+				break;
+
+			case SELECT_ALL_BATTLES:
+				ps = con.prepareStatement("SELECT COUNT(*) FROM Battles");
+				rs = ps.executeQuery();
+				if (rs.next()) {
+					data = new String[rs.getInt(1)][8];
+				}
+
+				ps = con.prepareStatement(SELECT_ALL_BATTLES);
+				rs = ps.executeQuery();
+				i = 0;
+				while (rs.next()) {
+					data[i][0] = rs.getString(1);
+					data[i][1] = rs.getString(2);
+					data[i][2] = rs.getString(3);
+					data[i][0] = rs.getString(4);
+					data[i][1] = rs.getString(5);
+					data[i][2] = rs.getString(6);
+					data[i][1] = rs.getString(7);
+					data[i][2] = rs.getString(8);
+					i++;
+				}
+				queryTable = new JTable(data, battlesColumns);
+				break;
+
 		}
 
 		return queryTable;

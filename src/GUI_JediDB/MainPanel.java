@@ -37,6 +37,8 @@ public class MainPanel extends JPanel {
 	static File jediBG = new File("src/images/hyperspacejump.jpg");
 	static File sithBG = new File("src/images/Korriban.jpg");
 	static File bountyHuntersBG = new File("src/images/BountyHunters.jpg");
+	static File smugglersBG = new File("src/images/milleniumFalcon.jpg");
+	static File battlesBG = new File("src/images/sabersCrossed.jpg");
 	static Image bgImage;
 
 	JLabel buttonsLabel = new JLabel();
@@ -47,9 +49,9 @@ public class MainPanel extends JPanel {
 	public static JButton jediButton = new JButton("Jedi");
 	public static JButton sithButton = new JButton("Sith");
 	public static JButton bhButton = new JButton("Bounty Hunters");
-	JButton smugglersButton = new JButton("Smugglers");
-	JButton battlesButton = new JButton("Battles");
-	JButton planetsButton = new JButton("Planets");
+	public static JButton smugglersButton = new JButton("Smugglers");
+	public static JButton battlesButton = new JButton("Battles");
+	public static JButton planetsButton = new JButton("Planets");
 
 	static JScrollPane scrollPane = new JScrollPane();
 
@@ -126,6 +128,15 @@ public class MainPanel extends JPanel {
 	public static void setPanelToBountyHunters () throws IOException {
 		bgImage = ImageIO.read(bountyHuntersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 	}
+	
+	public static void setPanelToSmugglers () throws IOException {
+		bgImage = ImageIO.read(smugglersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+	}
+	
+	public static void setPanelToBattles () throws IOException {
+		bgImage = ImageIO.read(battlesBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+	}
+
 
 
 	public static void setScrollPane (String data, Connection connection) throws Exception {
@@ -147,6 +158,12 @@ public class MainPanel extends JPanel {
 				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BOUNTYHUNTERS, con));
 				MainPanel.setPanelToBountyHunters();
 				break;
+			case "smugglers":
+				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SMUGGLERS, con));
+				MainPanel.setPanelToSmugglers();
+			case "battles":
+				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BATTLES, con));
+				MainPanel.setPanelToBattles();
 		}
 	}
 
