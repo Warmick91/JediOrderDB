@@ -1,9 +1,8 @@
 package App;
 
 import java.sql.*;
-import GUI_JediDB.ActionListenerClass;
-import GUI_JediDB.Frame;
-import GUI_JediDB.MainPanel;
+import GUI_JediDB.*;
+
 
 
 public class JediOrderDB {

@@ -154,11 +154,11 @@ public class Operation {
 					data[i][0] = rs.getString(1);
 					data[i][1] = rs.getString(2);
 					data[i][2] = rs.getString(3);
-					data[i][0] = rs.getString(4);
-					data[i][1] = rs.getString(5);
-					data[i][2] = rs.getString(6);
-					data[i][1] = rs.getString(7);
-					data[i][2] = rs.getString(8);
+					data[i][3] = rs.getString(4);
+					data[i][4] = rs.getString(5);
+					data[i][5] = rs.getString(6);
+					data[i][6] = rs.getString(7);
+					data[i][7] = rs.getString(8);
 					i++;
 				}
 				queryTable = new JTable(data, battlesColumns);
