@@ -24,6 +24,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import App.ConnectionFactory;
 import App.Operation;
+import appTools.ActionListenerClass;
 
 
 @SuppressWarnings("serial")
@@ -31,7 +32,7 @@ public class MainPanel extends JPanel {
 
 	private JPanel tablePanel = new JPanel();
 
-	JLabel textTitle = new JLabel();
+	public static JLabel textTitle = new JLabel();
 
 	static File generalBG = new File("src/images/Jedi_Archives.jpg");
 	static File jediBG = new File("src/images/hyperspacejump.jpg");
@@ -46,6 +47,7 @@ public class MainPanel extends JPanel {
 	Font swFont;
 
 	//Buttons
+	public static JButton beingsButton = new JButton("Root");
 	public static JButton jediButton = new JButton("Jedi");
 	public static JButton sithButton = new JButton("Sith");
 	public static JButton bhButton = new JButton("Bounty Hunters");
@@ -57,12 +59,12 @@ public class MainPanel extends JPanel {
 
 
 	public MainPanel (int width, int height) throws Exception {
-		JButton[] buttons = { jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton };
+		JButton[] buttons = { jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton };
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i].addActionListener(new ActionListenerClass());
 		}
-		
-		setPanelToMain();
+
+		setPanelToRoot();
 
 		//Registering font
 		try {
@@ -70,7 +72,6 @@ public class MainPanel extends JPanel {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/fonts/starjedi/Starjedi.ttf")));
 		} catch (FontFormatException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -89,10 +90,8 @@ public class MainPanel extends JPanel {
 
 		textTitle = new JLabel("Root location", SwingConstants.CENTER);
 		textTitle.setFont(swFont);
-		textTitle.setForeground(Color.white);
-		textTitle.setBackground(Color.green);
+		textTitle.setForeground(Color.yellow);
 		textTitle.setBounds(tablePanel.getX(), tablePanel.getY() - 50, 600, 30);
-		textTitle.setOpaque(true);
 		this.add(textTitle);
 
 		buttonsLabel.setBackground(Color.green);
@@ -106,10 +105,13 @@ public class MainPanel extends JPanel {
 		buttonsLabel.add(planetsButton);
 		this.add(buttonsLabel);
 
+		beingsButton.setBounds(tablePanel.getX() / 2 - 45, tablePanel.getHeight() / 2 + tablePanel.getY() - 30, 100, buttonsLabel.getHeight() / 2);
+		this.add(beingsButton);
+
 	}
 
 
-	public static void setPanelToMain () throws IOException {
+	public static void setPanelToRoot () throws IOException {
 
 		bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 
@@ -124,19 +126,21 @@ public class MainPanel extends JPanel {
 	public static void setPanelToSith () throws IOException {
 		bgImage = ImageIO.read(sithBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 	}
-	
+
+
 	public static void setPanelToBountyHunters () throws IOException {
 		bgImage = ImageIO.read(bountyHuntersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 	}
-	
+
+
 	public static void setPanelToSmugglers () throws IOException {
 		bgImage = ImageIO.read(smugglersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 	}
-	
+
+
 	public static void setPanelToBattles () throws IOException {
 		bgImage = ImageIO.read(battlesBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 	}
-
 
 
 	public static void setScrollPane (String data, Connection connection) throws Exception {
@@ -144,7 +148,7 @@ public class MainPanel extends JPanel {
 		switch (data) {
 			case "beings":
 				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, con));
-				MainPanel.setPanelToMain();
+				MainPanel.setPanelToRoot();
 				break;
 			case "jedi":
 				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_JEDI, con));
@@ -161,6 +165,7 @@ public class MainPanel extends JPanel {
 			case "smugglers":
 				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SMUGGLERS, con));
 				MainPanel.setPanelToSmugglers();
+				break;
 			case "battles":
 				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BATTLES, con));
 				MainPanel.setPanelToBattles();
@@ -171,8 +176,7 @@ public class MainPanel extends JPanel {
 	@Override
 	protected void paintComponent (Graphics g) {
 		super.paintComponent(g);
-
 		g.drawImage(bgImage, 0, 0, null);
-		
+
 	}
 }

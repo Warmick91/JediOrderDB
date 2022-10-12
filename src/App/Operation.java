@@ -163,7 +163,6 @@ public class Operation {
 				}
 				queryTable = new JTable(data, battlesColumns);
 				break;
-
 		}
 
 		return queryTable;
