@@ -1,11 +1,14 @@
 package GUI_JediDB;
 
 import javax.swing.JFrame;
-import javax.swing.JTable;
 
 
 public class Frame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public final int FRAME_WIDTH = 1000;
 	public final int FRAME_HEIGHT = 600;
 

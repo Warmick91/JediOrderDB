@@ -5,26 +5,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import App.ConnectionFactory;
-import App.Operation;
 import appTools.ActionListenerClass;
+import appTools.VisualPane;
 
 
 @SuppressWarnings("serial")
@@ -34,13 +24,7 @@ public class MainPanel extends JPanel {
 
 	public static JLabel textTitle = new JLabel();
 
-	static File generalBG = new File("src/images/Jedi_Archives.jpg");
-	static File jediBG = new File("src/images/hyperspacejump.jpg");
-	static File sithBG = new File("src/images/Korriban.jpg");
-	static File bountyHuntersBG = new File("src/images/BountyHunters.jpg");
-	static File smugglersBG = new File("src/images/milleniumFalcon.jpg");
-	static File battlesBG = new File("src/images/sabersCrossed.jpg");
-	static Image bgImage;
+
 
 	JLabel buttonsLabel = new JLabel();
 
@@ -55,16 +39,12 @@ public class MainPanel extends JPanel {
 	public static JButton battlesButton = new JButton("Battles");
 	public static JButton planetsButton = new JButton("Planets");
 
-	static JScrollPane scrollPane = new JScrollPane();
-
 
 	public MainPanel (int width, int height) throws Exception {
 		JButton[] buttons = { jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton };
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i].addActionListener(new ActionListenerClass());
 		}
-
-		setPanelToRoot();
 
 		//Registering font
 		try {
@@ -74,7 +54,7 @@ public class MainPanel extends JPanel {
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		this.setPreferredSize(new Dimension(width, height));
 		this.setBackground(Color.red);
 		this.setLayout(null);
@@ -84,7 +64,7 @@ public class MainPanel extends JPanel {
 		this.tablePanel.setLocation(width / 2 - tablePanel.getWidth() / 2, height / 2 - tablePanel.getHeight() / 2 - 50);
 		this.tablePanel.setLayout(new BorderLayout());
 		//this.scrollPane.setOpaque(true);
-		this.tablePanel.add(scrollPane, BorderLayout.CENTER);
+		this.tablePanel.add(VisualPane.scrollPane, BorderLayout.CENTER);
 		//scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, connection));
 		this.add(tablePanel);
 
@@ -109,74 +89,6 @@ public class MainPanel extends JPanel {
 		this.add(beingsButton);
 
 	}
+	
 
-
-	public static void setPanelToRoot () throws IOException {
-
-		bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-
-	}
-
-
-	public static void setPanelToJedi () throws IOException {
-		bgImage = ImageIO.read(jediBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-	}
-
-
-	public static void setPanelToSith () throws IOException {
-		bgImage = ImageIO.read(sithBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-	}
-
-
-	public static void setPanelToBountyHunters () throws IOException {
-		bgImage = ImageIO.read(bountyHuntersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-	}
-
-
-	public static void setPanelToSmugglers () throws IOException {
-		bgImage = ImageIO.read(smugglersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-	}
-
-
-	public static void setPanelToBattles () throws IOException {
-		bgImage = ImageIO.read(battlesBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-	}
-
-
-	public static void setScrollPane (String data, Connection connection) throws Exception {
-		Connection con = connection;
-		switch (data) {
-			case "beings":
-				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, con));
-				MainPanel.setPanelToRoot();
-				break;
-			case "jedi":
-				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_JEDI, con));
-				MainPanel.setPanelToJedi();
-				break;
-			case "sith":
-				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SITH, con));
-				MainPanel.setPanelToSith();
-				break;
-			case "bountyHunters":
-				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BOUNTYHUNTERS, con));
-				MainPanel.setPanelToBountyHunters();
-				break;
-			case "smugglers":
-				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SMUGGLERS, con));
-				MainPanel.setPanelToSmugglers();
-				break;
-			case "battles":
-				MainPanel.scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BATTLES, con));
-				MainPanel.setPanelToBattles();
-		}
-	}
-
-
-	@Override
-	protected void paintComponent (Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(bgImage, 0, 0, null);
-
-	}
 }

@@ -1,13 +1,21 @@
 package appTools;
 
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import javax.swing.JPanel;
 import App.ConnectionFactory;
 import GUI_JediDB.MainPanel;
 
 
-public class ActionListenerClass implements ActionListener {
+public class ActionListenerClass extends JPanel implements ActionListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	@Override
 	public void actionPerformed (ActionEvent e) {
@@ -16,7 +24,8 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Luminous Beings");
-				MainPanel.setScrollPane("beings", connection);
+				VisualPane.setScrollPane("beings", connection);
+				repaint();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -25,7 +34,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Jedi");
-				MainPanel.setScrollPane("jedi", connection);
+				VisualPane.setScrollPane("jedi", connection);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -35,7 +44,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Sith");
-				MainPanel.setScrollPane("sith", connection);
+				VisualPane.setScrollPane("sith", connection);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -45,7 +54,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Bounty Hunters");
-				MainPanel.setScrollPane("bountyHunters", connection);
+				VisualPane.setScrollPane("bountyHunters", connection);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -55,7 +64,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Smugglers");
-				MainPanel.setScrollPane("smugglers", connection);
+				VisualPane.setScrollPane("smugglers", connection);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -65,7 +74,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Battles");
-				MainPanel.setScrollPane("battles", connection);
+				VisualPane.setScrollPane("battles", connection);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -73,6 +82,13 @@ public class ActionListenerClass implements ActionListener {
 			System.out.println("STAR WARS BATTLES ARE AWESOME");
 		}
 
+	}
+
+
+	@Override
+	protected void paintComponent (Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(VisualPane.bgImage, 0, 0, null);
 	}
 
 }

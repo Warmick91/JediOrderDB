@@ -1,6 +1,5 @@
 package App;
 
-import java.awt.Color;
 import java.sql.*;
 import javax.swing.JTable;
 
