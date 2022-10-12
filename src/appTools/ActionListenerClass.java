@@ -17,7 +17,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Luminous Beings");
-				VisualPane.setScrollPane("beings", connection);
+				MainPanel.setScrollPane("beings", connection);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -26,7 +26,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Jedi");
-				VisualPane.setScrollPane("jedi", connection);
+				MainPanel.setScrollPane("jedi", connection);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -36,7 +36,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Sith");
-				VisualPane.setScrollPane("sith", connection);
+				MainPanel.setScrollPane("sith", connection);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -46,7 +46,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Bounty Hunters");
-				VisualPane.setScrollPane("bountyHunters", connection);
+				MainPanel.setScrollPane("bountyHunters", connection);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -56,7 +56,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Smugglers");
-				VisualPane.setScrollPane("smugglers", connection);
+				MainPanel.setScrollPane("smugglers", connection);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -66,7 +66,7 @@ public class ActionListenerClass implements ActionListener {
 			try {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Battles");
-				VisualPane.setScrollPane("battles", connection);
+				MainPanel.setScrollPane("battles", connection);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

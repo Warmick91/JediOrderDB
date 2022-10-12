@@ -2,7 +2,6 @@ package App;
 
 import java.sql.*;
 import GUI_JediDB.*;
-import appTools.VisualPane;
 
 
 

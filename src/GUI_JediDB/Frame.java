@@ -13,7 +13,7 @@ public class Frame extends JFrame {
 	public final int FRAME_HEIGHT = 600;
 
 	MenuBar mBar = new MenuBar();
-	MainPanel gui;
+	public static MainPanel gui;
 
 
 	public Frame () throws Exception {
