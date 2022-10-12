@@ -8,13 +8,7 @@ import App.ConnectionFactory;
 import GUI_JediDB.MainPanel;
 
 
-public class ActionListenerClass extends JPanel implements ActionListener {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class ActionListenerClass implements ActionListener {
 
 	@Override
 	public void actionPerformed (ActionEvent e) {

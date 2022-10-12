@@ -16,8 +16,8 @@ public class JediOrderDB {
 		Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 		System.out.println("Connected: " + connection.getMetaData().getDatabaseProductName());
 
-		VisualPane.setPanelToRoot();
-		VisualPane.setScrollPane("beings", connection);
+//		VisualPane.setPanelToRoot();
+//		VisualPane.setScrollPane("beings", connection);
 		
 		
 		//close the connection
