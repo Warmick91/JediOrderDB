@@ -79,16 +79,13 @@ public class MainPanel extends JPanel {
 		this.setBackground(Color.red);
 		this.setLayout(null);
 
-		//this.tablePanel.setBackground(Color.blue);
 		this.tablePanel.setSize(new Dimension(600, 350));
 		this.tablePanel.setLocation(width / 2 - tablePanel.getWidth() / 2, height / 2 - tablePanel.getHeight() / 2 - 50);
 		this.tablePanel.setLayout(new BorderLayout());
-		//this.scrollPane.setOpaque(true);
 		this.tablePanel.add(scrollPane, BorderLayout.CENTER);
-		//scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, connection));
 		this.add(tablePanel);
 
-		textTitle = new JLabel("Root location", SwingConstants.CENTER);
+		textTitle = new JLabel("Luminous Beings", SwingConstants.CENTER);
 		textTitle.setFont(swFont);
 		textTitle.setForeground(Color.yellow);
 		textTitle.setBounds(tablePanel.getX(), tablePanel.getY() - 50, 600, 30);
