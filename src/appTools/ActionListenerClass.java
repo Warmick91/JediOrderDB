@@ -1,6 +1,5 @@
 package appTools;
 
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -25,7 +24,6 @@ public class ActionListenerClass extends JPanel implements ActionListener {
 				Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 				MainPanel.textTitle.setText("Luminous Beings");
 				VisualPane.setScrollPane("beings", connection);
-				repaint();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -82,13 +80,6 @@ public class ActionListenerClass extends JPanel implements ActionListener {
 			System.out.println("STAR WARS BATTLES ARE AWESOME");
 		}
 
-	}
-
-
-	@Override
-	protected void paintComponent (Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(VisualPane.bgImage, 0, 0, null);
 	}
 
 }

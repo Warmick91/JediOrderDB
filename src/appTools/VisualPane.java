@@ -1,17 +1,16 @@
 package appTools;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import App.Operation;
+import GUI_JediDB.MainPanel;
 
 
-public class VisualPane extends JPanel {
+public class VisualPane {
 
 	/**
 	 * 
@@ -26,8 +25,8 @@ public class VisualPane extends JPanel {
 	public static Image bgImage;
 
 	public static JScrollPane scrollPane = new JScrollPane();
-
-
+	MainPanel mp = new MainPanel();
+	
 	public VisualPane () {};
 
 
@@ -37,6 +36,7 @@ public class VisualPane extends JPanel {
 			case "beings":
 				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, con));
 				setPanelToRoot();
+				
 				break;
 			case "jedi":
 				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_JEDI, con));
@@ -88,13 +88,6 @@ public class VisualPane extends JPanel {
 
 	public static void setPanelToBattles () throws IOException {
 		bgImage = ImageIO.read(battlesBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-	}
-
-
-	@Override
-	protected void paintComponent (Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(bgImage, 0, 0, null);
 	}
 
 }

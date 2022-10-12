@@ -37,7 +37,8 @@ public class MainPanel extends JPanel {
 	public static JButton smugglersButton = new JButton("Smugglers");
 	public static JButton battlesButton = new JButton("Battles");
 	public static JButton planetsButton = new JButton("Planets");
-
+	
+	public MainPanel() {};
 
 	public MainPanel (int width, int height) throws Exception {
 		JButton[] buttons = { jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton };
@@ -53,7 +54,7 @@ public class MainPanel extends JPanel {
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		VisualPane.setPanelToRoot();
 
 		this.setPreferredSize(new Dimension(width, height));
@@ -90,7 +91,6 @@ public class MainPanel extends JPanel {
 		this.add(beingsButton);
 
 	}
-
 
 	@Override
 	protected void paintComponent (Graphics g) {
