@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.io.File;
@@ -23,8 +24,6 @@ public class MainPanel extends JPanel {
 	private JPanel tablePanel = new JPanel();
 
 	public static JLabel textTitle = new JLabel();
-
-
 
 	JLabel buttonsLabel = new JLabel();
 
@@ -54,7 +53,9 @@ public class MainPanel extends JPanel {
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		
+
+		VisualPane.setPanelToRoot();
+
 		this.setPreferredSize(new Dimension(width, height));
 		this.setBackground(Color.red);
 		this.setLayout(null);
@@ -89,6 +90,11 @@ public class MainPanel extends JPanel {
 		this.add(beingsButton);
 
 	}
-	
 
+
+	@Override
+	protected void paintComponent (Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(VisualPane.bgImage, 0, 0, null);
+	}
 }

@@ -62,9 +62,7 @@ public class VisualPane extends JPanel {
 
 
 	public static void setPanelToRoot () throws IOException {
-
 		bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-
 	}
 
 
