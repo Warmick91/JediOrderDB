@@ -12,11 +12,13 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import app.Operation;
 import appTools.ActionListenerClass;
@@ -53,7 +55,8 @@ public class MainPanel extends JPanel {
 	public static JButton planetsButton = new JButton("Planets");
 	public static JButton modifiedSearchButton = new JButton("Modified search");
 	public static JButton manipulateButton = new JButton("Jedi Master Access");
-	public static JButton goBackButton = new JButton("Back <<<");
+	public static JButton goBackButtonToMain = new JButton("Back <<<");
+	public static JButton goBackButtonToCategory = new JButton("Back <<<");
 	public static JButton confirmButton = new JButton("Confirm >>>");
 	public static JButton emptyFieldsButton = new JButton("Empty all fields []");
 
@@ -77,8 +80,14 @@ public class MainPanel extends JPanel {
 			e.printStackTrace();
 		}
 
+		//Reused Back Buttons
+		goBackButtonToMain.setSize(100, 25);
+		goBackButtonToMain.setLocation(15, 15);
+		goBackButtonToCategory.setSize(100, 25);
+		goBackButtonToCategory.setLocation(15, 15);
+
 		//Adding Action Listener to
-		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButton, confirmButton, emptyFieldsButton };
+		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButtonToCategory, goBackButtonToMain, confirmButton, emptyFieldsButton };
 		for (JButton button : buttons) {
 			button.addActionListener(new ActionListenerClass());
 		}
@@ -164,9 +173,9 @@ public class MainPanel extends JPanel {
 	public void setPanelToCustomSearch () {
 		removeAll();
 		revalidate();
-		goBackButton.setSize(100, 25);
-		goBackButton.setLocation(15, 15);
-		this.add(goBackButton);
+		goBackButtonToMain.setSize(100, 25);
+		goBackButtonToMain.setLocation(15, 15);
+		this.add(goBackButtonToMain);
 		JLabel choiceQuestion = new JLabel("Choose search parameters:");
 
 		repaint();
@@ -175,32 +184,72 @@ public class MainPanel extends JPanel {
 
 	public void setPanelToJMAccess () {
 
-		JPanel textFields = new JPanel();
+		JPanel buttons = new JPanel();
 
 		removeAll();
 		revalidate();
 
-		goBackButton.setSize(100, 25);
-		goBackButton.setLocation(15, 15);
-		this.add(goBackButton);
+		this.add(goBackButtonToMain);
 
 		textTitle.setText("update category:");
 		textTitle.setLocation(this.getWidth() / 2 - textTitle.getWidth() / 2, tablePanel.getY());
 		this.add(textTitle);
-		
-		textFields.setOpaque(false);
-		textFields.setLayout(new GridLayout(3, 2, 15, 15));
-		textFields.setSize(600, 200);
-		textFields.setLocation(this.getWidth()/2 - textFields.getWidth()/2, this.getHeight()/2 - textFields.getHeight()/2);
-		textFields.add(updateJediButton);
-		textFields.add(updateSithButton);
-		textFields.add(updateBountyHuntersButton);
-		textFields.add(updateSmugglersButton);
-		textFields.add(updateBattlesButton);
-		textFields.add(updatePlanetsButton);
-		this.add(textFields);
+
+		buttons.setOpaque(false);
+		buttons.setLayout(new GridLayout(3, 2, 15, 15));
+		buttons.setSize(600, 200);
+		buttons.setLocation(this.getWidth() / 2 - buttons.getWidth() / 2, this.getHeight() / 2 - buttons.getHeight() / 2);
+		buttons.add(updateJediButton);
+		buttons.add(updateSithButton);
+		buttons.add(updateBountyHuntersButton);
+		buttons.add(updateSmugglersButton);
+		buttons.add(updateBattlesButton);
+		buttons.add(updatePlanetsButton);
+		this.add(buttons);
 
 		repaint();
+	}
+
+
+	public void setPanelToJMTextFields (String category) {
+
+		removeAll();
+		revalidate();
+
+		//Panel holding all rows
+		JPanel omniPanel = new JPanel(new GridLayout(5, 1, 10, 10));
+		omniPanel.setOpaque(false);
+		omniPanel.setSize(700, 200);
+		omniPanel.setLocation(this.getWidth() / 2 - omniPanel.getWidth() / 2, this.getHeight() / 2 - omniPanel.getHeight() / 2);
+
+		//Characters to add
+		JPanel[] textFieldRows = new JPanel[5];
+		for (int i = 0; i < 5; i++) {
+			textFieldRows[i] = new JPanel();
+		}
+
+		switch (category) {
+			case "jedi":
+				for (JPanel textFieldRow : textFieldRows) {
+					textFieldRow.setLayout(new GridLayout(1, 6, 10, 10));
+					textFieldRow.setOpaque(false);
+					textFieldRow.add(new JTextField("Last name"));
+					textFieldRow.add(new JTextField("First name"));
+					textFieldRow.add(new JTextField("Birth date"));
+					textFieldRow.add(new JTextField("Birth place"));
+					textFieldRow.add(new JTextField("Death date"));
+					textFieldRow.add(new JTextField("Death place"));
+					omniPanel.add(textFieldRow);
+
+				}
+
+				this.add(omniPanel);
+				this.add(goBackButtonToCategory);
+
+				repaint();
+				break;
+		}
+
 	}
 
 

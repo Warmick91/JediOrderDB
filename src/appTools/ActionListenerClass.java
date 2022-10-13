@@ -73,18 +73,29 @@ public class ActionListenerClass implements ActionListener {
 				e1.printStackTrace();
 			}
 			System.out.println("STAR WARS BATTLES ARE AWESOME");
-			
+
 		} else if (e.getSource() == MainPanel.modifiedSearchButton) {
 			Frame.gui.setPanelToCustomSearch();
-			
-		} else if (e.getSource() == MainPanel.goBackButton) {
+
+		} else if (e.getSource() == MainPanel.goBackButtonToMain) {
 			Frame.gui.setPanelToStart();
-			
-		} else if (e.getSource() == MainPanel.manipulateButton) {
+
+		} else if (e.getSource() == MainPanel.manipulateButton || e.getSource() == MainPanel.goBackButtonToCategory) {
 			Frame.gui.setPanelToJMAccess();
-			
+
 		} else if (e.getSource() == MainPanel.updateJediButton) {
-			
+			Frame.gui.setPanelToJMTextFields("jedi");
+
+		} else if (e.getSource() == MainPanel.updateSithButton) {
+
+		} else if (e.getSource() == MainPanel.updateBountyHuntersButton) {
+
+		} else if (e.getSource() == MainPanel.updateSmugglersButton) {
+
+		} else if (e.getSource() == MainPanel.updateBattlesButton) {
+
+		} else if (e.getSource() == MainPanel.updatePlanetsButton) {
+
 		}
 
 	}
