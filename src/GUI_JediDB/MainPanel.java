@@ -25,12 +25,12 @@ import appTools.ActionListenerClass;
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel {
 
-	static File generalBG = new File("src/images/Jedi_Archives.jpg");
-	static File jediBG = new File("src/images/hyperspacejump.jpg");
-	static File sithBG = new File("src/images/Korriban.jpg");
-	static File bountyHuntersBG = new File("src/images/BountyHunters.jpg");
-	static File smugglersBG = new File("src/images/milleniumFalcon.jpg");
-	static File battlesBG = new File("src/images/sabersCrossed.jpg");
+	static File generalBG = new File("images/Jedi_Archives.jpg");
+	static File jediBG = new File("images/hyperspacejump.jpg");
+	static File sithBG = new File("images/Korriban.jpg");
+	static File bountyHuntersBG = new File("images/BountyHunters.jpg");
+	static File smugglersBG = new File("images/milleniumFalcon.jpg");
+	static File battlesBG = new File("images/sabersCrossed.jpg");
 	public static Image bgImage;
 
 	static JScrollPane scrollPane = new JScrollPane();
@@ -70,7 +70,6 @@ public class MainPanel extends JPanel {
 			e.printStackTrace();
 		}
 
-		setPanelToRoot();
 
 		this.setPreferredSize(new Dimension(width, height));
 		this.setBackground(Color.red);
@@ -105,7 +104,7 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public static void setScrollPane (String data, Connection connection) throws Exception {
+	public void setScrollPane (String data, Connection connection) throws Exception {
 		Connection con = connection;
 		switch (data) {
 			case "beings":

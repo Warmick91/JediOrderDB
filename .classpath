@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="images/|fonts/starjedi/|fonts/starjout/|fonts/stjedise/|fonts/stjelogo/" kind="src" path="src"/>
-	<classpathentry kind="src" path="src/images"/>
+	<classpathentry excluding="images/|fonts/starjedi/|fonts/starjout/|fonts/stjedise/|fonts/stjelogo/|fonts/" kind="src" path="src"/>
+	<classpathentry kind="src" path="images"/>
 	<classpathentry kind="src" path="src/fonts/starjedi"/>
 	<classpathentry kind="src" path="src/fonts/starjout"/>
 	<classpathentry kind="src" path="src/fonts/stjedise"/>
 	<classpathentry kind="src" path="src/fonts/stjelogo"/>
+	<classpathentry excluding="starjedi/|starjout/|stjedise/|stjelogo/" kind="src" path="src/fonts"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-17.0.3">
 		<attributes>
 			<attribute name="module" value="true"/>
