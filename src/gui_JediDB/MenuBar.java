@@ -1,4 +1,4 @@
-package GUI_JediDB;
+package gui_JediDB;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;

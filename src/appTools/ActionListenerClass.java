@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import javax.swing.JPanel;
-import App.ConnectionFactory;
-import GUI_JediDB.Frame;
-import GUI_JediDB.MainPanel;
+import app.ConnectionFactory;
+import gui_JediDB.Frame;
+import gui_JediDB.MainPanel;
 
 
 public class ActionListenerClass implements ActionListener {
@@ -73,6 +73,18 @@ public class ActionListenerClass implements ActionListener {
 				e1.printStackTrace();
 			}
 			System.out.println("STAR WARS BATTLES ARE AWESOME");
+			
+		} else if (e.getSource() == MainPanel.modifiedSearchButton) {
+			Frame.gui.setPanelToCustomSearch();
+			
+		} else if (e.getSource() == MainPanel.goBackButton) {
+			Frame.gui.setPanelToStart();
+			
+		} else if (e.getSource() == MainPanel.manipulateButton) {
+			Frame.gui.setPanelToJMAccess();
+			
+		} else if (e.getSource() == MainPanel.updateJediButton) {
+			
 		}
 
 	}

@@ -1,7 +1,7 @@
-package App;
+package app;
 
 import java.sql.*;
-import GUI_JediDB.*;
+import gui_JediDB.*;
 
 
 
@@ -15,7 +15,7 @@ public class JediOrderDB {
 		Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 		System.out.println("Connected: " + connection.getMetaData().getDatabaseProductName());
 
-		Frame.gui.setPanelToRoot();
+		Frame.gui.setBackgroundToRoot();
 		Frame.gui.setScrollPane("beings", connection);
 		
 		

@@ -1,4 +1,4 @@
-package App;
+package app;
 
 import java.sql.*;
 import javax.swing.JTable;
@@ -12,6 +12,7 @@ public class Operation {
 	public static final String SELECT_ALL_BOUNTYHUNTERS = "SELECT * FROM BountyHunters ORDER BY HunterID";
 	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
 	public static final String SELECT_ALL_BATTLES = "SELECT * FROM Battles ORDER BY BattleID";
+	public static final String SELECT_CUSTOM = "";
 
 	private static PreparedStatement ps;
 	private static ResultSet rs;
