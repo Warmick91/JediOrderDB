@@ -23,6 +23,7 @@ public class ALClass {
 	public ActionListener toJMAccessListener;
 	public ActionListener toUpdateJediListener;
 	public ActionListener confirmButtonListener;
+	public ActionListener cancelAndEmptyListener;
 
 	public ALClass () {
 
@@ -157,7 +158,7 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Frame.gui.setPanelToJMTextFields("jedi");
+					Frame.gui.setPanelToJMTextFieldsAdd("jedi");
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -176,6 +177,16 @@ public class ALClass {
 				
 			}
 		};
+	
+		cancelAndEmptyListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				Frame.gui.clearInputTable();
+				
+			}
+			
+		};
+	
 	}
 }
 

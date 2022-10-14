@@ -26,7 +26,8 @@ import appTools.ALClass;
 
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel {
-
+	
+	//Images
 	static File generalBG = new File("images/Jedi_Archives.jpg");
 	static File jediBG = new File("images/hyperspacejump.jpg");
 	static File sithBG = new File("images/Korriban.jpg");
@@ -34,10 +35,14 @@ public class MainPanel extends JPanel {
 	static File smugglersBG = new File("images/milleniumFalcon.jpg");
 	static File battlesBG = new File("images/sabersCrossed.jpg");
 	public static Image bgImage;
-
-	static JScrollPane scrollPane = new JScrollPane();
+	
+	//Data table structure
+	private JPanel inputTablePanel;
+	private JScrollPane scrollPane = new JScrollPane();
 	private JPanel tablePanel = new JPanel();
-
+	private JTable inputTable;
+	
+	
 	public static JLabel textTitle = new JLabel("", SwingConstants.CENTER);
 
 	JLabel buttonsLabel = new JLabel();
@@ -68,7 +73,7 @@ public class MainPanel extends JPanel {
 	public static JButton updatePlanetsButton = new JButton("Planets");
 	public static JButton confirmJediUpdateButton = new JButton("Confirm >>>");
 	public static JButton emptyFieldsButton = new JButton("Empty all fields []");
-	public static JButton cancelInputsButton;
+
 
 
 	public MainPanel () throws Exception {
@@ -89,10 +94,10 @@ public class MainPanel extends JPanel {
 		goBackButtonToUpdateCategory.setLocation(15, 15);
 
 		//Adding Action Listeners to
-		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButtonToUpdateCategory, goBackButtonToMain, confirmJediUpdateButton, emptyFieldsButton };
-		for (JButton button : buttons) {
-			//button.addActionListener(new ALClass());
-		}
+//		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButtonToUpdateCategory, goBackButtonToMain, confirmJediUpdateButton, emptyFieldsButton };
+//		for (JButton button : buttons) {
+//			//button.addActionListener(new ALClass());
+//		}
 
 		beingsButton.addActionListener(alClass.showAllBeingsListener);
 		jediButton.addActionListener(alClass.showAllJediListener);
@@ -106,7 +111,9 @@ public class MainPanel extends JPanel {
 		goBackButtonToUpdateCategory.addActionListener(alClass.toJMAccessListener);
 		updateJediButton.addActionListener(alClass.toUpdateJediListener);
 		confirmJediUpdateButton.addActionListener(alClass.confirmButtonListener);
+		emptyFieldsButton.addActionListener(alClass.cancelAndEmptyListener);
 
+		//MainPanel attributes
 		this.setPreferredSize(new Dimension(Frame.FRAME_WIDTH, Frame.FRAME_HEIGHT));
 		this.setLayout(null);
 
@@ -226,10 +233,11 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public void setPanelToJMTextFields (String category) {
+	public void setPanelToJMTextFieldsAdd (String category) {
 
 		removeAll();
 		revalidate();
+		
 		textTitle.setText("Jedi to add:");
 		this.add(textTitle);
 
@@ -240,7 +248,6 @@ public class MainPanel extends JPanel {
 
 		//Data
 		String[][] inputs;
-		JTable inputTable;
 
 		switch (category) {
 			case "jedi":
@@ -260,14 +267,14 @@ public class MainPanel extends JPanel {
 				inputs = new String[numberOfInputRows][columnNames.length];
 				for (int i = 0; i < numberOfInputRows; i++) {
 					for (int j = 0; j < columnNames.length; j++) {
-						inputs[i][j] = "---";
+						inputs[i][j] = "";
 					}
 				}
 
-				JPanel inputTablePanel = new JPanel(new GridLayout());
+				inputTablePanel = new JPanel(new GridLayout());
 				inputTablePanel.setSize(850, 200);
 				inputTablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
-
+								
 				inputTable = new JTable(inputs, columnNames);
 				inputTable.setRowHeight(inputTablePanel.getHeight() / 5 - 4);
 				inputTablePanel.add(new JScrollPane(inputTable));
@@ -283,13 +290,12 @@ public class MainPanel extends JPanel {
 				counterPanel.setOpaque(true);
 				this.add(counterPanel);
 
-				cancelInputsButton = new JButton("Cancel and empty");
-				//cancelInputsButton.addActionListener(new ALClass());
+
 				JPanel buttons = new JPanel(new GridLayout(1, 2, 10, 0));
 				buttons.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
 				buttons.setOpaque(false);
 				buttons.add(confirmJediUpdateButton);
-				buttons.add(cancelInputsButton);
+				buttons.add(emptyFieldsButton);
 				this.add(buttons);
 
 				repaint();
@@ -298,7 +304,25 @@ public class MainPanel extends JPanel {
 
 	}
 
-
+	
+	public void clearInputTable () {
+		scrollPane.getViewport().remove(inputTable);
+		revalidate();
+		
+		for (int i = 0; i < inputTable.getRowCount(); i++) {
+			for (int j = 0; j < inputTable.getColumnCount(); j++) {
+				if (inputTable.getModel().getValueAt(i, j) != "") {
+					inputTable.getModel().setValueAt("", i, j);
+				}
+			}
+		}
+		
+		scrollPane.getViewport().add(inputTable);
+		
+		repaint();
+	}
+	
+	
 	public void setBackgroundToRoot () throws IOException {
 		bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 		repaint();
@@ -334,7 +358,10 @@ public class MainPanel extends JPanel {
 		repaint();
 	}
 
+	
 
+
+	
 	@Override
 	protected void paintComponent (Graphics g) {
 		super.paintComponent(g);
