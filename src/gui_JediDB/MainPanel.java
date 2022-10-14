@@ -57,8 +57,7 @@ public class MainPanel extends JPanel {
 	public static JButton modifiedSearchButton = new JButton("Modified search");
 	public static JButton manipulateButton = new JButton("Jedi Master Access");
 	public static JButton goBackButtonToMain = new JButton("Back <<<");
-	public static JButton goBackButtonToCategory = new JButton("Back <<<");
-	public static JButton emptyFieldsButton = new JButton("Empty all fields []");
+	public static JButton goBackButtonToUpdateCategory = new JButton("Back <<<");	
 
 	//Update button
 	public static JButton updateJediButton = new JButton("Jedi");
@@ -67,7 +66,8 @@ public class MainPanel extends JPanel {
 	public static JButton updateSmugglersButton = new JButton("Smugglers");
 	public static JButton updateBattlesButton = new JButton("Battles");
 	public static JButton updatePlanetsButton = new JButton("Planets");
-	public static JButton confirmButton = new JButton("Confirm >>>");
+	public static JButton confirmJediUpdateButton = new JButton("Confirm >>>");
+	public static JButton emptyFieldsButton = new JButton("Empty all fields []");
 	public static JButton cancelInputsButton;
 
 
@@ -85,21 +85,28 @@ public class MainPanel extends JPanel {
 		//Reused Back Buttons
 		goBackButtonToMain.setSize(100, 25);
 		goBackButtonToMain.setLocation(15, 15);
-		goBackButtonToCategory.setSize(100, 25);
-		goBackButtonToCategory.setLocation(15, 15);
+		goBackButtonToUpdateCategory.setSize(100, 25);
+		goBackButtonToUpdateCategory.setLocation(15, 15);
 
 		//Adding Action Listeners to
-		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButtonToCategory, goBackButtonToMain, confirmButton, emptyFieldsButton };
+		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButtonToUpdateCategory, goBackButtonToMain, confirmJediUpdateButton, emptyFieldsButton };
 		for (JButton button : buttons) {
 			//button.addActionListener(new ALClass());
 		}
-		
+
 		beingsButton.addActionListener(alClass.showAllBeingsListener);
-		jediButton.addActionListener(alClass.showAllJediButton);
-		sithButton.addActionListener(alClass.showAllSithButton);
-		
-		
-		
+		jediButton.addActionListener(alClass.showAllJediListener);
+		sithButton.addActionListener(alClass.showAllSithListener);
+		bhButton.addActionListener(alClass.showAllBHListener);
+		smugglersButton.addActionListener(alClass.showAllSmugglersListener);
+		battlesButton.addActionListener(alClass.showAllBattlesListener);
+		modifiedSearchButton.addActionListener(alClass.toModifiedSearchListener);
+		manipulateButton.addActionListener(alClass.toJMAccessListener);
+		goBackButtonToMain.addActionListener(alClass.backToStartPanelListener);
+		goBackButtonToUpdateCategory.addActionListener(alClass.toJMAccessListener);
+		updateJediButton.addActionListener(alClass.toUpdateJediListener);
+		confirmJediUpdateButton.addActionListener(alClass.confirmButtonListener);
+
 		this.setPreferredSize(new Dimension(Frame.FRAME_WIDTH, Frame.FRAME_HEIGHT));
 		this.setLayout(null);
 
@@ -226,7 +233,7 @@ public class MainPanel extends JPanel {
 		textTitle.setText("Jedi to add:");
 		this.add(textTitle);
 
-		this.add(goBackButtonToCategory);
+		this.add(goBackButtonToUpdateCategory);
 
 		final int numberOfInputRows = 5;
 		String[] columnNames;
@@ -281,7 +288,7 @@ public class MainPanel extends JPanel {
 				JPanel buttons = new JPanel(new GridLayout(1, 2, 10, 0));
 				buttons.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
 				buttons.setOpaque(false);
-				buttons.add(confirmButton);
+				buttons.add(confirmJediUpdateButton);
 				buttons.add(cancelInputsButton);
 				this.add(buttons);
 

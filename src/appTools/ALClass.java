@@ -12,9 +12,17 @@ import gui_JediDB.MainPanel;
 public class ALClass {
 
 	public ActionListener showAllBeingsListener;
-	public ActionListener showAllJediButton;
-	public ActionListener showAllSithButton;
+	public ActionListener showAllJediListener;
+	public ActionListener showAllSithListener;
+	public ActionListener showAllBHListener;
+	public ActionListener showAllSmugglersListener;
+	public ActionListener showAllBattlesListener;
 
+	public ActionListener toModifiedSearchListener;
+	public ActionListener backToStartPanelListener;
+	public ActionListener toJMAccessListener;
+	public ActionListener toUpdateJediListener;
+	public ActionListener confirmButtonListener;
 
 	public ALClass () {
 
@@ -22,7 +30,7 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 
-					try {
+				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 					MainPanel.textTitle.setText("Luminous Beings");
 					Frame.gui.setScrollPane("beings", connection);
@@ -30,26 +38,25 @@ public class ALClass {
 					e1.printStackTrace();
 				}
 				System.out.println("WE ARE ALL LUMINOUS BEINGS");
-				
-			
+
 			}
 		};
-		
-		showAllJediButton = new ActionListener() {
+
+		showAllJediListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
-					try {
+				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 					MainPanel.textTitle.setText("Jedi");
 					Frame.gui.setScrollPane("jedi", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				System.out.println("JEDI RULE");			
+				System.out.println("JEDI RULE");
 			}
 		};
-		
-		showAllSithButton = new ActionListener() {
+
+		showAllSithListener = new ActionListener() {
 
 			@Override
 			public void actionPerformed (ActionEvent e) {
@@ -60,15 +67,127 @@ public class ALClass {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				System.out.println("SITH RULE");	
-				
-			}			
+				System.out.println("SITH RULE");
+
+			}
+
+		};
+
+		showAllBHListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					MainPanel.textTitle.setText("Bounty Hunters");
+					Frame.gui.setScrollPane("bountyHunters", connection);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				System.out.println("BOUNTY HUNTERS RULES");
+
+			}
+		};
+
+		showAllSmugglersListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					MainPanel.textTitle.setText("Smugglers");
+					Frame.gui.setScrollPane("smugglers", connection);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				System.out.println("SMUGGLERS RULE");
+			}
+		};
+
+		showAllBattlesListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					MainPanel.textTitle.setText("Battles");
+					Frame.gui.setScrollPane("battles", connection);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				System.out.println("STAR WARS BATTLES ARE AWESOME");
+
+			}
+		};
+
+		toModifiedSearchListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					Frame.gui.setPanelToCustomSearch();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+		};
+
+		backToStartPanelListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					Frame.gui.setPanelToStart();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		};
+
+		toJMAccessListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					Frame.gui.setPanelToJMAccess();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+		};
+
+		toUpdateJediListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					Frame.gui.setPanelToJMTextFields("jedi");
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		};
 		
+		confirmButtonListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				System.out.println("New Jedi added");	
+				
+			}
 		};
 	}
 }
-	
-	
+
+
+
+
+
+//	try {
+//		Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+//	} catch (Exception e1) {
+//		e1.printStackTrace();
+//	}
 
 //ELSE-IF OPTION -------------------------
 
@@ -169,5 +288,3 @@ public class ALClass {
 //		}
 //
 //	}
-
-
