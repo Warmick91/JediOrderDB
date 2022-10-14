@@ -12,12 +12,12 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import app.Operation;
@@ -57,7 +57,6 @@ public class MainPanel extends JPanel {
 	public static JButton manipulateButton = new JButton("Jedi Master Access");
 	public static JButton goBackButtonToMain = new JButton("Back <<<");
 	public static JButton goBackButtonToCategory = new JButton("Back <<<");
-	public static JButton confirmButton = new JButton("Confirm >>>");
 	public static JButton emptyFieldsButton = new JButton("Empty all fields []");
 
 	//Update button
@@ -67,6 +66,8 @@ public class MainPanel extends JPanel {
 	public static JButton updateSmugglersButton = new JButton("Smugglers");
 	public static JButton updateBattlesButton = new JButton("Battles");
 	public static JButton updatePlanetsButton = new JButton("Planets");
+	public static JButton confirmButton = new JButton("Confirm >>>");
+	public static JButton cancelInputsButton;
 
 
 	public MainPanel () throws Exception {
@@ -215,37 +216,68 @@ public class MainPanel extends JPanel {
 
 		removeAll();
 		revalidate();
+		textTitle.setText("Jedi to add:");
+		this.add(textTitle);
 
-		//Panel holding all rows
-		JPanel omniPanel = new JPanel(new GridLayout(5, 1, 10, 10));
-		omniPanel.setOpaque(false);
-		omniPanel.setSize(700, 200);
-		omniPanel.setLocation(this.getWidth() / 2 - omniPanel.getWidth() / 2, this.getHeight() / 2 - omniPanel.getHeight() / 2);
+		this.add(goBackButtonToCategory);
 
-		//Characters to add
-		JPanel[] textFieldRows = new JPanel[5];
-		for (int i = 0; i < 5; i++) {
-			textFieldRows[i] = new JPanel();
-		}
+		final int numberOfInputRows = 5;
+		String[] columnNames;
+
+		//Data
+		String[][] inputs;
+		JTable inputTable;
 
 		switch (category) {
 			case "jedi":
-				for (JPanel textFieldRow : textFieldRows) {
-					textFieldRow.setLayout(new GridLayout(1, 6, 10, 10));
-					textFieldRow.setOpaque(false);
-					textFieldRow.add(new JTextField("Last name"));
-					textFieldRow.add(new JTextField("First name"));
-					textFieldRow.add(new JTextField("Birth date"));
-					textFieldRow.add(new JTextField("Birth place"));
-					textFieldRow.add(new JTextField("Death date"));
-					textFieldRow.add(new JTextField("Death place"));
-					omniPanel.add(textFieldRow);
 
+				columnNames = new String[10];
+				columnNames[0] = "Last name";
+				columnNames[1] = "First name";
+				columnNames[2] = "Date of birth";
+				columnNames[3] = "Birthplace";
+				columnNames[4] = "Date of death";
+				columnNames[5] = "Deathplace";
+				columnNames[6] = "Rank";
+				columnNames[7] = "Specialization";
+				columnNames[8] = "Saber type";
+				columnNames[9] = "Saber color";
+
+				inputs = new String[numberOfInputRows][columnNames.length];
+				for (int i = 0; i < numberOfInputRows; i++) {
+					for (int j = 0; j < columnNames.length; j++) {
+						inputs[i][j] = "---";
+					}
 				}
 
-				this.add(omniPanel);
-				this.add(goBackButtonToCategory);
+				JPanel inputTablePanel = new JPanel(new GridLayout());
+				inputTablePanel.setSize(850, 200);
+				inputTablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
 
+				inputTable = new JTable(inputs, columnNames);
+				inputTable.setRowHeight(inputTablePanel.getHeight() / 5 - 4);
+				inputTablePanel.add(new JScrollPane(inputTable));
+				this.add(inputTablePanel);
+
+				//Counter
+				JPanel counterPanel = new JPanel(new GridLayout(numberOfInputRows, 1));
+				for (int i = 1; i <= numberOfInputRows; i++) {
+					counterPanel.add(new JLabel(String.valueOf(i), SwingConstants.CENTER));
+				}
+				counterPanel.setSize(20, inputTablePanel.getHeight() - 20);
+				counterPanel.setLocation(inputTablePanel.getX() - counterPanel.getWidth(), inputTablePanel.getY() + 20);
+				counterPanel.setOpaque(true);
+				this.add(counterPanel);
+
+				cancelInputsButton = new JButton("Cancel and empty");
+				cancelInputsButton.addActionListener(new ActionListenerClass());
+				JPanel buttons = new JPanel(new GridLayout(1, 2, 10, 0));
+				buttons.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
+				buttons.setOpaque(false);
+				buttons.add(confirmButton);
+				buttons.add(cancelInputsButton);
+				this.add(buttons);
+				
 				repaint();
 				break;
 		}
