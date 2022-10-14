@@ -21,7 +21,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import app.Operation;
-import appTools.ActionListenerClass;
+import appTools.ALClass;
 
 
 @SuppressWarnings("serial")
@@ -45,6 +45,7 @@ public class MainPanel extends JPanel {
 
 	Font swFont;
 
+	ALClass alClass = new ALClass();
 	//Main buttons
 	public static JButton beingsButton = new JButton("Root");
 	public static JButton jediButton = new JButton("Jedi");
@@ -87,12 +88,18 @@ public class MainPanel extends JPanel {
 		goBackButtonToCategory.setSize(100, 25);
 		goBackButtonToCategory.setLocation(15, 15);
 
-		//Adding Action Listener to
+		//Adding Action Listeners to
 		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButtonToCategory, goBackButtonToMain, confirmButton, emptyFieldsButton };
 		for (JButton button : buttons) {
-			button.addActionListener(new ActionListenerClass());
+			//button.addActionListener(new ALClass());
 		}
-
+		
+		beingsButton.addActionListener(alClass.showAllBeingsListener);
+		jediButton.addActionListener(alClass.showAllJediButton);
+		sithButton.addActionListener(alClass.showAllSithButton);
+		
+		
+		
 		this.setPreferredSize(new Dimension(Frame.FRAME_WIDTH, Frame.FRAME_HEIGHT));
 		this.setLayout(null);
 
@@ -270,14 +277,14 @@ public class MainPanel extends JPanel {
 				this.add(counterPanel);
 
 				cancelInputsButton = new JButton("Cancel and empty");
-				cancelInputsButton.addActionListener(new ActionListenerClass());
+				//cancelInputsButton.addActionListener(new ALClass());
 				JPanel buttons = new JPanel(new GridLayout(1, 2, 10, 0));
 				buttons.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
 				buttons.setOpaque(false);
 				buttons.add(confirmButton);
 				buttons.add(cancelInputsButton);
 				this.add(buttons);
-				
+
 				repaint();
 				break;
 		}
