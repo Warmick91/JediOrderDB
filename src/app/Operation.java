@@ -2,6 +2,7 @@ package app;
 
 import java.sql.*;
 import javax.swing.JTable;
+import gui_JediDB.Frame;
 
 
 public class Operation {
@@ -13,7 +14,15 @@ public class Operation {
 	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
 	public static final String SELECT_ALL_BATTLES = "SELECT * FROM Battles ORDER BY BattleID";
 	public static final String SELECT_CUSTOM = "";
-
+	
+	//Check the DB for specific column names
+	public static final String INSERT_INTO_JEDI = "BEGIN; "
+												+ "INSERT INTO Beings "
+												+ "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?); "
+												+ "INSERT INTO Jedi "
+												+ "VALUES (NULL, ?, ?, ?, ?, ?); "
+												+ "END;";
+	
 	private static PreparedStatement ps;
 	private static ResultSet rs;
 	private static String[][] data;
@@ -167,5 +176,18 @@ public class Operation {
 
 		return queryTable;
 	}
+	
+	
+	public static void insertData (String query, Connection con) throws SQLException {
 
+		switch (query) {
+			case INSERT_INTO_JEDI:
+				//
+				ps = con.prepareStatement(query);
+				//ps.setString(1, Frame.gui.);
+				
+			break;
+
+		}
+	}
 }

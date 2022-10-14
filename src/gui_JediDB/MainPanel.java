@@ -41,6 +41,8 @@ public class MainPanel extends JPanel {
 	private JScrollPane scrollPane = new JScrollPane();
 	private JPanel tablePanel = new JPanel();
 	private JTable inputTable;
+	private String[] columnNames;
+	private String[][] inputs;
 	
 	
 	public static JLabel textTitle = new JLabel("", SwingConstants.CENTER);
@@ -247,7 +249,7 @@ public class MainPanel extends JPanel {
 		String[] columnNames;
 
 		//Data
-		String[][] inputs;
+		
 
 		switch (category) {
 			case "jedi":
@@ -274,7 +276,7 @@ public class MainPanel extends JPanel {
 				inputTablePanel = new JPanel(new GridLayout());
 				inputTablePanel.setSize(850, 200);
 				inputTablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
-								
+				
 				inputTable = new JTable(inputs, columnNames);
 				inputTable.setRowHeight(inputTablePanel.getHeight() / 5 - 4);
 				inputTablePanel.add(new JScrollPane(inputTable));
@@ -306,8 +308,7 @@ public class MainPanel extends JPanel {
 
 	
 	public void clearInputTable () {
-		scrollPane.getViewport().remove(inputTable);
-		revalidate();
+
 		
 		for (int i = 0; i < inputTable.getRowCount(); i++) {
 			for (int j = 0; j < inputTable.getColumnCount(); j++) {
@@ -317,9 +318,8 @@ public class MainPanel extends JPanel {
 			}
 		}
 		
-		scrollPane.getViewport().add(inputTable);
-		
 		repaint();
+
 	}
 	
 	
