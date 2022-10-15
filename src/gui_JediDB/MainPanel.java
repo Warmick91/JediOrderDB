@@ -40,7 +40,7 @@ public class MainPanel extends JPanel {
 	private JPanel inputTablePanel;
 	private JScrollPane scrollPane = new JScrollPane();
 	private JPanel tablePanel = new JPanel();
-	private JTable inputTable;
+	public JTable inputTable;
 	private String[] columnNames;
 	private String[][] inputs;
 	
@@ -200,7 +200,6 @@ public class MainPanel extends JPanel {
 		goBackButtonToMain.setSize(100, 25);
 		goBackButtonToMain.setLocation(15, 15);
 		this.add(goBackButtonToMain);
-		JLabel choiceQuestion = new JLabel("Choose search parameters:");
 
 		repaint();
 	}
@@ -253,18 +252,20 @@ public class MainPanel extends JPanel {
 
 		switch (category) {
 			case "jedi":
-
-				columnNames = new String[10];
+				//Table's attributes for the specific class' input
+				
+				columnNames = new String[11];
 				columnNames[0] = "Last name";
 				columnNames[1] = "First name";
-				columnNames[2] = "Date of birth";
-				columnNames[3] = "Birthplace";
-				columnNames[4] = "Date of death";
-				columnNames[5] = "Deathplace";
-				columnNames[6] = "Rank";
-				columnNames[7] = "Specialization";
-				columnNames[8] = "Saber type";
-				columnNames[9] = "Saber color";
+				columnNames[2] = "Species";
+				columnNames[3] = "Date of birth";
+				columnNames[4] = "Birthplace";
+				columnNames[5] = "Date of death";
+				columnNames[6] = "Deathplace";
+				columnNames[7] = "Rank";
+				columnNames[8] = "Specialization";
+				columnNames[9] = "Saber type";
+				columnNames[10] = "Saber color";
 
 				inputs = new String[numberOfInputRows][columnNames.length];
 				for (int i = 0; i < numberOfInputRows; i++) {
@@ -279,6 +280,8 @@ public class MainPanel extends JPanel {
 				
 				inputTable = new JTable(inputs, columnNames);
 				inputTable.setRowHeight(inputTablePanel.getHeight() / 5 - 4);
+				inputTable.getColumnModel().getColumn(3).setPreferredWidth(60);
+				inputTable.getColumnModel().getColumn(5).setPreferredWidth(60);
 				inputTablePanel.add(new JScrollPane(inputTable));
 				this.add(inputTablePanel);
 

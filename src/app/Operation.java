@@ -14,20 +14,18 @@ public class Operation {
 	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
 	public static final String SELECT_ALL_BATTLES = "SELECT * FROM Battles ORDER BY BattleID";
 	public static final String SELECT_CUSTOM = "";
-	
+
 	//Check the DB for specific column names
-	public static final String INSERT_INTO_JEDI = "BEGIN; "
-												+ "INSERT INTO Beings "
-												+ "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?); "
-												+ "INSERT INTO Jedi "
-												+ "VALUES (NULL, ?, ?, ?, ?, ?); "
-												+ "END;";
-	
+	public static final String INSERT_INTO_BEINGS = "INSERT INTO Beings " 
+												+ "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, 'Jedi')";
+	public static final String INSERT_INTO_JEDI = "INSERT INTO Jedi " 
+												+ "VALUES (NULL, ?, ?, ?, ?, ?)";
+
 	private static PreparedStatement ps;
 	private static ResultSet rs;
 	private static String[][] data;
 
-	private static final String[] beingsColumns = { "ID", "Last Name", "First Name", "Birth Date", "Birtplace", "Death Date", "Deathplace", "Species","Class" };
+	private static final String[] beingsColumns = { "ID", "Last Name", "First Name", "Birth Date", "Birtplace", "Death Date", "Deathplace", "Species", "Class" };
 	private static final String[] jediColumns = { "ID", "Last Name", "Rank", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] sithColumns = { "ID", "Last Name", "Title at death", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation" };
@@ -65,9 +63,7 @@ public class Operation {
 					i++;
 				}
 				queryTable = new JTable(data, beingsColumns);
-				queryTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 				queryTable.getColumnModel().getColumn(0).setPreferredWidth(20);
-
 
 				break;
 
@@ -181,17 +177,38 @@ public class Operation {
 
 		return queryTable;
 	}
-	
-	
+
+
 	public static void insertData (String query, Connection con) throws SQLException {
 
 		switch (query) {
 			case INSERT_INTO_JEDI:
-				//
-				ps = con.prepareStatement(query);
-				//ps.setString(1, Frame.gui.);
 				
-			break;
+				//Add a being				
+				ps = con.prepareStatement(INSERT_INTO_BEINGS);
+				
+				ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 0))); //LastName (Beings)
+				ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 1))); //FirstName
+				ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 3))); //Birthday
+				ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 4))); //Birthplace
+				ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 5))); //Deathday
+				ps.setString(6, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 6))); //Deathplace
+				ps.setString(7, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 2))); //Species
+				
+				ps.executeUpdate();	
+				
+				//Add a Jedi
+				ps = con.prepareStatement(INSERT_INTO_JEDI);
+
+				ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 0))); //LastName (Jedi)
+				ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 7))); //Rank
+				ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 8))); //Specialization
+				ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 9))); //Saber type
+				ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 10))); //Saber color
+				
+				ps.executeUpdate();						
+				
+				break;
 
 		}
 	}

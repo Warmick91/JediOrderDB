@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import javax.swing.JPanel;
 import app.ConnectionFactory;
+import app.Operation;
 import gui_JediDB.Frame;
 import gui_JediDB.MainPanel;
 
@@ -170,10 +171,11 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					Operation.insertData(Operation.INSERT_INTO_JEDI, connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				System.out.println("New Jedi added");	
+				System.out.println("Button is working, text to change");	
 				
 			}
 		};
