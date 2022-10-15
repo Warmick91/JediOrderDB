@@ -80,7 +80,7 @@ public class MainPanel extends JPanel {
 
 	public MainPanel () throws Exception {
 
-		//Registering font
+		//Registering the SW font
 		try {
 			swFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/fonts/starjedi/Starjedi.ttf")).deriveFont(30f);
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -240,7 +240,7 @@ public class MainPanel extends JPanel {
 		removeAll();
 		revalidate();
 		
-		textTitle.setText("Jedi to add:");
+		textTitle.setText("Jedi to add (1 - 5):");
 		this.add(textTitle);
 
 		this.add(goBackButtonToUpdateCategory);

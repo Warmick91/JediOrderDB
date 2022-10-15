@@ -27,7 +27,7 @@ public class Operation {
 	private static ResultSet rs;
 	private static String[][] data;
 
-	private static final String[] beingsColumns = { "ID", "Last Name", "First Name", "Birth Date", "Birtplace", "Death Date", "Deathplace", "Class" };
+	private static final String[] beingsColumns = { "ID", "Last Name", "First Name", "Birth Date", "Birtplace", "Death Date", "Deathplace", "Species","Class" };
 	private static final String[] jediColumns = { "ID", "Last Name", "Rank", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] sithColumns = { "ID", "Last Name", "Title at death", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation" };
@@ -45,7 +45,7 @@ public class Operation {
 				ps = con.prepareStatement("SELECT COUNT(*) FROM Beings");
 				rs = ps.executeQuery();
 				if (rs.next()) {
-					data = new String[rs.getInt(1)][8];
+					data = new String[rs.getInt(1)][9];
 				}
 
 				ps = con.prepareStatement(SELECT_ALL_BEINGS);
@@ -61,9 +61,14 @@ public class Operation {
 					data[i][5] = rs.getString(6);
 					data[i][6] = rs.getString(7);
 					data[i][7] = rs.getString(8);
+					data[i][8] = rs.getString(9);
 					i++;
 				}
 				queryTable = new JTable(data, beingsColumns);
+				queryTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+				queryTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+
+
 				break;
 
 			case SELECT_ALL_JEDI:

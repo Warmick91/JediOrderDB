@@ -10,6 +10,7 @@ CREATE TABLE Beings (
 	BirthPlace VARCHAR(250),
 	DeathDate VARCHAR(250),
 	DeathPlace VARCHAR(250),
+	Species VARCHAR(250),
 	beingClass ENUM('Jedi', 'Sith', 'BountyHunter', 'Smuggler'),
     UNIQUE (beingID),
 	PRIMARY KEY (LastName)
