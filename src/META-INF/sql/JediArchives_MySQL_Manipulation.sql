@@ -2,25 +2,25 @@ USE jediarchives;
 
 INSERT INTO Beings
 VALUES 
-(NULL, 'Yoda', 'Unknown', 'Unknown', 'Unknown', '4 ABY', 'Dagobah', 'Jedi'),
-(NULL, 'Windu', 'Mace', '72 BBY', 'Haruun Kal', '19 BBY', 'Coruscant', 'Jedi'),
-(NULL, 'Mundi', 'Ki-Adi', 'Unknown', 'Unknown', '19 BBY', 'Mygeeto', 'Jedi'),
-(NULL, 'Bridger', 'Ezra', '19 BBY', 'Lothal', NULL, NULL, 'Jedi'),
-(NULL, 'Tano', 'Ahsoka', '36 BBY', 'Shili', NULL, NULL, 'Jedi'),
-(NULL, 'Kenobi', 'Obi-Wan', '57 BBY', 'Stewjon', '0 BBY', 'Death Start', 'Jedi'),
-(NULL, 'Jinn', 'Qui-Gon', '80 BBY', 'Coruscant', '32 BBY', 'Naboo', 'Jedi'), 
+(NULL, 'Yoda', 'Unknown', 'Unknown', 'Unknown', '4 ABY', 'Dagobah', 'Unknown', 'Jedi'),
+(NULL, 'Windu', 'Mace', '72 BBY', 'Haruun Kal', '19 BBY', 'Coruscant', 'Human ', 'Jedi'),
+(NULL, 'Mundi', 'Ki-Adi', 'Unknown', 'Unknown', '19 BBY', 'Mygeeto', 'Cerean','Jedi'),
+(NULL, 'Bridger', 'Ezra', '19 BBY', 'Lothal', NULL, NULL, 'Human','Jedi'),
+(NULL, 'Tano', 'Ahsoka', '36 BBY', 'Shili', NULL, NULL, 'Togruta', 'Jedi'),
+(NULL, 'Kenobi', 'Obi-Wan', '57 BBY', 'Stewjon', '0 BBY', 'Death Start', 'Human','Jedi'),
+(NULL, 'Jinn', 'Qui-Gon', '80 BBY', 'Coruscant', '32 BBY', 'Naboo', 'Human','Jedi'), 
 
-(NULL, 'Maul', 'Unknown', '54 BBY', 'Dathomir', '2 BBY', 'Tatooine', 'Sith'),
-(NULL, 'Palpatine', 'Sheev', '82 BBY', 'Naboo', '35 ABY', 'Exegol', 'Sith'),
-(NULL, 'Damask II', 'Hego', '147 BBY', 'Mygeeto', '32 BBY', 'Coruscant', 'Sith'),
+(NULL, 'Maul', 'Unknown', '54 BBY', 'Dathomir', '2 BBY', 'Tatooine', 'Zabrak','Sith'),
+(NULL, 'Palpatine', 'Sheev', '82 BBY', 'Naboo', '35 ABY', 'Exegol', 'Human', 'Sith'),
+(NULL, 'Damask II', 'Hego', '147 BBY', 'Mygeeto', '32 BBY', 'Coruscant', 'Muun','Sith'),
 
-(NULL, 'Fett', 'Boba', '32 BBY', 'Kamino', NULL, NULL, 'BountyHunter'),
-(NULL, 'Sing', 'Aurra', '51 BBY', 'Nar Shaddaa', '10 BBY', 'Unknown', 'BountyHunter'),
-(NULL, 'Bane', 'Cad', '62 BBY', 'Duro', '9 ABY', 'Tatooine', 'BountyHunter'),
+(NULL, 'Fett', 'Boba', '32 BBY', 'Kamino', NULL, NULL, 'Human', 'BountyHunter'),
+(NULL, 'Sing', 'Aurra', '51 BBY', 'Nar Shaddaa', '10 BBY', 'Unknown', 'Palliduvan', 'BountyHunter'),
+(NULL, 'Bane', 'Cad', '62 BBY', 'Duro', '9 ABY', 'Tatooine', 'Duros', 'BountyHunter'),
 
-(NULL, 'Solo', 'Han', '32 BBY', 'Corellia', '34 ABY', 'Ilum', 'Smuggler'),
-(NULL, 'Chewbacca', NULL, '200 BBY', 'Kashyyyk', NULL, NULL, 'Smuggler'),
-(NULL, 'Calrissian', 'Lando', '43 BBY', 'Socorro', NULL, NULL, 'Smuggler');
+(NULL, 'Solo', 'Han', '32 BBY', 'Corellia', '34 ABY', 'Ilum', 'Human','Smuggler'),
+(NULL, 'Chewbacca', NULL, '200 BBY', 'Kashyyyk', NULL, NULL, 'Wookie', 'Smuggler'),
+(NULL, 'Calrissian', 'Lando', '43 BBY', 'Socorro', NULL, NULL, 'Human','Smuggler');
 
 
 INSERT INTO Jedi
@@ -57,3 +57,8 @@ INSERT INTO Battles
 VALUES
 (NULL, 'Naboo', '32 BBY', 'Jinn', 'Kenobi', 'Maul', NULL, 'Death of Qui-Gon and Darth Maul'),
 (NULL, 'Tatooine', '4 ABY', 'Solo', NULL, 'Fett', NULL, 'Apparent death of Boba Fett');
+
+-- proba
+
+INSERT INTO Jedi
+VALUES (NULL, 'asd', 'Padawan', 'Guardian', 'asd', 'asd'); 

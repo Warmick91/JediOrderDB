@@ -1,8 +1,9 @@
-package App;
+package app;
 
 import java.awt.Color;
 import java.sql.*;
 import javax.swing.JTable;
+import GUI_JediDB.Frame;
 
 
 public class Operation {
@@ -13,12 +14,19 @@ public class Operation {
 	public static final String SELECT_ALL_BOUNTYHUNTERS = "SELECT * FROM BountyHunters ORDER BY HunterID";
 	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
 	public static final String SELECT_ALL_BATTLES = "SELECT * FROM Battles ORDER BY BattleID";
+	public static final String SELECT_CUSTOM = "";
+
+	//Check the DB for specific column names
+	public static final String INSERT_INTO_BEINGS = "INSERT INTO Beings " 
+												+ "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, 'Jedi')";
+	public static final String INSERT_INTO_JEDI = "INSERT INTO Jedi " 
+												+ "VALUES (NULL, ?, ?, ?, ?, ?)";
 
 	private static PreparedStatement ps;
 	private static ResultSet rs;
 	private static String[][] data;
 
-	private static final String[] beingsColumns = { "ID", "Last Name", "First Name", "Birth Date", "Birtplace", "Death Date", "Deathplace", "Class" };
+	private static final String[] beingsColumns = { "ID", "Last Name", "First Name", "Birth Date", "Birtplace", "Death Date", "Deathplace", "Species", "Class" };
 	private static final String[] jediColumns = { "ID", "Last Name", "Rank", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] sithColumns = { "ID", "Last Name", "Title at death", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation" };
@@ -36,7 +44,7 @@ public class Operation {
 				ps = con.prepareStatement("SELECT COUNT(*) FROM Beings");
 				rs = ps.executeQuery();
 				if (rs.next()) {
-					data = new String[rs.getInt(1)][8];
+					data = new String[rs.getInt(1)][9];
 				}
 
 				ps = con.prepareStatement(SELECT_ALL_BEINGS);
@@ -52,9 +60,12 @@ public class Operation {
 					data[i][5] = rs.getString(6);
 					data[i][6] = rs.getString(7);
 					data[i][7] = rs.getString(8);
+					data[i][8] = rs.getString(9);
 					i++;
 				}
 				queryTable = new JTable(data, beingsColumns);
+				queryTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+
 				break;
 
 			case SELECT_ALL_JEDI:
@@ -167,5 +178,78 @@ public class Operation {
 
 		return queryTable;
 	}
+
+
+	public static void insertData (String query, Connection con) throws SQLException {
+		
+		//Check how many rows were filled with data
+		int filledRowsNumberCheck = 0;
+		for (int i = 0; i < Frame.gui.inputTable.getRowCount(); i++) {
+			if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "") {
+				filledRowsNumberCheck++;
+			}
+		}
+		
+		if(filledRowsNumberCheck == 0) {
+			Frame.gui.setNoDataErrorLabel();
+			return;
+		}
+
+		
+		int numberOfSuccessfulOperations = 0;		
+		con.setAutoCommit(false);
+		switch (query) {
+			case INSERT_INTO_JEDI:
+			
+				for (int i = 0; i < filledRowsNumberCheck; i++) {
+					if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "") {
+
+						try {
+							//Add a being				
+							ps = con.prepareStatement(INSERT_INTO_BEINGS);
+
+							ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName (Beings)
+							ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 1))); //FirstName
+							ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 3))); //Birthday
+							ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 4))); //Birthplace
+							ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 5))); //Deathday
+							ps.setString(6, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 6))); //Deathplace
+							ps.setString(7, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 2))); //Species
+
+							ps.executeUpdate();
+
+							//Add a Jedi
+							ps = con.prepareStatement(INSERT_INTO_JEDI);
+
+							ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName (Jedi)
+							ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 7))); //Rank
+							ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 8))); //Specialization
+							ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 9))); //Saber type
+							ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 10))); //Saber color
+
+							ps.executeUpdate();												
+							
+							numberOfSuccessfulOperations++;
+							System.out.println("DONE");
+						} catch (SQLException sqle) {
+							throw new SQLException("Possible duplicate entries");
+						}
+					}
+					
+					if (numberOfSuccessfulOperations == filledRowsNumberCheck) {
+						Frame.gui.confirmationLabel.setForeground(Color.yellow);
+						Frame.gui.confirmationLabel.setText("New Jedi added");
+						con.commit();
+					} else {
+						con.rollback();
+					}
+				}
+
+				con.setAutoCommit(true);
+				break;
+
+		}
+	}
+
 
 }

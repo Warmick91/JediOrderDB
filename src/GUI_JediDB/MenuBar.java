@@ -6,7 +6,11 @@ import javax.swing.JMenuItem;
 
 public class MenuBar extends JMenuBar {
 
-    private JMenu mFile = new JMenu("Data");
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JMenu mFile = new JMenu("Data");
     private JMenuItem cmdReload = new JMenuItem("Load");
     private JMenuItem cmdFind = new JMenuItem("Find...");
     private JMenuItem cmdRegister = new JMenuItem("Register...");

@@ -1,21 +1,27 @@
 package GUI_JediDB;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JTable;
 
 
 public class Frame extends JFrame {
 
-	public final int FRAME_WIDTH = 1000;
-	public final int FRAME_HEIGHT = 600;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public final static int FRAME_WIDTH = 1000;
+	public final static int FRAME_HEIGHT = 600;
 
 	MenuBar mBar = new MenuBar();
-	MainPanel gui;
+	ImageIcon lightsabersIcon = new ImageIcon("images/sabers.jpg");
+	public static MainPanel gui;
 
 
 	public Frame () throws Exception {
 		super("Jedi Order's Data Archives");
-		gui = new MainPanel(FRAME_WIDTH, FRAME_HEIGHT);
+		this.setIconImage(lightsabersIcon.getImage());
+		gui = new MainPanel();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
