@@ -2,6 +2,7 @@ package gui_JediDB;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -13,20 +14,23 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.TableCellRenderer;
 import app.Operation;
 import appTools.ALClass;
 
 
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel {
-	
+
 	//Images
 	static File generalBG = new File("images/Jedi_Archives.jpg");
 	static File jediBG = new File("images/hyperspacejump.jpg");
@@ -35,7 +39,7 @@ public class MainPanel extends JPanel {
 	static File smugglersBG = new File("images/milleniumFalcon.jpg");
 	static File battlesBG = new File("images/sabersCrossed.jpg");
 	public static Image bgImage;
-	
+
 	//Data table structure
 	private JPanel inputTablePanel;
 	private JScrollPane scrollPane = new JScrollPane();
@@ -43,9 +47,9 @@ public class MainPanel extends JPanel {
 	public JTable inputTable;
 	private String[] columnNames;
 	private String[][] inputs;
-	
-	
-	public static JLabel textTitle = new JLabel("", SwingConstants.CENTER);
+
+	public JLabel textTitle = new JLabel("", SwingConstants.CENTER);
+	public JLabel confirmationLabel = new JLabel("", SwingConstants.CENTER);
 
 	JLabel buttonsLabel = new JLabel();
 	JLabel advancedButtons = new JLabel();
@@ -64,7 +68,7 @@ public class MainPanel extends JPanel {
 	public static JButton modifiedSearchButton = new JButton("Modified search");
 	public static JButton manipulateButton = new JButton("Jedi Master Access");
 	public static JButton goBackButtonToMain = new JButton("Back <<<");
-	public static JButton goBackButtonToUpdateCategory = new JButton("Back <<<");	
+	public static JButton goBackButtonToUpdateCategory = new JButton("Back <<<");
 
 	//Update button
 	public static JButton updateJediButton = new JButton("Jedi");
@@ -75,7 +79,6 @@ public class MainPanel extends JPanel {
 	public static JButton updatePlanetsButton = new JButton("Planets");
 	public static JButton confirmJediUpdateButton = new JButton("Confirm >>>");
 	public static JButton emptyFieldsButton = new JButton("Empty all fields []");
-
 
 
 	public MainPanel () throws Exception {
@@ -96,10 +99,10 @@ public class MainPanel extends JPanel {
 		goBackButtonToUpdateCategory.setLocation(15, 15);
 
 		//Adding Action Listeners to
-//		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButtonToUpdateCategory, goBackButtonToMain, confirmJediUpdateButton, emptyFieldsButton };
-//		for (JButton button : buttons) {
-//			//button.addActionListener(new ALClass());
-//		}
+		//		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButtonToUpdateCategory, goBackButtonToMain, confirmJediUpdateButton, emptyFieldsButton };
+		//		for (JButton button : buttons) {
+		//			//button.addActionListener(new ALClass());
+		//		}
 
 		beingsButton.addActionListener(alClass.showAllBeingsListener);
 		jediButton.addActionListener(alClass.showAllJediListener);
@@ -238,22 +241,21 @@ public class MainPanel extends JPanel {
 
 		removeAll();
 		revalidate();
-		
-		textTitle.setText("Jedi to add (1 - 5):");
-		this.add(textTitle);
 
+		this.confirmationLabel.setText("");
 		this.add(goBackButtonToUpdateCategory);
+		this.add(textTitle);
 
 		final int numberOfInputRows = 5;
 		String[] columnNames;
 
 		//Data
-		
-
 		switch (category) {
 			case "jedi":
-				//Table's attributes for the specific class' input
-				
+
+				textTitle.setText("Jedi to add (1 - 5):");
+
+				//Table's attributes for the specific class' input				
 				columnNames = new String[11];
 				columnNames[0] = "Last name";
 				columnNames[1] = "First name";
@@ -270,22 +272,37 @@ public class MainPanel extends JPanel {
 				inputs = new String[numberOfInputRows][columnNames.length];
 				for (int i = 0; i < numberOfInputRows; i++) {
 					for (int j = 0; j < columnNames.length; j++) {
-						inputs[i][j] = "";
+						if (j != 7 && j != 8) { //not sure if needed - ComboBoxes have to be added for these cells
+							inputs[i][j] = "";
+						}
 					}
 				}
 
 				inputTablePanel = new JPanel(new GridLayout());
 				inputTablePanel.setSize(850, 200);
 				inputTablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
-				
+
 				inputTable = new JTable(inputs, columnNames);
 				inputTable.setRowHeight(inputTablePanel.getHeight() / 5 - 4);
 				inputTable.getColumnModel().getColumn(3).setPreferredWidth(60);
 				inputTable.getColumnModel().getColumn(5).setPreferredWidth(60);
+
+				String[] rankJediOptions = { "", "Padawan", "Knight", "Master", "Grand Master" };
+				MyComboBoxRenderer rankJediOptionsJCBox = new MyComboBoxRenderer(rankJediOptions); //The actual JComboBox
+				rankJediOptionsJCBox.setSelectedIndex(0);
+				inputTable.getColumnModel().getColumn(7).setCellEditor(new MyComboBoxEditor(rankJediOptions));
+				inputTable.getColumnModel().getColumn(7).setCellRenderer(rankJediOptionsJCBox);
+				String[] specJediOptions = { "", "Guardian", "Consular", "Sentinel" };
+				MyComboBoxRenderer specJediOptionsJCBox = new MyComboBoxRenderer(specJediOptions); //The actual JComboBox
+				specJediOptionsJCBox.setSelectedIndex(0);
+				inputTable.getColumnModel().getColumn(8).setCellEditor(new MyComboBoxEditor(specJediOptions));
+				inputTable.getColumnModel().getColumn(8).setCellRenderer(new MyComboBoxRenderer(specJediOptions));
+
 				inputTablePanel.add(new JScrollPane(inputTable));
+
 				this.add(inputTablePanel);
 
-				//Counter
+				//Counter on the left side
 				JPanel counterPanel = new JPanel(new GridLayout(numberOfInputRows, 1));
 				for (int i = 1; i <= numberOfInputRows; i++) {
 					counterPanel.add(new JLabel(String.valueOf(i), SwingConstants.CENTER));
@@ -295,7 +312,6 @@ public class MainPanel extends JPanel {
 				counterPanel.setOpaque(true);
 				this.add(counterPanel);
 
-
 				JPanel buttons = new JPanel(new GridLayout(1, 2, 10, 0));
 				buttons.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
 				buttons.setOpaque(false);
@@ -303,16 +319,21 @@ public class MainPanel extends JPanel {
 				buttons.add(emptyFieldsButton);
 				this.add(buttons);
 
+				confirmationLabel.setSize(buttons.getWidth() / 2, 40);
+				confirmationLabel.setLocation(Frame.FRAME_WIDTH / 2 - confirmationLabel.getWidth() / 2, buttons.getY() + buttons.getHeight() + 25);
+				confirmationLabel.setFont(swFont);
+				confirmationLabel.setOpaque(false);
+				this.add(confirmationLabel);
+
 				repaint();
 				break;
 		}
 
 	}
 
-	
+
 	public void clearInputTable () {
 
-		
 		for (int i = 0; i < inputTable.getRowCount(); i++) {
 			for (int j = 0; j < inputTable.getColumnCount(); j++) {
 				if (inputTable.getModel().getValueAt(i, j) != "") {
@@ -320,12 +341,14 @@ public class MainPanel extends JPanel {
 				}
 			}
 		}
-		
+
+		this.confirmationLabel.setText("");
+
 		repaint();
 
 	}
-	
-	
+
+
 	public void setBackgroundToRoot () throws IOException {
 		bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 		repaint();
@@ -361,10 +384,42 @@ public class MainPanel extends JPanel {
 		repaint();
 	}
 
-	
+
+	public void setNoDataErrorLabel () {
+		Frame.gui.confirmationLabel.setForeground(Color.red);
+		Frame.gui.confirmationLabel.setText("No data input");
+		System.out.println("No data input");
+	}
 
 
-	
+	class MyComboBoxRenderer extends JComboBox<Object> implements TableCellRenderer {
+		public MyComboBoxRenderer (String[] items) {
+			super(items);
+		}
+
+
+		public Component getTableCellRendererComponent (JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+				super.setBackground(table.getSelectionBackground());
+			} else {
+				setForeground(table.getForeground());
+				setBackground(table.getBackground());
+			}
+			setSelectedItem(value);
+			return this;
+		}
+	}
+
+
+
+	class MyComboBoxEditor extends DefaultCellEditor {
+		public MyComboBoxEditor (String[] items) {
+			super(new JComboBox(items));
+		}
+	}
+
+
 	@Override
 	protected void paintComponent (Graphics g) {
 		super.paintComponent(g);

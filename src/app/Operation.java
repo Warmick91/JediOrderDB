@@ -1,5 +1,6 @@
 package app;
 
+import java.awt.Color;
 import java.sql.*;
 import javax.swing.JTable;
 import gui_JediDB.Frame;
@@ -180,36 +181,75 @@ public class Operation {
 
 
 	public static void insertData (String query, Connection con) throws SQLException {
+		
+		//Check how many rows were filled with data
+		int filledRowsNumberCheck = 0;
+		for (int i = 0; i < Frame.gui.inputTable.getRowCount(); i++) {
+			if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "") {
+				filledRowsNumberCheck++;
+			}
+		}
+		
+		if(filledRowsNumberCheck == 0) {
+			Frame.gui.setNoDataErrorLabel();
+			return;
+		}
 
+		
+		int numberOfSuccessfulOperations = 0;		
+		con.setAutoCommit(false);
 		switch (query) {
 			case INSERT_INTO_JEDI:
-				
-				//Add a being				
-				ps = con.prepareStatement(INSERT_INTO_BEINGS);
-				
-				ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 0))); //LastName (Beings)
-				ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 1))); //FirstName
-				ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 3))); //Birthday
-				ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 4))); //Birthplace
-				ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 5))); //Deathday
-				ps.setString(6, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 6))); //Deathplace
-				ps.setString(7, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 2))); //Species
-				
-				ps.executeUpdate();	
-				
-				//Add a Jedi
-				ps = con.prepareStatement(INSERT_INTO_JEDI);
+			
+				for (int i = 0; i < filledRowsNumberCheck; i++) {
+					if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "") {
 
-				ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 0))); //LastName (Jedi)
-				ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 7))); //Rank
-				ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 8))); //Specialization
-				ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 9))); //Saber type
-				ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(0, 10))); //Saber color
-				
-				ps.executeUpdate();						
-				
+						try {
+							//Add a being				
+							ps = con.prepareStatement(INSERT_INTO_BEINGS);
+
+							ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName (Beings)
+							ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 1))); //FirstName
+							ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 3))); //Birthday
+							ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 4))); //Birthplace
+							ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 5))); //Deathday
+							ps.setString(6, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 6))); //Deathplace
+							ps.setString(7, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 2))); //Species
+
+							ps.executeUpdate();
+
+							//Add a Jedi
+							ps = con.prepareStatement(INSERT_INTO_JEDI);
+
+							ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName (Jedi)
+							ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 7))); //Rank
+							ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 8))); //Specialization
+							ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 9))); //Saber type
+							ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 10))); //Saber color
+
+							ps.executeUpdate();												
+							
+							numberOfSuccessfulOperations++;
+							System.out.println("DONE");
+						} catch (SQLException sqle) {
+							throw new SQLException("Possible duplicate entries");
+						}
+					}
+					
+					if (numberOfSuccessfulOperations == filledRowsNumberCheck) {
+						Frame.gui.confirmationLabel.setForeground(Color.yellow);
+						Frame.gui.confirmationLabel.setText("New Jedi added");
+						con.commit();
+					} else {
+						con.rollback();
+					}
+				}
+
+				con.setAutoCommit(true);
 				break;
 
 		}
 	}
+
+
 }

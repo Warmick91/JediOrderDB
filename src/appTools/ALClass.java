@@ -1,5 +1,6 @@
 package appTools;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -34,7 +35,7 @@ public class ALClass {
 
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					MainPanel.textTitle.setText("Luminous Beings");
+					Frame.gui.textTitle.setText("Luminous Beings");
 					Frame.gui.setScrollPane("beings", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -49,7 +50,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					MainPanel.textTitle.setText("Jedi");
+					Frame.gui.textTitle.setText("Jedi");
 					Frame.gui.setScrollPane("jedi", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -64,7 +65,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					MainPanel.textTitle.setText("Sith");
+					Frame.gui.textTitle.setText("Sith");
 					Frame.gui.setScrollPane("sith", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -80,7 +81,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					MainPanel.textTitle.setText("Bounty Hunters");
+					Frame.gui.textTitle.setText("Bounty Hunters");
 					Frame.gui.setScrollPane("bountyHunters", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -95,7 +96,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					MainPanel.textTitle.setText("Smugglers");
+					Frame.gui.textTitle.setText("Smugglers");
 					Frame.gui.setScrollPane("smugglers", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -109,7 +110,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					MainPanel.textTitle.setText("Battles");
+					Frame.gui.textTitle.setText("Battles");
 					Frame.gui.setScrollPane("battles", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -136,6 +137,8 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
+					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					Frame.gui.setScrollPane("beings", connection);
 					Frame.gui.setPanelToStart();
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -174,8 +177,9 @@ public class ALClass {
 					Operation.insertData(Operation.INSERT_INTO_JEDI, connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
-				}
-				System.out.println("Button is working, text to change");	
+					Frame.gui.confirmationLabel.setForeground(Color.red);
+					Frame.gui.confirmationLabel.setText("input fields error");
+				}				
 				
 			}
 		};
@@ -183,8 +187,7 @@ public class ALClass {
 		cancelAndEmptyListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				Frame.gui.clearInputTable();
-				
+				Frame.gui.clearInputTable();				
 			}
 			
 		};

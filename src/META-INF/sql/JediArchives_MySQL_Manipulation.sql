@@ -61,4 +61,4 @@ VALUES
 -- proba
 
 INSERT INTO Jedi
-VALUES (NULL, 'asd', 'Consular', 'asd', 'asd', 'asd'); 
+VALUES (NULL, 'asd', 'Padawan', 'Guardian', 'asd', 'asd'); 
