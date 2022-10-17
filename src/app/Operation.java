@@ -196,7 +196,7 @@ public class Operation {
 		}
 
 		
-		int numberOfSuccessfulOperations = 0;		
+		int numberOfSuccessfulOperations = 0;				
 		con.setAutoCommit(false);
 		switch (query) {
 			case INSERT_INTO_JEDI:
@@ -215,8 +215,8 @@ public class Operation {
 							ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 5))); //Deathday
 							ps.setString(6, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 6))); //Deathplace
 							ps.setString(7, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 2))); //Species
-
-							ps.executeUpdate();
+							
+							ps.addBatch();
 
 							//Add a Jedi
 							ps = con.prepareStatement(INSERT_INTO_JEDI);
@@ -226,26 +226,30 @@ public class Operation {
 							ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 8))); //Specialization
 							ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 9))); //Saber type
 							ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 10))); //Saber color
-
-							ps.executeUpdate();												
+							
+							ps.addBatch();
+							//ps.executeUpdate();												
 							
 							numberOfSuccessfulOperations++;
-							System.out.println("DONE");
+							
 						} catch (SQLException sqle) {
-							throw new SQLException("Possible duplicate entries");
-						}
-					}
+							ps.clearBatch();
+							throw new SQLException("input error");							
+						}					
+					}				
+					
 					
 					if (numberOfSuccessfulOperations == filledRowsNumberCheck) {
+						ps.executeBatch();
+						con.commit();					
 						Frame.gui.confirmationLabel.setForeground(Color.yellow);
-						Frame.gui.confirmationLabel.setText("New Jedi added");
-						con.commit();
+						Frame.gui.confirmationLabel.setText("New Jedi added");						
 					} else {
-						con.rollback();
+						ps.clearBatch();
+						System.out.println("no i chuj");
+						//throw new SQLException("B Possible duplicate entries");
 					}
 				}
-
-				con.setAutoCommit(true);
 				break;
 
 		}
