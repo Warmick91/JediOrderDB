@@ -17,12 +17,12 @@ public class Operation {
 	public static final String SELECT_CUSTOM = "";
 
 	//Check the DB for specific column names
-	public static final String INSERT_INTO_BEINGS = "INSERT INTO Beings " 
-												+ "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, 'Jedi')";
-	public static final String INSERT_INTO_JEDI = "INSERT INTO Jedi " 
-												+ "VALUES (NULL, ?, ?, ?, ?, ?)";
+	public static final String INSERT_INTO_BEINGS = "INSERT INTO Beings " + "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, 'Jedi')";
+	public static final String INSERT_INTO_JEDI = "INSERT INTO Jedi " + "VALUES (NULL, ?, ?, ?, ?, ?)";
+	public static final String INSERT_INTO_JEDI_CALL = "CALL insertIntoJediAndBeings (" + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	private static PreparedStatement ps;
+	private static CallableStatement cs;
 	private static ResultSet rs;
 	private static String[][] data;
 
@@ -181,7 +181,7 @@ public class Operation {
 
 
 	public static void insertData (String query, Connection con) throws SQLException {
-		
+
 		//Check how many rows were filled with data
 		int filledRowsNumberCheck = 0;
 		for (int i = 0; i < Frame.gui.inputTable.getRowCount(); i++) {
@@ -189,71 +189,70 @@ public class Operation {
 				filledRowsNumberCheck++;
 			}
 		}
-		
-		if(filledRowsNumberCheck == 0) {
+
+		if (filledRowsNumberCheck == 0) {
 			Frame.gui.setNoDataErrorLabel();
 			return;
 		}
 
-		
-		int numberOfSuccessfulOperations = 0;				
+		int numberOfSuccessfulOperations = 0;
 		con.setAutoCommit(false);
 		switch (query) {
 			case INSERT_INTO_JEDI:
-			
+
+				cs = con.prepareCall(INSERT_INTO_JEDI_CALL);
+
 				for (int i = 0; i < filledRowsNumberCheck; i++) {
 					if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "") {
 
 						try {
-							//Add a being				
-							ps = con.prepareStatement(INSERT_INTO_BEINGS);
 
-							ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName (Beings)
-							ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 1))); //FirstName
-							ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 3))); //Birthday
-							ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 4))); //Birthplace
-							ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 5))); //Deathday
-							ps.setString(6, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 6))); //Deathplace
-							ps.setString(7, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 2))); //Species
-							
-							ps.addBatch();
+							cs.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName (Beings and Jedi)
+							cs.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 1))); //FirstName
+							cs.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 3))); //Birthday
+							cs.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 4))); //Birthplace
+							cs.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 5))); //Deathday
+							cs.setString(6, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 6))); //Deathplace
+							cs.setString(7, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 2))); //Species							
 
-							//Add a Jedi
-							ps = con.prepareStatement(INSERT_INTO_JEDI);
+							cs.setString(8, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 7))); //Rank
+							cs.setString(9, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 8))); //Specialization
+							cs.setString(10, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 9))); //Saber type
+							cs.setString(11, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 10))); //Saber color
 
-							ps.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName (Jedi)
-							ps.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 7))); //Rank
-							ps.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 8))); //Specialization
-							ps.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 9))); //Saber type
-							ps.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 10))); //Saber color
-							
-							ps.addBatch();
-							//ps.executeUpdate();												
-							
+							//cs.execute();
+							cs.addBatch();
+
 							numberOfSuccessfulOperations++;
-							
+
 						} catch (SQLException sqle) {
-							ps.clearBatch();
-							throw new SQLException("input error");							
-						}					
-					}				
-					
-					
-					if (numberOfSuccessfulOperations == filledRowsNumberCheck) {
-						ps.executeBatch();
-						con.commit();					
-						Frame.gui.confirmationLabel.setForeground(Color.yellow);
-						Frame.gui.confirmationLabel.setText("New Jedi added");						
-					} else {
-						ps.clearBatch();
-						System.out.println("no i chuj");
-						//throw new SQLException("B Possible duplicate entries");
+							Frame.gui.confirmationLabel.setForeground(Color.red);
+							Frame.gui.confirmationLabel.setText("input error");
+							sqle.printStackTrace();
+							throw new SQLException("Something went wrong with adding to the batch");
+						}
 					}
+
 				}
-				break;
 
+				if (numberOfSuccessfulOperations == filledRowsNumberCheck) {
+					try {
+						cs.executeBatch();
+						con.commit();
+						Frame.gui.confirmationLabel.setForeground(Color.yellow);
+						Frame.gui.confirmationLabel.setText("New Jedi added");
+					} catch (BatchUpdateException bue) {
+						cs.clearBatch();
+						con.rollback();
+						Frame.gui.confirmationLabel.setForeground(Color.red);
+						Frame.gui.confirmationLabel.setText("possible duplicates");
+						throw new BatchUpdateException("Something went wrong with the batch execution", null);
+					}
+
+					break;
+
+				}
 		}
+
 	}
-
-
 }
