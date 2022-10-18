@@ -37,7 +37,8 @@ public class ALClass {
 
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					Frame.gui.textTitle.setText("Luminous Beings");
+					MainPanel.textTitle.setText("Luminous Beings");
+					Frame.gui.setBackgroundTo("root");
 					Frame.gui.setScrollPane("beings", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -52,7 +53,8 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					Frame.gui.textTitle.setText("Jedi");
+					MainPanel.textTitle.setText("Jedi");
+					Frame.gui.setBackgroundTo("jedi");
 					Frame.gui.setScrollPane("jedi", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -67,7 +69,8 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					Frame.gui.textTitle.setText("Sith");
+					MainPanel.textTitle.setText("Sith");
+					Frame.gui.setBackgroundTo("sith");
 					Frame.gui.setScrollPane("sith", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -83,7 +86,8 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					Frame.gui.textTitle.setText("Bounty Hunters");
+					MainPanel.textTitle.setText("Bounty Hunters");
+					Frame.gui.setBackgroundTo("bountyHunters");
 					Frame.gui.setScrollPane("bountyHunters", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -98,7 +102,8 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					Frame.gui.textTitle.setText("Smugglers");
+					MainPanel.textTitle.setText("Smugglers");
+					Frame.gui.setBackgroundTo("smugglers");
 					Frame.gui.setScrollPane("smugglers", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -112,7 +117,8 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					Frame.gui.textTitle.setText("Battles");
+					MainPanel.textTitle.setText("Battles");
+					Frame.gui.setBackgroundTo("battles");
 					Frame.gui.setScrollPane("battles", connection);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -164,7 +170,7 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Frame.gui.setPanelToJMTextFieldsAdd("jedi");
+					Frame.gui.setPanelToJMAdd("jedi");
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -204,7 +210,7 @@ public class ALClass {
 				if (e.getSource() == MainPanel.addDataButton && MainPanel.panelCheck == "JMAJedi") {
 					try {
 						System.out.println("ok");
-						Frame.gui.setPanelToJMTextFieldsAdd("jedi");
+						Frame.gui.setPanelToJMAdd("jedi");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -220,8 +226,9 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				if (e.getSource() == MainPanel.editDataButton && MainPanel.panelCheck == "JMAJedi") {
 					try {
+						Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 						System.out.println("ok");
-						Frame.gui.setPanelToJMEdit("jedi");
+						Frame.gui.setPanelToJMEdit("jedi", connection);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}

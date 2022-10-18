@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.sql.*;
 import javax.swing.JTable;
 import GUI_JediDB.Frame;
+import GUI_JediDB.MainPanel;
 
 
 public class Operation {
@@ -63,7 +64,12 @@ public class Operation {
 					data[i][8] = rs.getString(9);
 					i++;
 				}
-				queryTable = new JTable(data, beingsColumns);
+				queryTable = new JTable(data, beingsColumns) {
+					public boolean editCellAt (int row, int column, java.util.EventObject e) {
+						return false;
+					}
+				};
+
 				queryTable.getColumnModel().getColumn(0).setPreferredWidth(20);
 
 				break;
@@ -88,7 +94,11 @@ public class Operation {
 					data[i][5] = rs.getString(6);
 					i++;
 				}
-				queryTable = new JTable(data, jediColumns);
+				queryTable = new JTable(data, jediColumns) {
+					public boolean editCellAt (int row, int column, java.util.EventObject e) {
+						return false;
+					}
+				};
 				break;
 
 			case SELECT_ALL_SITH:
@@ -110,7 +120,11 @@ public class Operation {
 					data[i][5] = rs.getString(6);
 					i++;
 				}
-				queryTable = new JTable(data, sithColumns);
+				queryTable = new JTable(data, sithColumns) {
+					public boolean editCellAt (int row, int column, java.util.EventObject e) {
+						return false;
+					}
+				};
 				break;
 
 			case SELECT_ALL_BOUNTYHUNTERS:
@@ -129,7 +143,11 @@ public class Operation {
 					data[i][2] = rs.getString(3);
 					i++;
 				}
-				queryTable = new JTable(data, bountyHuntersColumns);
+				queryTable = new JTable(data, bountyHuntersColumns) {
+					public boolean editCellAt (int row, int column, java.util.EventObject e) {
+						return false;
+					}
+				};
 				break;
 
 			case SELECT_ALL_SMUGGLERS:
@@ -148,7 +166,11 @@ public class Operation {
 					data[i][2] = rs.getString(3);
 					i++;
 				}
-				queryTable = new JTable(data, smugglersColumns);
+				queryTable = new JTable(data, smugglersColumns) {
+					public boolean editCellAt (int row, int column, java.util.EventObject e) {
+						return false;
+					}
+				};
 				break;
 
 			case SELECT_ALL_BATTLES:
@@ -172,7 +194,11 @@ public class Operation {
 					data[i][7] = rs.getString(8);
 					i++;
 				}
-				queryTable = new JTable(data, battlesColumns);
+				queryTable = new JTable(data, battlesColumns) {
+					public boolean editCellAt (int row, int column, java.util.EventObject e) {
+						return false;
+					}
+				};
 				break;
 		}
 

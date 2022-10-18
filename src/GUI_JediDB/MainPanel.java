@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import app.Operation;
 import appTools.ALClass;
@@ -30,7 +31,8 @@ import appTools.ALClass;
 
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel {
-
+	
+	
 	public static String panelCheck = "";
 
 	//Images
@@ -117,7 +119,8 @@ public class MainPanel extends JPanel {
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
-
+		
+		
 		//MainPanel attributes
 		this.setPreferredSize(new Dimension(Frame.FRAME_WIDTH, Frame.FRAME_HEIGHT));
 		this.setLayout(null);
@@ -141,7 +144,6 @@ public class MainPanel extends JPanel {
 		//		for (JButton button : buttons) {
 		//			//button.addActionListener(new ALClass());
 		//		}
-
 
 		addAllButtonListeners();
 		setPanelToStart();
@@ -173,32 +175,26 @@ public class MainPanel extends JPanel {
 		switch (data) {
 			case "beings":
 				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, con));
-				Frame.gui.setBackgroundToRoot();
 				break;
 			case "jedi":
 				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_JEDI, con));
-				Frame.gui.setBackgroundToJedi();
 				break;
 			case "sith":
 				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SITH, con));
-				Frame.gui.setBackgroundToSith();
 				break;
 			case "bountyHunters":
 				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BOUNTYHUNTERS, con));
-				Frame.gui.setBackgroundToBountyHunters();
 				break;
 			case "smugglers":
 				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SMUGGLERS, con));
-				Frame.gui.setBackgroundToSmugglers();
 				break;
 			case "battles":
 				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BATTLES, con));
-				Frame.gui.setBackgroundToBattles();
 		}
 	}
 
 
-	public void setPanelToStart () {
+	public void setPanelToStart () throws IOException {
 
 		panelCheck = "startPanel";
 
@@ -210,7 +206,8 @@ public class MainPanel extends JPanel {
 		this.tablePanel.setLayout(new BorderLayout());
 		this.tablePanel.add(scrollPane, BorderLayout.CENTER);
 		this.add(tablePanel);
-
+		
+		
 		textTitle.setText("Luminous Beings");
 		textTitle.setSize(600, 40);
 		textTitle.setLocation(tablePanel.getX(), tablePanel.getY() - 60);
@@ -235,7 +232,9 @@ public class MainPanel extends JPanel {
 		buttonsLabel.add(battlesButton);
 		buttonsLabel.add(planetsButton);
 		this.add(buttonsLabel);
-
+		
+		this.setBackgroundTo("root");
+		
 		repaint();
 	}
 
@@ -254,10 +253,12 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public void setPanelToJMAccess () {
+	public void setPanelToJMAccess () throws IOException {
 
-		panelCheck = "JMAAccess";
+		panelCheck = "JMAAccess";		
+		this.setBackgroundTo("root");
 
+		
 		JPanel buttons = new JPanel();
 
 		removeAll();
@@ -287,7 +288,7 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public void setPanelToJMTextFieldsAdd (String category) {
+	public void setPanelToJMAdd (String category) {
 
 		removeAll();
 		revalidate();
@@ -385,7 +386,7 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public void setPanelToJMEdit (String category) {
+	public void setPanelToJMEdit (String category, Connection connection) throws Exception {
 
 		removeAll();
 		revalidate();
@@ -408,10 +409,10 @@ public class MainPanel extends JPanel {
 				tablePanel = new JPanel(new GridLayout());
 				tablePanel.setSize(850, 200);
 				tablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
-				
 				tablePanel.add(scrollPane, BorderLayout.CENTER);
 				
-				this.add(tablePanel);
+				this.setScrollPane("jedi", connection);			
+				this.add(tablePanel);			
 				
 				repaint();
 				break;
@@ -442,40 +443,70 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public void setBackgroundToRoot () throws IOException {
-		bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-		repaint();
+	public void setBackgroundTo (String panel) throws IOException {
+		switch (panel) {
+			case "root":
+				bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+				repaint();
+				break;
+			case "jedi":
+				bgImage = ImageIO.read(jediBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+				repaint();
+				break;
+			case "sith":
+				bgImage = ImageIO.read(sithBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+				repaint();
+				break;
+			case "bountyHunters":
+				bgImage = ImageIO.read(bountyHuntersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+				repaint();
+				break;
+			case "smugglers":
+				bgImage = ImageIO.read(smugglersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+				repaint();
+				break;
+			case "battles":
+				bgImage = ImageIO.read(battlesBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+				repaint();
+				break;
+		}
 	}
 
-
-	public void setBackgroundToJedi () throws IOException {
-		bgImage = ImageIO.read(jediBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-		repaint();
-	}
-
-
-	public void setBackgroundToSith () throws IOException {
-		bgImage = ImageIO.read(sithBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-		repaint();
-	}
-
-
-	public void setBackgroundToBountyHunters () throws IOException {
-		bgImage = ImageIO.read(bountyHuntersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-		repaint();
-	}
-
-
-	public void setBackgroundToSmugglers () throws IOException {
-		bgImage = ImageIO.read(smugglersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-		repaint();
-	}
-
-
-	public void setBackgroundToBattles () throws IOException {
-		bgImage = ImageIO.read(battlesBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-		repaint();
-	}
+	
+//	public void setBackgroundToRoot () throws IOException {
+//		bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+//		repaint();
+//	}
+//
+//
+//	public void setBackgroundToJedi () throws IOException {
+//		bgImage = ImageIO.read(jediBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+//		repaint();
+//	}
+//
+//
+//	public void setBackgroundToSith () throws IOException {
+//		bgImage = ImageIO.read(sithBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+//		repaint();
+//	}
+//
+//
+//	public void setBackgroundToBountyHunters () throws IOException {
+//		bgImage = ImageIO.read(bountyHuntersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+//		repaint();
+//	}
+//
+//
+//	public void setBackgroundToSmugglers () throws IOException {
+//		bgImage = ImageIO.read(smugglersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+//		repaint();
+//	}
+//
+//
+//	public void setBackgroundToBattles () throws IOException {
+//		bgImage = ImageIO.read(battlesBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
+//		repaint();
+//	}
 
 
 	public void setNoDataErrorLabel () {
@@ -504,11 +535,9 @@ public class MainPanel extends JPanel {
 		}
 	}
 
-
-
 	class MyComboBoxEditor extends DefaultCellEditor {
 		public MyComboBoxEditor (String[] items) {
-			super(new JComboBox(items));
+			super(new JComboBox<Object>(items));
 		}
 	}
 
