@@ -33,8 +33,18 @@ import appTools.ALClass;
 public class MainPanel extends JPanel {
 	
 	
-	public static String panelCheck = "";
-
+	public enum panelCheckEnum {
+		START_PANEL,
+		CUSTOM_SEARCH,
+		JMA_MENU,
+		JMA_JEDI_ADD,
+		JMA_JEDI_EDIT,
+		JMA_JEDI_REMOVE
+	}
+	
+	public static panelCheckEnum panelCheck = panelCheckEnum.START_PANEL;;
+	
+	
 	//Images
 	static File generalBG = new File("images/Jedi_Archives.jpg");
 	static File jediBG = new File("images/hyperspacejump.jpg");
@@ -110,7 +120,7 @@ public class MainPanel extends JPanel {
 
 
 	public MainPanel () throws Exception {
-
+		
 		//Registering the SW font
 		try {
 			swFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/fonts/starjedi/Starjedi.ttf")).deriveFont(30f);
@@ -139,12 +149,6 @@ public class MainPanel extends JPanel {
 		editTypeButtonsLabel.add(MainPanel.editDataButton);
 		editTypeButtonsLabel.add(MainPanel.removeDataButton);
 
-		//Adding Action Listeners to
-		//		JButton[] buttons = { updatePlanetsButton, updateBattlesButton, updateSmugglersButton, updateBountyHuntersButton, updateSithButton, updateJediButton, jediButton, sithButton, bhButton, smugglersButton, battlesButton, planetsButton, beingsButton, modifiedSearchButton, manipulateButton, goBackButtonToUpdateCategory, goBackButtonToMain, confirmJediUpdateButton, emptyFieldsButton };
-		//		for (JButton button : buttons) {
-		//			//button.addActionListener(new ALClass());
-		//		}
-
 		addAllButtonListeners();
 		setPanelToStart();
 
@@ -172,31 +176,38 @@ public class MainPanel extends JPanel {
 	
 	public void setScrollPane (String data, Connection connection) throws Exception {
 		Connection con = connection;
+		JTable table;
 		switch (data) {
 			case "beings":
-				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BEINGS, con));
+				table = Operation.readQuery(Operation.SELECT_ALL_BEINGS, con);
+				scrollPane.getViewport().add(table);
 				break;
 			case "jedi":
-				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_JEDI, con));
+				table = Operation.readQuery(Operation.SELECT_ALL_JEDI, con);
+				scrollPane.getViewport().add(table);
 				break;
 			case "sith":
-				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SITH, con));
+				table = Operation.readQuery(Operation.SELECT_ALL_SITH, con);
+				scrollPane.getViewport().add(table);
 				break;
 			case "bountyHunters":
-				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BOUNTYHUNTERS, con));
+				table = Operation.readQuery(Operation.SELECT_ALL_BOUNTYHUNTERS, con);
+				scrollPane.getViewport().add(table);
 				break;
 			case "smugglers":
-				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_SMUGGLERS, con));
+				table = Operation.readQuery(Operation.SELECT_ALL_SMUGGLERS, con);
+				scrollPane.getViewport().add(table);
 				break;
 			case "battles":
-				scrollPane.getViewport().add(Operation.readQuery(Operation.SELECT_ALL_BATTLES, con));
+				table = Operation.readQuery(Operation.SELECT_ALL_BATTLES, con);
+				scrollPane.getViewport().add(table);
 		}
 	}
 
 
 	public void setPanelToStart () throws IOException {
 
-		panelCheck = "startPanel";
+		panelCheck = panelCheckEnum.START_PANEL;
 
 		removeAll();
 		revalidate();
@@ -241,7 +252,7 @@ public class MainPanel extends JPanel {
 
 	public void setPanelToCustomSearch () {
 
-		panelCheck = "customSearch";
+		panelCheck = panelCheckEnum.CUSTOM_SEARCH;
 
 		removeAll();
 		revalidate();
@@ -255,7 +266,7 @@ public class MainPanel extends JPanel {
 
 	public void setPanelToJMAccess () throws IOException {
 
-		panelCheck = "JMAAccess";		
+		panelCheck = panelCheckEnum.JMA_MENU;		
 		this.setBackgroundTo("root");
 
 		
@@ -305,7 +316,7 @@ public class MainPanel extends JPanel {
 		switch (category) {
 			case "jedi":
 
-				panelCheck = "JMAJedi";
+				panelCheck = panelCheckEnum.JMA_JEDI_ADD;
 
 				textTitle.setText("Jedi to add (1 - 5):");
 
@@ -402,7 +413,7 @@ public class MainPanel extends JPanel {
 		switch (category) {
 			case "jedi":
 				
-				panelCheck = "JMAJedi";
+				panelCheck = panelCheckEnum.JMA_JEDI_EDIT;
 				
 				textTitle.setText("Edit Jedi:");
 
@@ -422,7 +433,7 @@ public class MainPanel extends JPanel {
 
 
 	public void setPanelToJMRemove (String category) {
-
+		panelCheck = panelCheckEnum.JMA_JEDI_REMOVE;
 	}
 
 
@@ -471,42 +482,6 @@ public class MainPanel extends JPanel {
 				break;
 		}
 	}
-
-	
-//	public void setBackgroundToRoot () throws IOException {
-//		bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-//		repaint();
-//	}
-//
-//
-//	public void setBackgroundToJedi () throws IOException {
-//		bgImage = ImageIO.read(jediBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-//		repaint();
-//	}
-//
-//
-//	public void setBackgroundToSith () throws IOException {
-//		bgImage = ImageIO.read(sithBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-//		repaint();
-//	}
-//
-//
-//	public void setBackgroundToBountyHunters () throws IOException {
-//		bgImage = ImageIO.read(bountyHuntersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-//		repaint();
-//	}
-//
-//
-//	public void setBackgroundToSmugglers () throws IOException {
-//		bgImage = ImageIO.read(smugglersBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-//		repaint();
-//	}
-//
-//
-//	public void setBackgroundToBattles () throws IOException {
-//		bgImage = ImageIO.read(battlesBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
-//		repaint();
-//	}
 
 
 	public void setNoDataErrorLabel () {

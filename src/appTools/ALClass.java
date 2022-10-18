@@ -7,6 +7,7 @@ import app.ConnectionFactory;
 import app.Operation;
 import GUI_JediDB.Frame;
 import GUI_JediDB.MainPanel;
+import GUI_JediDB.MainPanel.panelCheckEnum;
 
 
 public class ALClass {
@@ -207,7 +208,7 @@ public class ALClass {
 
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if (e.getSource() == MainPanel.addDataButton && MainPanel.panelCheck == "JMAJedi") {
+				if (e.getSource() == MainPanel.addDataButton && MainPanel.panelCheck == panelCheckEnum.JMA_JEDI_ADD) {
 					try {
 						System.out.println("ok");
 						Frame.gui.setPanelToJMAdd("jedi");
@@ -224,7 +225,7 @@ public class ALClass {
 
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if (e.getSource() == MainPanel.editDataButton && MainPanel.panelCheck == "JMAJedi") {
+				if (e.getSource() == MainPanel.editDataButton && MainPanel.panelCheck == panelCheckEnum.JMA_JEDI_ADD || MainPanel.panelCheck == panelCheckEnum.JMA_JEDI_REMOVE) {
 					try {
 						Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 						System.out.println("ok");

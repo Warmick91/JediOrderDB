@@ -37,6 +37,7 @@ public class Operation {
 	static JTable queryTable = null;
 
 
+	@SuppressWarnings("serial")
 	public static JTable readQuery (String query, Connection con) throws SQLException {
 
 		switch (query) {
@@ -64,6 +65,7 @@ public class Operation {
 					data[i][8] = rs.getString(9);
 					i++;
 				}
+
 				queryTable = new JTable(data, beingsColumns) {
 					public boolean editCellAt (int row, int column, java.util.EventObject e) {
 						return false;
@@ -74,6 +76,7 @@ public class Operation {
 
 				break;
 
+				
 			case SELECT_ALL_JEDI:
 
 				ps = con.prepareStatement("SELECT COUNT(*) FROM Jedi");
@@ -94,13 +97,32 @@ public class Operation {
 					data[i][5] = rs.getString(6);
 					i++;
 				}
-				queryTable = new JTable(data, jediColumns) {
-					public boolean editCellAt (int row, int column, java.util.EventObject e) {
-						return false;
-					}
-				};
+
+				switch (MainPanel.panelCheck) {
+					case START_PANEL:
+						queryTable = new JTable(data, jediColumns) {
+							public boolean editCellAt (int row, int column, java.util.EventObject e) {
+								return false;
+							}
+						};
+
+						break;
+
+					case JMA_JEDI_EDIT:
+						queryTable = new JTable(data, jediColumns);
+
+						break;
+
+					default:
+						System.out.println("No panel enum set");
+
+				}
+
+				queryTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+
 				break;
 
+				
 			case SELECT_ALL_SITH:
 				ps = con.prepareStatement("SELECT COUNT(*) FROM Sith");
 				rs = ps.executeQuery();
@@ -125,8 +147,10 @@ public class Operation {
 						return false;
 					}
 				};
+				
 				break;
 
+				
 			case SELECT_ALL_BOUNTYHUNTERS:
 				ps = con.prepareStatement("SELECT COUNT(*) FROM Bountyhunters");
 				rs = ps.executeQuery();
@@ -150,6 +174,7 @@ public class Operation {
 				};
 				break;
 
+				
 			case SELECT_ALL_SMUGGLERS:
 				ps = con.prepareStatement("SELECT COUNT(*) FROM Smugglers");
 				rs = ps.executeQuery();
@@ -173,6 +198,7 @@ public class Operation {
 				};
 				break;
 
+				
 			case SELECT_ALL_BATTLES:
 				ps = con.prepareStatement("SELECT COUNT(*) FROM Battles");
 				rs = ps.executeQuery();
@@ -200,6 +226,7 @@ public class Operation {
 					}
 				};
 				break;
+				
 		}
 
 		return queryTable;
