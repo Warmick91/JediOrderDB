@@ -142,6 +142,14 @@ public class MainPanel extends JPanel {
 		//			//button.addActionListener(new ALClass());
 		//		}
 
+
+		addAllButtonListeners();
+		setPanelToStart();
+
+	}
+
+	public void addAllButtonListeners() {
+		
 		beingsButton.addActionListener(alClass.showAllBeingsListener);
 		jediButton.addActionListener(alClass.showAllJediListener);
 		sithButton.addActionListener(alClass.showAllSithListener);
@@ -157,12 +165,9 @@ public class MainPanel extends JPanel {
 		emptyFieldsButtonLabel.addActionListener(alClass.cancelAndEmptyListener);
 		addDataButton.addActionListener(alClass.addDataListener);
 		editDataButton.addActionListener(alClass.editDataListener);
-		
-		setPanelToStart();
-
 	}
-
-
+	
+	
 	public void setScrollPane (String data, Connection connection) throws Exception {
 		Connection con = connection;
 		switch (data) {
@@ -259,15 +264,17 @@ public class MainPanel extends JPanel {
 		revalidate();
 
 		this.add(goBackButtonToMain);
-
+		
+		buttons.setSize(600, 200);
+		buttons.setLocation(this.getWidth() / 2 - buttons.getWidth() / 2, this.getHeight() / 2 - buttons.getHeight() / 2);
+		
 		textTitle.setText("update category:");
-		textTitle.setLocation(this.getWidth() / 2 - textTitle.getWidth() / 2, tablePanel.getY());
+		textTitle.setLocation(this.getWidth() / 2 - textTitle.getWidth() / 2, buttons.getY() - 95);
 		this.add(textTitle);
 
 		buttons.setOpaque(false);
 		buttons.setLayout(new GridLayout(3, 2, 15, 15));
-		buttons.setSize(600, 200);
-		buttons.setLocation(this.getWidth() / 2 - buttons.getWidth() / 2, this.getHeight() / 2 - buttons.getHeight() / 2);
+		
 		buttons.add(updateJediButton);
 		buttons.add(updateSithButton);
 		buttons.add(updateBountyHuntersButton);
