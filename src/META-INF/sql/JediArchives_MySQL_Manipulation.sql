@@ -55,10 +55,7 @@ VALUES
 
 INSERT INTO Battles
 VALUES
-(NULL, 'Naboo', '32 BBY', 'Jinn', 'Kenobi', 'Maul', NULL, 'Death of Qui-Gon and Darth Maul'),
-(NULL, 'Tatooine', '4 ABY', 'Solo', NULL, 'Fett', NULL, 'Apparent death of Boba Fett');
+(NULL, 'Naboo', '32 BBY', 7, 6, 8, NULL, 'Death of Qui-Gon and Darth Maul'),
+(NULL, 'Tatooine', '4 ABY', 14, NULL, 11, NULL, 'Apparent death of Boba Fett');
 
 -- proba
-
-INSERT INTO Jedi
-VALUES (NULL, 'asd', 'Padawan', 'Guardian', 'asd', 'asd'); 

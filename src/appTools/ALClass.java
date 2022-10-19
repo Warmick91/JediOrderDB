@@ -5,9 +5,10 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import app.ConnectionFactory;
 import app.Operation;
+import app.Operation.OperationType;
 import GUI_JediDB.Frame;
 import GUI_JediDB.MainPanel;
-import GUI_JediDB.MainPanel.panelCheckEnum;
+import GUI_JediDB.MainPanel.PanelCheckEnum;
 
 
 public class ALClass {
@@ -22,11 +23,11 @@ public class ALClass {
 	public ActionListener toModifiedSearchListener;
 	public ActionListener backToStartPanelListener;
 	public ActionListener toJMAccessListener;
-	public ActionListener toUpdateJediListener;
+	public ActionListener toAddJediListener;
 	public ActionListener confirmButtonListener;
-	public ActionListener cancelAndEmptyListener;
+	public ActionListener cancelOrEmptyListener;
 	public ActionListener addDataListener;
-	public ActionListener editDataListener;
+	public ActionListener toEditDataListener;
 	public ActionListener removeDataListener;
 
 
@@ -167,13 +168,17 @@ public class ALClass {
 			}
 		};
 
-		toUpdateJediListener = new ActionListener() {
+		toAddJediListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				try {
-					Frame.gui.setPanelToJMAdd("jedi");
-				} catch (Exception e1) {
-					e1.printStackTrace();
+				if ((e.getSource() == MainPanel.updateJediButton && MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_MENU) 
+					|| (e.getSource() == MainPanel.addDataButton && MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT || MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_JEDI_REMOVE)) {
+						try {
+							System.out.println("ok");
+							Frame.gui.setPanelToJMAdd("jedi");
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 				}
 			}
 		};
@@ -181,22 +186,28 @@ public class ALClass {
 		confirmButtonListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if (e.getSource() == MainPanel.confirmJediUpdateButton) {
+				if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_JEDI_ADD) {
 					try {
 						Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-						Operation.insertData(Operation.INSERT_INTO_JEDI, connection);
+						Operation.insertData(Operation.OperationType.INSERT_INTO_JEDI_CALL, connection);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 
 					}
 
-				} else {
-					System.out.println("No action defined");
+				} else if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT) {
+					try {
+					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					Operation.editData(OperationType.EDIT_JEDI_CALL, connection, Frame.gui.savedOriginalArray);
+					System.out.println("JMA_JEDI_EDIT button working");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		};
 
-		cancelAndEmptyListener = new ActionListener() {
+		cancelOrEmptyListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				Frame.gui.clearInputTable();
@@ -204,32 +215,15 @@ public class ALClass {
 
 		};
 
-		addDataListener = new ActionListener() {
+		toEditDataListener = new ActionListener() {
 
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if (e.getSource() == MainPanel.addDataButton && MainPanel.panelCheck == panelCheckEnum.JMA_JEDI_ADD) {
-					try {
-						System.out.println("ok");
-						Frame.gui.setPanelToJMAdd("jedi");
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-
-			}
-
-		};
-
-		editDataListener = new ActionListener() {
-
-			@Override
-			public void actionPerformed (ActionEvent e) {
-				if (e.getSource() == MainPanel.editDataButton && MainPanel.panelCheck == panelCheckEnum.JMA_JEDI_ADD || MainPanel.panelCheck == panelCheckEnum.JMA_JEDI_REMOVE) {
+				if (e.getSource() == MainPanel.editDataButton && MainPanel.panelCheck == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.panelCheck == PanelCheckEnum.JMA_JEDI_REMOVE) {
 					try {
 						Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
 						System.out.println("ok");
-						Frame.gui.setPanelToJMEdit("jedi", connection);
+						Frame.gui.setPanelToJMEdit("jediEdit", connection);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}

@@ -12,8 +12,7 @@ CREATE TABLE Beings (
 	DeathPlace VARCHAR(250),
 	Species VARCHAR(250),
 	beingClass ENUM('Jedi', 'Sith', 'BountyHunter', 'Smuggler'),
-    UNIQUE (beingID),
-	PRIMARY KEY (LastName)
+	PRIMARY KEY (beingID)
 );
 
 CREATE TABLE Jedi (
@@ -23,9 +22,8 @@ CREATE TABLE Jedi (
 	JediSpecialization ENUM ('Guardian', 'Consular', 'Sentinel'),
 	SaberType VARCHAR(30) NOT NULL,
 	SaberColor VARCHAR(30) NOT NULL,
-	UNIQUE (JediID),
-	PRIMARY KEY (JediLastName),
-	FOREIGN KEY (JediLastName) REFERENCES beings (LastName)
+	PRIMARY KEY (JediID),
+	FOREIGN KEY (JediID) REFERENCES beings (beingID)
 );
 
 CREATE TABLE Sith (
@@ -35,41 +33,38 @@ CREATE TABLE Sith (
 	SithSpecialization ENUM ('Marauder', 'Assassin', 'Lord'),
 	SaberType VARCHAR(30) NOT NULL,
 	SaberColor VARCHAR(25) NOT NULL,
-	UNIQUE (SithID),
-	PRIMARY KEY (SithLastName),
-	FOREIGN KEY (SithLastName) REFERENCES beings (LastName)
+	PRIMARY KEY (SithID),
+	FOREIGN KEY (SithID) REFERENCES beings (beingID)
 );
 
 CREATE TABLE BountyHunters (
 	HunterID BIGINT NOT NULL AUTO_INCREMENT,
 	BountyHunterLastName VARCHAR(250) NOT NULL,
 	Organisation VARCHAR(250) NOT NULL,
-	UNIQUE (HunterID),
-	PRIMARY KEY (BountyHunterLastName),
-	FOREIGN KEY (BountyHunterLastName) REFERENCES beings (LastName)
+	PRIMARY KEY (HunterID),
+	FOREIGN KEY (HunterID) REFERENCES beings (beingID)
 );
 
 CREATE TABLE Smugglers (
 	SmugglerID BIGINT NOT NULL AUTO_INCREMENT,
 	SmugglerLastName VARCHAR(250) NOT NULL,
 	Organisation VARCHAR(250),
-	UNIQUE (SmugglerID),
-	PRIMARY KEY (SmugglerLastName),
-	FOREIGN KEY (SmugglerLastName) REFERENCES beings (LastName)
+	PRIMARY KEY (SmugglerID),
+	FOREIGN KEY (SmugglerID) REFERENCES beings (beingID)
 );
 
 CREATE TABLE Battles (
 	BattleID BIGINT NOT NULL AUTO_INCREMENT,
 	Location VARCHAR(250) NOT NULL,
 	BattleDate VARCHAR(30) NOT NULL,
-	FighterA1 VARCHAR(250) NOT NULL,
-	FighterA2 VARCHAR(250),
-	FighterB1 VARCHAR(250) NOT NULL,
-	FighterB2 VARCHAR(250),
+	FighterA1 BIGINT NOT NULL,
+	FighterA2 BIGINT,
+	FighterB1 BIGINT NOT NULL,
+	FighterB2 BIGINT,
 	Outcome VARCHAR(250) NOT NULL,
 	PRIMARY KEY (BattleID),
-	FOREIGN KEY (FighterA1) REFERENCES beings (LastName),
-	FOREIGN KEY (FighterA2) REFERENCES beings (LastName),
-	FOREIGN KEY (FighterB1) REFERENCES beings (LastName),
-	FOREIGN KEY (FighterB2) REFERENCES beings (LastName)
+	FOREIGN KEY (FighterA1) REFERENCES beings (beingID),
+	FOREIGN KEY (FighterA2) REFERENCES beings (beingID),
+	FOREIGN KEY (FighterB1) REFERENCES beings (beingID),
+	FOREIGN KEY (FighterB2) REFERENCES beings (beingID)
 );

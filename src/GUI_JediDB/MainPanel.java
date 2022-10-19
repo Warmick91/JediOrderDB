@@ -31,20 +31,14 @@ import appTools.ALClass;
 
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel {
-	
-	
-	public enum panelCheckEnum {
-		START_PANEL,
-		CUSTOM_SEARCH,
-		JMA_MENU,
-		JMA_JEDI_ADD,
-		JMA_JEDI_EDIT,
-		JMA_JEDI_REMOVE
+
+	public enum PanelCheckEnum {
+		START_PANEL, CUSTOM_SEARCH, JMA_MENU, JMA_JEDI_ADD, JMA_JEDI_EDIT, JMA_JEDI_REMOVE
 	}
-	
-	public static panelCheckEnum panelCheck = panelCheckEnum.START_PANEL;;
-	
-	
+
+
+	public static PanelCheckEnum panelCheck = PanelCheckEnum.START_PANEL;;
+
 	//Images
 	static File generalBG = new File("images/Jedi_Archives.jpg");
 	static File jediBG = new File("images/hyperspacejump.jpg");
@@ -56,14 +50,17 @@ public class MainPanel extends JPanel {
 
 	//Data table structure
 	private JPanel inputTablePanel;
-	private JScrollPane scrollPane = new JScrollPane();
+	public JScrollPane scrollPane = new JScrollPane();
 	private JPanel tablePanel = new JPanel();
 	public JTable inputTable;
 	public JTable editTable;
 	private String[][] inputs;
+	public JTable viewTable;
+	public String[][] savedOriginalArray;
 
 	public static JLabel textTitle = new JLabel("", SwingConstants.CENTER);
 	public JLabel confirmationLabel = new JLabel("", SwingConstants.CENTER);
+	public JPanel confirmationButtonsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
 
 	//SW font
 	Font swFont;
@@ -113,14 +110,15 @@ public class MainPanel extends JPanel {
 	public static JButton confirmPlanetsUpdateButton = new JButton("Confirm >>>");
 
 	//General buttons
-	public static JButton emptyFieldsButtonLabel = new JButton("Empty all fields []");
+	public static JButton cancelChangesButton = new JButton("Cancel changes X");
+	public static JButton emptyFieldsButton = new JButton("Empty all fields []");
 	public static JButton addDataButton = new JButton("add");
 	public static JButton editDataButton = new JButton("edit");
 	public static JButton removeDataButton = new JButton("remove");
 
 
 	public MainPanel () throws Exception {
-		
+
 		//Registering the SW font
 		try {
 			swFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/fonts/starjedi/Starjedi.ttf")).deriveFont(30f);
@@ -129,8 +127,7 @@ public class MainPanel extends JPanel {
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		//MainPanel attributes
 		this.setPreferredSize(new Dimension(Frame.FRAME_WIDTH, Frame.FRAME_HEIGHT));
 		this.setLayout(null);
@@ -154,8 +151,9 @@ public class MainPanel extends JPanel {
 
 	}
 
-	public void addAllButtonListeners() {
-		
+
+	public void addAllButtonListeners () {
+
 		beingsButton.addActionListener(alClass.showAllBeingsListener);
 		jediButton.addActionListener(alClass.showAllJediListener);
 		sithButton.addActionListener(alClass.showAllSithListener);
@@ -166,48 +164,51 @@ public class MainPanel extends JPanel {
 		manipulateButton.addActionListener(alClass.toJMAccessListener);
 		goBackButtonToMain.addActionListener(alClass.backToStartPanelListener);
 		goBackButtonToUpdateCategory.addActionListener(alClass.toJMAccessListener);
-		updateJediButton.addActionListener(alClass.toUpdateJediListener);
+		updateJediButton.addActionListener(alClass.toAddJediListener);
 		confirmJediUpdateButton.addActionListener(alClass.confirmButtonListener);
-		emptyFieldsButtonLabel.addActionListener(alClass.cancelAndEmptyListener);
-		addDataButton.addActionListener(alClass.addDataListener);
-		editDataButton.addActionListener(alClass.editDataListener);
+		emptyFieldsButton.addActionListener(alClass.cancelOrEmptyListener);
+		addDataButton.addActionListener(alClass.toAddJediListener);
+		editDataButton.addActionListener(alClass.toEditDataListener);
 	}
-	
-	
+
+
 	public void setScrollPane (String data, Connection connection) throws Exception {
 		Connection con = connection;
-		JTable table;
 		switch (data) {
 			case "beings":
-				table = Operation.readQuery(Operation.SELECT_ALL_BEINGS, con);
-				scrollPane.getViewport().add(table);
+				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_BEINGS, con);
+				scrollPane.getViewport().add(viewTable);
 				break;
 			case "jedi":
-				table = Operation.readQuery(Operation.SELECT_ALL_JEDI, con);
-				scrollPane.getViewport().add(table);
+				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_JEDI, con);
+				scrollPane.getViewport().add(viewTable);
+				break;
+			case "jediEdit":
+				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_JEDI_FOR_EDIT, con);
+				scrollPane.getViewport().add(viewTable);
 				break;
 			case "sith":
-				table = Operation.readQuery(Operation.SELECT_ALL_SITH, con);
-				scrollPane.getViewport().add(table);
+				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_SITH, con);
+				scrollPane.getViewport().add(viewTable);
 				break;
 			case "bountyHunters":
-				table = Operation.readQuery(Operation.SELECT_ALL_BOUNTYHUNTERS, con);
-				scrollPane.getViewport().add(table);
+				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_BOUNTYHUNTERS, con);
+				scrollPane.getViewport().add(viewTable);
 				break;
 			case "smugglers":
-				table = Operation.readQuery(Operation.SELECT_ALL_SMUGGLERS, con);
-				scrollPane.getViewport().add(table);
+				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_SMUGGLERS, con);
+				scrollPane.getViewport().add(viewTable);
 				break;
 			case "battles":
-				table = Operation.readQuery(Operation.SELECT_ALL_BATTLES, con);
-				scrollPane.getViewport().add(table);
+				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_BATTLES, con);
+				scrollPane.getViewport().add(viewTable);
 		}
 	}
 
 
 	public void setPanelToStart () throws IOException {
 
-		panelCheck = panelCheckEnum.START_PANEL;
+		panelCheck = PanelCheckEnum.START_PANEL;
 
 		removeAll();
 		revalidate();
@@ -217,8 +218,7 @@ public class MainPanel extends JPanel {
 		this.tablePanel.setLayout(new BorderLayout());
 		this.tablePanel.add(scrollPane, BorderLayout.CENTER);
 		this.add(tablePanel);
-		
-		
+
 		textTitle.setText("Luminous Beings");
 		textTitle.setSize(600, 40);
 		textTitle.setLocation(tablePanel.getX(), tablePanel.getY() - 60);
@@ -243,16 +243,16 @@ public class MainPanel extends JPanel {
 		buttonsLabel.add(battlesButton);
 		buttonsLabel.add(planetsButton);
 		this.add(buttonsLabel);
-		
+
 		this.setBackgroundTo("root");
-		
+
 		repaint();
 	}
 
 
 	public void setPanelToCustomSearch () {
 
-		panelCheck = panelCheckEnum.CUSTOM_SEARCH;
+		panelCheck = PanelCheckEnum.CUSTOM_SEARCH;
 
 		removeAll();
 		revalidate();
@@ -266,27 +266,26 @@ public class MainPanel extends JPanel {
 
 	public void setPanelToJMAccess () throws IOException {
 
-		panelCheck = panelCheckEnum.JMA_MENU;		
+		panelCheck = PanelCheckEnum.JMA_MENU;
 		this.setBackgroundTo("root");
 
-		
 		JPanel buttons = new JPanel();
 
 		removeAll();
 		revalidate();
 
 		this.add(goBackButtonToMain);
-		
+
 		buttons.setSize(600, 200);
 		buttons.setLocation(this.getWidth() / 2 - buttons.getWidth() / 2, this.getHeight() / 2 - buttons.getHeight() / 2);
-		
+
 		textTitle.setText("update category:");
 		textTitle.setLocation(this.getWidth() / 2 - textTitle.getWidth() / 2, buttons.getY() - 95);
 		this.add(textTitle);
 
 		buttons.setOpaque(false);
 		buttons.setLayout(new GridLayout(3, 2, 15, 15));
-		
+
 		buttons.add(updateJediButton);
 		buttons.add(updateSithButton);
 		buttons.add(updateBountyHuntersButton);
@@ -316,7 +315,7 @@ public class MainPanel extends JPanel {
 		switch (category) {
 			case "jedi":
 
-				panelCheck = panelCheckEnum.JMA_JEDI_ADD;
+				panelCheck = PanelCheckEnum.JMA_JEDI_ADD;
 
 				textTitle.setText("Jedi to add (1 - 5):");
 
@@ -377,15 +376,15 @@ public class MainPanel extends JPanel {
 				counterPanel.setOpaque(true);
 				this.add(counterPanel);
 
-				JPanel buttons = new JPanel(new GridLayout(1, 2, 10, 0));
-				buttons.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
-				buttons.setOpaque(false);
-				buttons.add(confirmJediUpdateButton);
-				buttons.add(emptyFieldsButtonLabel);
-				this.add(buttons);
+				confirmationButtonsPanel.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
+				confirmationButtonsPanel.setOpaque(false);
+				confirmationButtonsPanel.remove(cancelChangesButton);
+				confirmationButtonsPanel.add(confirmJediUpdateButton);
+				confirmationButtonsPanel.add(emptyFieldsButton);
+				this.add(confirmationButtonsPanel);
 
-				confirmationLabel.setSize(buttons.getWidth() / 2, 40);
-				confirmationLabel.setLocation(Frame.FRAME_WIDTH / 2 - confirmationLabel.getWidth() / 2, buttons.getY() + buttons.getHeight() + 25);
+				confirmationLabel.setSize(confirmationButtonsPanel.getWidth() / 2, 40);
+				confirmationLabel.setLocation(Frame.FRAME_WIDTH / 2 - confirmationLabel.getWidth() / 2, confirmationButtonsPanel.getY() + confirmationButtonsPanel.getHeight() + 25);
 				confirmationLabel.setFont(swFont);
 				confirmationLabel.setOpaque(false);
 				this.add(confirmationLabel);
@@ -407,33 +406,41 @@ public class MainPanel extends JPanel {
 		this.add(textTitle);
 		this.add(editTypeButtonsLabel);
 
+		confirmationButtonsPanel.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
+		confirmationButtonsPanel.setOpaque(false);
+		confirmationButtonsPanel.remove(emptyFieldsButton);
+		confirmationButtonsPanel.add(cancelChangesButton);
+		this.add(confirmationButtonsPanel);
+
 		final int numberOfInputRows = 5;
 
 		//Data
 		switch (category) {
-			case "jedi":
-				
-				panelCheck = panelCheckEnum.JMA_JEDI_EDIT;
-				
+			case "jediEdit":
+
+				panelCheck = PanelCheckEnum.JMA_JEDI_EDIT;
+
 				textTitle.setText("Edit Jedi:");
 
 				tablePanel = new JPanel(new GridLayout());
 				tablePanel.setSize(850, 200);
 				tablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
 				tablePanel.add(scrollPane, BorderLayout.CENTER);
-				
-				this.setScrollPane("jedi", connection);			
-				this.add(tablePanel);			
-				
+
+				this.setScrollPane("jediEdit", connection);
+				this.add(tablePanel);
+
 				repaint();
 				break;
 
 		}
+
+		savedOriginalArray = Operation.saveOriginalTable();
 	}
 
 
 	public void setPanelToJMRemove (String category) {
-		panelCheck = panelCheckEnum.JMA_JEDI_REMOVE;
+		panelCheck = PanelCheckEnum.JMA_JEDI_REMOVE;
 	}
 
 
@@ -509,6 +516,8 @@ public class MainPanel extends JPanel {
 			return this;
 		}
 	}
+
+
 
 	class MyComboBoxEditor extends DefaultCellEditor {
 		public MyComboBoxEditor (String[] items) {
