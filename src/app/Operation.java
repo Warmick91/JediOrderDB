@@ -5,6 +5,7 @@ import java.sql.*;
 import javax.swing.JTable;
 import GUI_JediDB.Frame;
 import GUI_JediDB.MainPanel;
+import GUI_JediDB.MainPanel.PanelCheckEnum;
 
 
 public class Operation {
@@ -16,7 +17,7 @@ public class Operation {
 
 	public static final String SELECT_ALL_BEINGS = "SELECT * FROM Beings ORDER BY beingID";
 	public static final String SELECT_ALL_JEDI = "SELECT * FROM Jedi ORDER BY JediID";
-	public static final String SELECT_ALL_JEDI_FOR_EDIT = "SELECT j.JediID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM beings AS b, jedi AS j WHERE beingID = JediID";
+	public static final String SELECT_ALL_JEDI_FOR_EDIT = "SELECT j.JediID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM beings AS b, jedi AS j WHERE beingID = JediID ORDER BY beingID";
 
 	public static final String SELECT_ALL_SITH = "SELECT * FROM Sith ORDER BY SithID";
 	public static final String SELECT_ALL_BOUNTYHUNTERS = "SELECT * FROM BountyHunters ORDER BY HunterID";
@@ -47,7 +48,6 @@ public class Operation {
 	private static int i;
 
 
-	@SuppressWarnings("serial")
 	public static JTable readQuery (OperationType operationType, Connection con) throws SQLException {
 
 		switch (operationType) {
@@ -198,7 +198,7 @@ public class Operation {
 						}
 					}
 				}
-				
+
 				//				for (int i = 0; i < isCellDifferent.length; i++) {
 				//					for (int j = 0; j < isCellDifferent[0].length; j++) {
 				//						System.out.println(isCellDifferent[i][j]);
@@ -208,8 +208,7 @@ public class Operation {
 				//				System.out.println(isCellDifferent.length * isCellDifferent[0].length);
 
 				cs = con.prepareCall(EDIT_JEDI_CALL);
-				
-				
+
 				break;
 
 			default:
@@ -232,8 +231,6 @@ public class Operation {
 		return arrayOriginal;
 	}
 
-	
-	
 
 	private static void selectAllBeingsOperation (Connection con) throws SQLException {
 		ps = con.prepareStatement("SELECT COUNT(*) FROM Beings");
@@ -257,9 +254,11 @@ public class Operation {
 			data[i][7] = rs.getString(8);
 			data[i][8] = rs.getString(9);
 			i++;
-		}
-
-		switch (MainPanel.panelCheck) {
+		}		
+		
+		System.out.println(MainPanel.getPanelCheck());
+		switch (MainPanel.getPanelCheck()) {
+			case JMA_MENU:
 			case START_PANEL:
 				queryTable = new JTable(data, beingsColumns) {
 					public boolean editCellAt (int row, int column, java.util.EventObject e) {

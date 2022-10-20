@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import app.ConnectionFactory;
 import app.Operation;
 import appTools.ALClass;
 
@@ -37,7 +38,7 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public static PanelCheckEnum panelCheck = PanelCheckEnum.START_PANEL;;
+	private static PanelCheckEnum panelCheck = PanelCheckEnum.START_PANEL;;
 
 	//Images
 	static File generalBG = new File("images/Jedi_Archives.jpg");
@@ -207,8 +208,15 @@ public class MainPanel extends JPanel {
 
 
 	public void setPanelToStart () throws IOException {
-
+		
 		panelCheck = PanelCheckEnum.START_PANEL;
+		
+		Connection connection = null;
+		try {
+			connection = ConnectionFactory.getConnection();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}				
 
 		removeAll();
 		revalidate();
@@ -244,8 +252,12 @@ public class MainPanel extends JPanel {
 		buttonsLabel.add(planetsButton);
 		this.add(buttonsLabel);
 
-		this.setBackgroundTo("root");
-
+		this.setBackgroundTo("start");
+		try {
+			this.setScrollPane("beings", connection);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		repaint();
 	}
 
@@ -267,6 +279,7 @@ public class MainPanel extends JPanel {
 	public void setPanelToJMAccess () throws IOException {
 
 		panelCheck = PanelCheckEnum.JMA_MENU;
+		
 		this.setBackgroundTo("root");
 
 		JPanel buttons = new JPanel();
@@ -396,7 +409,7 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public void setPanelToJMEdit (String category, Connection connection) throws Exception {
+	public void setPanelToJMEdit (String category) throws Exception {
 
 		removeAll();
 		revalidate();
@@ -427,7 +440,7 @@ public class MainPanel extends JPanel {
 				tablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
 				tablePanel.add(scrollPane, BorderLayout.CENTER);
 
-				this.setScrollPane("jediEdit", connection);
+				this.setScrollPane("jediEdit", ConnectionFactory.getConnection());
 				this.add(tablePanel);
 
 				repaint();
@@ -463,7 +476,7 @@ public class MainPanel extends JPanel {
 
 	public void setBackgroundTo (String panel) throws IOException {
 		switch (panel) {
-			case "root":
+			case "start":
 				bgImage = ImageIO.read(generalBG).getScaledInstance(1000, 600, Image.SCALE_DEFAULT);
 				repaint();
 				break;
@@ -530,5 +543,15 @@ public class MainPanel extends JPanel {
 	protected void paintComponent (Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(bgImage, 0, 0, null);
+	}
+
+
+	public static PanelCheckEnum getPanelCheck () {
+		return panelCheck;
+	}
+
+
+	public static void setPanelCheck (PanelCheckEnum panelCheck) {
+		MainPanel.panelCheck = panelCheck;
 	}
 }

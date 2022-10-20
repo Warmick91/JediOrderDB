@@ -9,15 +9,9 @@ public class JediOrderDB {
 
 	public static void main (String[] args) throws Exception {
 		
-		@SuppressWarnings("unused")
-		Frame frame = new Frame();
-		
-		Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-		System.out.println("Connected: " + connection.getMetaData().getDatabaseProductName());
 
-		Frame.gui.setScrollPane("beings", connection);
-		
-		
+		Frame frame = new Frame();
+
 		//close the connection
 	}
 

@@ -38,7 +38,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 
 				try {
-					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Luminous Beings");
 					Frame.gui.setBackgroundTo("root");
 					Frame.gui.setScrollPane("beings", connection);
@@ -54,7 +54,7 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Jedi");
 					Frame.gui.setBackgroundTo("jedi");
 					Frame.gui.setScrollPane("jedi", connection);
@@ -70,7 +70,7 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Sith");
 					Frame.gui.setBackgroundTo("sith");
 					Frame.gui.setScrollPane("sith", connection);
@@ -87,7 +87,7 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Bounty Hunters");
 					Frame.gui.setBackgroundTo("bountyHunters");
 					Frame.gui.setScrollPane("bountyHunters", connection);
@@ -103,7 +103,7 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Smugglers");
 					Frame.gui.setBackgroundTo("smugglers");
 					Frame.gui.setScrollPane("smugglers", connection);
@@ -118,7 +118,7 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Battles");
 					Frame.gui.setBackgroundTo("battles");
 					Frame.gui.setScrollPane("battles", connection);
@@ -146,9 +146,7 @@ public class ALClass {
 		backToStartPanelListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				try {
-					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					Frame.gui.setScrollPane("beings", connection);
+				try {		
 					Frame.gui.setPanelToStart();
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -171,10 +169,9 @@ public class ALClass {
 		toAddJediListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if ((e.getSource() == MainPanel.updateJediButton && MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_MENU) 
-					|| (e.getSource() == MainPanel.addDataButton && MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT || MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_JEDI_REMOVE)) {
+				if ((e.getSource() == MainPanel.updateJediButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_MENU) 
+					|| (e.getSource() == MainPanel.addDataButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT || MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_REMOVE)) {
 						try {
-							System.out.println("ok");
 							Frame.gui.setPanelToJMAdd("jedi");
 						} catch (Exception e1) {
 							e1.printStackTrace();
@@ -186,19 +183,18 @@ public class ALClass {
 		confirmButtonListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_JEDI_ADD) {
+				if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_ADD) {
 					try {
-						Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
+						Connection connection = ConnectionFactory.getConnection();
 						Operation.insertData(Operation.OperationType.INSERT_INTO_JEDI_CALL, connection);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 
 					}
 
-				} else if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.panelCheck == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT) {
+				} else if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT) {
 					try {
-					Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-					Operation.editData(OperationType.EDIT_JEDI_CALL, connection, Frame.gui.savedOriginalArray);
+					Operation.editData(OperationType.EDIT_JEDI_CALL, ConnectionFactory.getConnection(), Frame.gui.savedOriginalArray);
 					System.out.println("JMA_JEDI_EDIT button working");
 					} catch (Exception e1) {
 						e1.printStackTrace();
@@ -219,11 +215,10 @@ public class ALClass {
 
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if (e.getSource() == MainPanel.editDataButton && MainPanel.panelCheck == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.panelCheck == PanelCheckEnum.JMA_JEDI_REMOVE) {
+				if (e.getSource() == MainPanel.editDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_REMOVE) {
 					try {
-						Connection connection = ConnectionFactory.getConnection(ConnectionFactory.DatabaseType.MYSQL);
-						System.out.println("ok");
-						Frame.gui.setPanelToJMEdit("jediEdit", connection);
+						Connection connection = ConnectionFactory.getConnection();
+						Frame.gui.setPanelToJMEdit("jediEdit");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}

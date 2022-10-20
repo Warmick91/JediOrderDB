@@ -9,15 +9,18 @@ public class ConnectionFactory {
 
 	private static Connection con = null;
 
+	static DatabaseType database = DatabaseType.MYSQL;
+	
+	
+	public final static Connection getConnection () throws Exception {
 
-	public static Connection getConnection (final DatabaseType type) throws Exception {
-
+		
 		try {
 			if (con != null) return con;
 
 			else {
 
-				con = newJdbcConnection(type);
+				con = newJdbcConnection(database);
 				return con;
 
 			}
