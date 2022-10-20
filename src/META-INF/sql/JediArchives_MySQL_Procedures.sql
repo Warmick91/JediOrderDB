@@ -3,7 +3,6 @@ DROP PROCEDURE IF EXISTS insertIntoJediAndBeings;
 DROP PROCEDURE IF EXISTS editJediAndBeings;
 
 DELIMITER //
-
 CREATE PROCEDURE insertIntoJediAndBeings(
 			IN lastName VARCHAR(30)
 			 , firstName VARCHAR(250)
@@ -20,10 +19,11 @@ CREATE PROCEDURE insertIntoJediAndBeings(
 )
 BEGIN
 		INSERT INTO Beings VALUES (NULL, lastName, firstName, bd, bp, dd, dp, speci, 'Jedi');
-		INSERT INTO Jedi VALUES (NULL, lastName, jRank, jSpec, saberT, saberC);
+		INSERT INTO Jedi SELECT NULL, 'Master', 'Guardian', 'aaa', 'aaa', MAX(beings.beingID) FROM beings;
 END //
+DELIMITER ;
 
-
+DELIMITER //
 CREATE PROCEDURE editJediAndBeings(
 			IN ID BIGINT
 			 , lastName VARCHAR(30)
@@ -52,8 +52,7 @@ BEGIN
 			beingID = ID;
             
 		UPDATE Jedi
-        SET   JediLastName = lastName
-			, JediRank = jRank
+        SET   JediRank = jRank
             , JediSpecialization = jSpec
             , SaberType = saberT
             , SaberColor = saberC
@@ -61,5 +60,4 @@ BEGIN
 			JediID = ID;
 
 END //
-
 DELIMITER ;

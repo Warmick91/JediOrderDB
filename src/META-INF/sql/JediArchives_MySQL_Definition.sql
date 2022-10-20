@@ -17,40 +17,40 @@ CREATE TABLE Beings (
 
 CREATE TABLE Jedi (
 	JediID BIGINT NOT NULL AUTO_INCREMENT,
-	JediLastName VARCHAR(250) NOT NULL,
 	JediRank ENUM('Grand Master', 'Master', 'Knight', 'Padawan'),
 	JediSpecialization ENUM ('Guardian', 'Consular', 'Sentinel'),
 	SaberType VARCHAR(30) NOT NULL,
 	SaberColor VARCHAR(30) NOT NULL,
+    beingRefID BIGINT NOT NULL,
 	PRIMARY KEY (JediID),
-	FOREIGN KEY (JediID) REFERENCES beings (beingID)
+    FOREIGN KEY (beingRefID) REFERENCES beings (beingID) ON DELETE CASCADE
 );
 
 CREATE TABLE Sith (
 	SithID BIGINT NOT NULL AUTO_INCREMENT,
-	SithLastName VARCHAR(250) NOT NULL,
 	TitleAtDeath ENUM ('Master', 'Apprentice'),
 	SithSpecialization ENUM ('Marauder', 'Assassin', 'Lord'),
 	SaberType VARCHAR(30) NOT NULL,
 	SaberColor VARCHAR(25) NOT NULL,
+    beingRefID BIGINT NOT NULL,
 	PRIMARY KEY (SithID),
-	FOREIGN KEY (SithID) REFERENCES beings (beingID)
+	FOREIGN KEY (beingRefID) REFERENCES beings (beingID) ON DELETE CASCADE
 );
 
 CREATE TABLE BountyHunters (
 	HunterID BIGINT NOT NULL AUTO_INCREMENT,
-	BountyHunterLastName VARCHAR(250) NOT NULL,
 	Organisation VARCHAR(250) NOT NULL,
+    beingRefID BIGINT NOT NULL,
 	PRIMARY KEY (HunterID),
-	FOREIGN KEY (HunterID) REFERENCES beings (beingID)
+	FOREIGN KEY (beingRefID) REFERENCES beings (beingID) ON DELETE CASCADE
 );
 
 CREATE TABLE Smugglers (
 	SmugglerID BIGINT NOT NULL AUTO_INCREMENT,
-	SmugglerLastName VARCHAR(250) NOT NULL,
 	Organisation VARCHAR(250),
+	beingRefID BIGINT NOT NULL,
 	PRIMARY KEY (SmugglerID),
-	FOREIGN KEY (SmugglerID) REFERENCES beings (beingID)
+	FOREIGN KEY (beingRefID) REFERENCES beings (beingID) ON DELETE CASCADE
 );
 
 CREATE TABLE Battles (

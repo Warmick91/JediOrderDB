@@ -131,11 +131,11 @@ public class ALClass {
 		};
 
 		toModifiedSearchListener = new ActionListener() {
-
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Frame.gui.setPanelToCustomSearch();
+					System.out.println("BUTTON -> to ModifiedSearch(Custom Search)");
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -148,6 +148,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {		
 					Frame.gui.setPanelToStart();
+					System.out.println("BUTTON -> to StartPanel");
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -159,6 +160,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				try {
 					Frame.gui.setPanelToJMAccess();
+					System.out.println("BUTTON -> to JMA Menu");
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -173,6 +175,7 @@ public class ALClass {
 					|| (e.getSource() == MainPanel.addDataButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT || MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_REMOVE)) {
 						try {
 							Frame.gui.setPanelToJMAdd("jedi");
+							System.out.println("BUTTON -> to JMA_ADD");
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
@@ -187,6 +190,7 @@ public class ALClass {
 					try {
 						Connection connection = ConnectionFactory.getConnection();
 						Operation.insertData(Operation.OperationType.INSERT_INTO_JEDI_CALL, connection);
+						System.out.println("JMA_CONFIRM/ADD_BUTTON button working");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 
@@ -195,7 +199,7 @@ public class ALClass {
 				} else if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT) {
 					try {
 					Operation.editData(OperationType.EDIT_JEDI_CALL, ConnectionFactory.getConnection(), Frame.gui.savedOriginalArray);
-					System.out.println("JMA_JEDI_EDIT button working");
+					System.out.println("JMA_CONFIRM/EDIT_BUTTON working");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -207,6 +211,7 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				Frame.gui.clearInputTable();
+				System.out.println("JMA_CANCEL_BUTTON working");
 			}
 
 		};
@@ -219,6 +224,7 @@ public class ALClass {
 					try {
 						Connection connection = ConnectionFactory.getConnection();
 						Frame.gui.setPanelToJMEdit("jediEdit");
+						System.out.println("BUTTON -> JMA_EDIT");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}

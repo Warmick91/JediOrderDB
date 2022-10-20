@@ -25,33 +25,33 @@ VALUES
 
 INSERT INTO Jedi
 VALUES 
-(NULL, 'Yoda', 'Grand Master', 'Consular', 'shoto, single', 'green'),
-(NULL, 'Windu', 'Master', 'Guardian', 'regular, single', 'amethyst'),
-(NULL, 'Mundi', 'Master', 'Guardian', 'regular, single', 'blue'),
-(NULL, 'Bridger', 'Padawan', 'Sentinel', 'regular, single', 'blue'),
-(NULL, 'Tano', 'Padawan', 'Guardian', 'regular, two', 'white'),
-(NULL, 'Kenobi', 'Master', 'Guardian', 'regular, single', 'blue'),
-(NULL, 'Jinn', 'Master', 'Sentinel', 'regular, single', 'green');
+(NULL, 'Grand Master', 'Consular', 'shoto, single', 'green', 1),
+(NULL, 'Master', 'Guardian', 'regular, single', 'amethyst', 2),
+(NULL, 'Master', 'Guardian', 'regular, single', 'blue', 3),
+(NULL, 'Padawan', 'Sentinel', 'regular, single', 'blue', 4),
+(NULL, 'Padawan', 'Guardian', 'regular, two', 'white', 5),
+(NULL, 'Master', 'Guardian', 'regular, single', 'blue', 6),
+(NULL,  'Master', 'Sentinel', 'regular, single', 'green', 7);
 
 
 INSERT INTO Sith
 VALUES
-(NULL, 'Maul', 'Apprentice', 'Assassin', 'lightstaff', 'red'),
-(NULL, 'Palpatine', 'Master', 'Lord', 'regular, single', 'red'),
-(NULL, 'Damask II', 'Master', 'Lord', 'regular, single', 'red');
+(NULL, 'Apprentice', 'Assassin', 'lightstaff', 'red', 8),
+(NULL, 'Master', 'Lord', 'regular, single', 'red', 9),
+(NULL, 'Master', 'Lord', 'regular, single', 'red', 10);
 
 
 INSERT INTO BountyHunters
 VALUES
-(NULL, 'Fett', 'Fett gotra'),
-(NULL, 'Sing', 'Hutt Clan'),
-(NULL, 'Bane', 'Pyke Syndicate');
+(NULL, 'Fett gotra', 11),
+(NULL, 'Hutt Clan', 12),
+(NULL, 'Pyke Syndicate', 13);
 
 INSERT INTO Smugglers
 VALUES
-(NULL, 'Solo', 'Rebel Alliance'),
-(NULL, 'Chewbacca', 'Rebel Alliance'),
-(NULL, 'Calrissian', 'Rebel Alliance');
+(NULL, 'Rebel Alliance', 14),
+(NULL, 'Rebel Alliance', 15),
+(NULL, 'Rebel Alliance', 16);
 
 INSERT INTO Battles
 VALUES

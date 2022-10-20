@@ -1,8 +1,6 @@
 use jediarchives;
 
-delete from jedi where JediLastName = "aaa";
 delete from beings where LastName = "aaa";
-delete from jedi where JediLastName = "bbb";
 delete from beings where LastName = "bbb";
 delete from jedi where JediLastName = "ccc";
 delete from beings where LastName = "ccc";
@@ -58,3 +56,14 @@ SELECT j.JediIDeditJediAndBeings
     , j.sabercolor
     FROM beings AS b, jedi AS j WHERE beingID = JediID;
     
+
+            
+SELECT j.jediid, b.lastname, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM jedi AS j, beings AS b WHERE b.beingclass = 'jedi' AND j.beingRefID = b.beingid ORDER BY JediID;    
+SELECT s.sithid, b.lastname, s.titleatdeath, s.sithspecialization, s.sabertype, s.sabercolor FROM sith as s, beings as b WHERE b.beingclass = 'sith' AND s.beingRefID = b.beingid ORDER BY SithID;
+
+select * FROM beings;
+select * from jedi;     
+select * from sith;
+
+
+INSERT INTO Jedi SELECT NULL, 'Master', 'Guardian', 'aaa', 'aaa', MAX(beings.beingID) FROM beings;

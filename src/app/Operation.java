@@ -16,10 +16,11 @@ public class Operation {
 
 
 	public static final String SELECT_ALL_BEINGS = "SELECT * FROM Beings ORDER BY beingID";
-	public static final String SELECT_ALL_JEDI = "SELECT * FROM Jedi ORDER BY JediID";
+	
+	public static final String SELECT_ALL_JEDI = "SELECT j.jediid, b.lastname, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM jedi AS j, beings AS b WHERE b.beingclass = 'jedi' AND j.beingRefID = b.beingid ORDER BY JediID";
 	public static final String SELECT_ALL_JEDI_FOR_EDIT = "SELECT j.JediID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM beings AS b, jedi AS j WHERE beingID = JediID ORDER BY beingID";
 
-	public static final String SELECT_ALL_SITH = "SELECT * FROM Sith ORDER BY SithID";
+	public static final String SELECT_ALL_SITH = "SELECT s.sithid, b.lastname, s.titleatdeath, s.sithspecialization, s.sabertype, s.sabercolor FROM sith as s, beings as b WHERE b.beingclass = 'sith' AND s.beingRefID = b.beingid ORDER BY SithID";
 	public static final String SELECT_ALL_BOUNTYHUNTERS = "SELECT * FROM BountyHunters ORDER BY HunterID";
 	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
 	public static final String SELECT_ALL_BATTLES = "SELECT * FROM Battles ORDER BY BattleID";
@@ -123,7 +124,7 @@ public class Operation {
 
 						try {
 
-							cs.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName (Beings and Jedi)
+							cs.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName
 							cs.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 1))); //FirstName
 							cs.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 3))); //Birthday
 							cs.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 4))); //Birthplace
@@ -136,7 +137,7 @@ public class Operation {
 							cs.setString(10, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 9))); //Saber type
 							cs.setString(11, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 10))); //Saber color
 
-							//cs.execute();
+	
 							cs.addBatch();
 
 							numberOfSuccessfulOperations++;
@@ -256,7 +257,6 @@ public class Operation {
 			i++;
 		}		
 		
-		System.out.println(MainPanel.getPanelCheck());
 		switch (MainPanel.getPanelCheck()) {
 			case JMA_MENU:
 			case START_PANEL:
