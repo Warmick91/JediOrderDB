@@ -62,7 +62,13 @@ public class MainPanel extends JPanel {
 	public static JLabel textTitle = new JLabel("", SwingConstants.CENTER);
 	public JLabel confirmationLabel = new JLabel("", SwingConstants.CENTER);
 	public JPanel confirmationButtonsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+	
+	private final String[] rankJediOptions = { "", "Padawan", "Knight", "Master", "Grand Master" };
+	private final String[] specJediOptions = { "", "Guardian", "Consular", "Sentinel" };
 
+	private final MyComboBoxRenderer rankJediOptionsJCBox = new MyComboBoxRenderer(rankJediOptions); //The actual JComboBox
+	private final MyComboBoxRenderer specJediOptionsJCBox = new MyComboBoxRenderer(specJediOptions); //The actual JComboBox
+	
 	//SW font
 	Font swFont;
 
@@ -186,7 +192,7 @@ public class MainPanel extends JPanel {
 				break;
 			case "jediEdit":
 				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_JEDI_FOR_EDIT, con);
-				scrollPane.getViewport().add(viewTable);
+				scrollPane.getViewport().add(viewTable);			
 				break;
 			case "sith":
 				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_SITH, con);
@@ -363,17 +369,15 @@ public class MainPanel extends JPanel {
 				inputTable.setRowHeight(inputTablePanel.getHeight() / 5 - 4);
 				inputTable.getColumnModel().getColumn(3).setPreferredWidth(60);
 				inputTable.getColumnModel().getColumn(5).setPreferredWidth(60);
-
-				String[] rankJediOptions = { "", "Padawan", "Knight", "Master", "Grand Master" };
-				MyComboBoxRenderer rankJediOptionsJCBox = new MyComboBoxRenderer(rankJediOptions); //The actual JComboBox
+				
+				//Combo boxes for insert
 				rankJediOptionsJCBox.setSelectedIndex(0);
 				inputTable.getColumnModel().getColumn(7).setCellEditor(new MyComboBoxEditor(rankJediOptions));
 				inputTable.getColumnModel().getColumn(7).setCellRenderer(rankJediOptionsJCBox);
-				String[] specJediOptions = { "", "Guardian", "Consular", "Sentinel" };
-				MyComboBoxRenderer specJediOptionsJCBox = new MyComboBoxRenderer(specJediOptions); //The actual JComboBox
+
 				specJediOptionsJCBox.setSelectedIndex(0);
 				inputTable.getColumnModel().getColumn(8).setCellEditor(new MyComboBoxEditor(specJediOptions));
-				inputTable.getColumnModel().getColumn(8).setCellRenderer(new MyComboBoxRenderer(specJediOptions));
+				inputTable.getColumnModel().getColumn(8).setCellRenderer(specJediOptionsJCBox);
 
 				inputTablePanel.add(new JScrollPane(inputTable));
 
@@ -424,7 +428,9 @@ public class MainPanel extends JPanel {
 		confirmationButtonsPanel.remove(emptyFieldsButton);
 		confirmationButtonsPanel.add(cancelChangesButton);
 		this.add(confirmationButtonsPanel);
-
+	
+		
+		
 		final int numberOfInputRows = 5;
 
 		//Data
@@ -434,21 +440,33 @@ public class MainPanel extends JPanel {
 				panelCheck = PanelCheckEnum.JMA_JEDI_EDIT;
 
 				textTitle.setText("Edit Jedi:");
-
+			
+				
 				tablePanel = new JPanel(new GridLayout());
 				tablePanel.setSize(850, 200);
 				tablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
 				tablePanel.add(scrollPane, BorderLayout.CENTER);
-
+				
+				
 				this.setScrollPane("jediEdit", ConnectionFactory.getConnection());
 				this.add(tablePanel);
-
+				
+				rankJediOptionsJCBox.setSelectedIndex(1);
+				viewTable.getColumnModel().getColumn(7).setCellEditor(new MyComboBoxEditor(rankJediOptions));
+				viewTable.getColumnModel().getColumn(7).setCellRenderer(rankJediOptionsJCBox);
+				
+				specJediOptionsJCBox.setSelectedIndex(1);
+				viewTable.getColumnModel().getColumn(8).setCellEditor(new MyComboBoxEditor(specJediOptions));
+				viewTable.getColumnModel().getColumn(8).setCellRenderer(specJediOptionsJCBox);	
+				
+				viewTable.setRowHeight(25);
+				
 				repaint();
 				break;
 
 		}
 
-		savedOriginalArray = Operation.saveOriginalTable();
+		//savedOriginalArray = Operation.saveOriginalTable();
 	}
 
 

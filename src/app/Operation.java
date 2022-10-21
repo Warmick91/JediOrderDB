@@ -18,8 +18,7 @@ public class Operation {
 	public static final String SELECT_ALL_BEINGS = "SELECT * FROM Beings ORDER BY beingID";
 	
 	public static final String SELECT_ALL_JEDI = "SELECT j.jediid, b.lastname, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM jedi AS j, beings AS b WHERE b.beingclass = 'jedi' AND j.beingRefID = b.beingid ORDER BY JediID";
-	public static final String SELECT_ALL_JEDI_FOR_EDIT = "SELECT j.JediID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM beings AS b, jedi AS j WHERE beingID = JediID ORDER BY beingID";
-
+	public static final String SELECT_ALL_JEDI_FOR_EDIT = "SELECT j.JediID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor, j.beingRefId FROM beings AS b, jedi AS j WHERE beingID = JediID ORDER BY beingID";
 	public static final String SELECT_ALL_SITH = "SELECT s.sithid, b.lastname, s.titleatdeath, s.sithspecialization, s.sabertype, s.sabercolor FROM sith as s, beings as b WHERE b.beingclass = 'sith' AND s.beingRefID = b.beingid ORDER BY SithID";
 	public static final String SELECT_ALL_BOUNTYHUNTERS = "SELECT * FROM BountyHunters ORDER BY HunterID";
 	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
@@ -28,7 +27,7 @@ public class Operation {
 
 	public static final String INSERT_INTO_JEDI_CALL = "CALL insertIntoJediAndBeings (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	public static final String EDIT_JEDI_CALL = "CALL editJediAndBeings(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+	
 	private static PreparedStatement ps;
 	private static CallableStatement cs;
 	private static ResultSet rs;
@@ -37,7 +36,7 @@ public class Operation {
 	//Column names
 	private static final String[] beingsColumns = { "ID", "Last Name", "First Name", "Birth Date", "Birtplace", "Death Date", "Deathplace", "Species", "Class" };
 	private static final String[] jediColumns = { "ID", "Last Name", "Rank", "Specialization", "Saber Type", "Saber Color" };
-	private static final String[] jediToEditColumns = { "ID", "Last Name", "First Name", "Species", "Birthdate", "Birthplace", "Deathdate", "Deathplace", "Rank", "Specialization", "Saber Type", "Saber Color" };
+	private static final String[] jediToEditColumns = { "ID", "Last Name", "First Name", "Species", "Birthdate", "Birthplace", "Deathdate", "Deathplace", "Rank", "Specialization", "Saber Type", "Saber Color", "beingRefID" };
 	private static final String[] sithColumns = { "ID", "Last Name", "Title at death", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation" };
 	private static final String[] smugglersColumns = { "ID", "Last Name", "Organisation" };
@@ -180,25 +179,25 @@ public class Operation {
 	public static void editData (OperationType operationType, Connection con, String[][] origArray) throws SQLException {
 
 		//new Array
-		String[][] editedArray = new String[Frame.gui.savedOriginalArray.length][Frame.gui.savedOriginalArray[0].length];
-		for (int i = 0; i < editedArray.length; i++) {
-			for (int j = 0; j < editedArray[0].length; j++) {
-				editedArray[i][j] = (String) Frame.gui.viewTable.getValueAt(i, j);
-			}
-		}
+//		String[][] editedArray = new String[Frame.gui.savedOriginalArray.length][Frame.gui.savedOriginalArray[0].length];
+//		for (int i = 0; i < editedArray.length; i++) {
+//			for (int j = 0; j < editedArray[0].length; j++) {
+//				editedArray[i][j] = (String) Frame.gui.viewTable.getValueAt(i, j);
+//			}
+//		}
 
 		switch (operationType) {
 			case EDIT_JEDI_CALL:
 				//Comparing two arrays and saving results to the bool table
 				//If cells are different than the result is true		
-				boolean[][] isCellDifferent = new boolean[Frame.gui.savedOriginalArray.length][Frame.gui.savedOriginalArray[0].length];
-				for (int i = 0; i < isCellDifferent.length; i++) {
-					for (int j = 0; j < isCellDifferent[0].length; j++) {
-						if (editedArray[i][j] != Frame.gui.savedOriginalArray[i][j]) {
-							isCellDifferent[i][j] = true;
-						}
-					}
-				}
+//				boolean[][] isCellDifferent = new boolean[Frame.gui.savedOriginalArray.length][Frame.gui.savedOriginalArray[0].length];
+//				for (int i = 0; i < isCellDifferent.length; i++) {
+//					for (int j = 0; j < isCellDifferent[0].length; j++) {
+//						if (editedArray[i][j] != Frame.gui.savedOriginalArray[i][j]) {
+//							isCellDifferent[i][j] = true;
+//						}
+//					}
+//				}
 
 				//				for (int i = 0; i < isCellDifferent.length; i++) {
 				//					for (int j = 0; j < isCellDifferent[0].length; j++) {
@@ -207,9 +206,29 @@ public class Operation {
 				//				}
 				//				
 				//				System.out.println(isCellDifferent.length * isCellDifferent[0].length);
-
+				
+				con.setAutoCommit(false);
 				cs = con.prepareCall(EDIT_JEDI_CALL);
-
+				
+				//cs.setInt(1, (int) Frame.gui.viewTable.getModel().getValueAt(0, 12)); //ID SHOULD BE
+				cs.setInt(1, 1); //AUX
+				cs.setString(2, (String) Frame.gui.viewTable.getModel().getValueAt(0, 1));  //Last Name
+				cs.setString(3, (String) Frame.gui.viewTable.getModel().getValueAt(0, 2));  //First Name
+				cs.setString(4, (String) Frame.gui.viewTable.getModel().getValueAt(0, 3));  //Birthdate
+				cs.setString(5, (String) Frame.gui.viewTable.getModel().getValueAt(0, 4));  //Birthplace
+				cs.setString(6, (String) Frame.gui.viewTable.getModel().getValueAt(0, 5)); 	//Deathdate
+				cs.setString(7, (String) Frame.gui.viewTable.getModel().getValueAt(0, 6)); 	//Deathplace
+				cs.setString(8, (String) Frame.gui.viewTable.getModel().getValueAt(0, 7));	//Species
+				cs.setString(9, (String) Frame.gui.viewTable.getModel().getValueAt(0, 9)); 	//Rank
+				cs.setString(10, (String) Frame.gui.viewTable.getModel().getValueAt(0, 9)); //Specialization
+				cs.setString(11, (String) Frame.gui.viewTable.getModel().getValueAt(0, 10));//Saber Type
+				cs.setString(12, (String) Frame.gui.viewTable.getModel().getValueAt(0, 11));//Saber Color
+				
+				cs.addBatch();
+				
+				cs.executeBatch();
+				con.commit();
+				
 				break;
 
 			default:
@@ -317,7 +336,7 @@ public class Operation {
 		ps = con.prepareStatement("SELECT COUNT(*) FROM Jedi");
 		rs = ps.executeQuery();
 		if (rs.next()) {
-			data = new String[rs.getInt(1)][12];
+			data = new String[rs.getInt(1)][13];
 		}
 
 		ps = con.prepareStatement(SELECT_ALL_JEDI_FOR_EDIT);
@@ -336,6 +355,7 @@ public class Operation {
 			data[i][9] = rs.getString(10);
 			data[i][10] = rs.getString(11);
 			data[i][11] = rs.getString(12);
+			data[i][12] = rs.getString(13); // beingRefID
 			i++;
 		}
 
@@ -349,7 +369,8 @@ public class Operation {
 				}
 			}
 		};
-
+		
+		queryTable.removeColumn(queryTable.getColumnModel().getColumn(12)); // removes ONLY the display of the beingRefID column
 		queryTable.getColumnModel().getColumn(0).setPreferredWidth(25);
 	}
 

@@ -67,3 +67,5 @@ select * from sith;
 
 
 INSERT INTO Jedi SELECT NULL, 'Master', 'Guardian', 'aaa', 'aaa', MAX(beings.beingID) FROM beings;
+
+
