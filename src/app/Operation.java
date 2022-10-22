@@ -36,7 +36,7 @@ public class Operation {
 	//Column names
 	private static final String[] beingsColumns = { "ID", "Last Name", "First Name", "Birth Date", "Birtplace", "Death Date", "Deathplace", "Species", "Class" };
 	private static final String[] jediColumns = { "ID", "Last Name", "Rank", "Specialization", "Saber Type", "Saber Color" };
-	private static final String[] jediToEditColumns = { "ID", "Last Name", "First Name", "Species", "Birthdate", "Birthplace", "Deathdate", "Deathplace", "Rank", "Specialization", "Saber Type", "Saber Color", "beingRefID" };
+	private static final String[] jediToEditColumns = { "ID", "Last name", "First name", "Species", "Birthdate", "Birthplace", "Death date", "Deathplace", "Rank", "Specialization", "Saber type", "Saber color", "beingRefID" };
 	private static final String[] sithColumns = { "ID", "Last Name", "Title at death", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation" };
 	private static final String[] smugglersColumns = { "ID", "Last Name", "Organisation" };
@@ -101,7 +101,7 @@ public class Operation {
 		//Check how many rows were filled with data
 		int filledRowsNumberCheck = 0;
 		for (int i = 0; i < Frame.gui.inputTable.getRowCount(); i++) {
-			if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "") {
+			if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "" && Frame.gui.inputTable.getModel().getValueAt(i, 0).toString().trim().length() != 0) {
 				filledRowsNumberCheck++;
 			}
 		}
@@ -119,7 +119,7 @@ public class Operation {
 				cs = con.prepareCall(INSERT_INTO_JEDI_CALL);
 
 				for (int i = 0; i < filledRowsNumberCheck; i++) {
-					if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "") {
+					if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "" && Frame.gui.inputTable.getModel().getValueAt(i, 0).toString().trim().length() != 0) {
 
 						try {
 

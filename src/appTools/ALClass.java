@@ -38,10 +38,9 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 
 				try {
-					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Luminous Beings");
 					Frame.gui.setBackgroundTo("root");
-					Frame.gui.setScrollPane("beings", connection);
+					Frame.gui.setScrollPane("beings", ConnectionFactory.getConnection());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -54,10 +53,9 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Jedi");
 					Frame.gui.setBackgroundTo("jedi");
-					Frame.gui.setScrollPane("jedi", connection);
+					Frame.gui.setScrollPane("jedi", ConnectionFactory.getConnection());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -70,10 +68,9 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Sith");
 					Frame.gui.setBackgroundTo("sith");
-					Frame.gui.setScrollPane("sith", connection);
+					Frame.gui.setScrollPane("sith", ConnectionFactory.getConnection());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -87,10 +84,9 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Bounty Hunters");
 					Frame.gui.setBackgroundTo("bountyHunters");
-					Frame.gui.setScrollPane("bountyHunters", connection);
+					Frame.gui.setScrollPane("bountyHunters", ConnectionFactory.getConnection());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -103,10 +99,9 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Smugglers");
 					Frame.gui.setBackgroundTo("smugglers");
-					Frame.gui.setScrollPane("smugglers", connection);
+					Frame.gui.setScrollPane("smugglers", ConnectionFactory.getConnection());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -118,10 +113,9 @@ public class ALClass {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				try {
-					Connection connection = ConnectionFactory.getConnection();
 					MainPanel.textTitle.setText("Battles");
 					Frame.gui.setBackgroundTo("battles");
-					Frame.gui.setScrollPane("battles", connection);
+					Frame.gui.setScrollPane("battles", ConnectionFactory.getConnection());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -188,8 +182,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_ADD) {
 					try {
-						Connection connection = ConnectionFactory.getConnection();
-						Operation.insertData(Operation.OperationType.INSERT_INTO_JEDI_CALL, connection);
+						Operation.insertData(Operation.OperationType.INSERT_INTO_JEDI_CALL, ConnectionFactory.getConnection());
 						System.out.println("JMA_CONFIRM/ADD_BUTTON button working");
 					} catch (Exception e1) {
 						e1.printStackTrace();
