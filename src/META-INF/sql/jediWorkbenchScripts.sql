@@ -70,4 +70,4 @@ describe beings;
 
 SELECT beingRefID FROM jedi WHERE beingReFID = 2;
 
-select jediID from jedi Where jediID BETWEEN 23 AND 40;
+delete from beings Where beingID BETWEEN 23 AND 40;
