@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import app.ConnectionFactory;
@@ -177,6 +178,7 @@ public class MainPanel extends JPanel {
 		emptyFieldsButton.addActionListener(alClass.cancelOrEmptyListener);
 		addDataButton.addActionListener(alClass.toAddJediListener);
 		editDataButton.addActionListener(alClass.toEditDataListener);
+		cancelChangesButton.addActionListener(alClass.cancelOrEmptyListener);
 	}
 
 
@@ -260,6 +262,7 @@ public class MainPanel extends JPanel {
 		this.add(buttonsLabel);
 
 		this.setBackgroundTo("start");
+
 		try {
 			this.setScrollPane("beings", connection);
 		} catch (Exception e) {
@@ -424,13 +427,12 @@ public class MainPanel extends JPanel {
 		this.add(goBackButtonToUpdateCategory);
 		this.add(textTitle);
 		this.add(editTypeButtonsLabel);
+		this.add(confirmationLabel);
 
 		confirmationButtonsPanel.setOpaque(false);
 		confirmationButtonsPanel.remove(emptyFieldsButton);
 		confirmationButtonsPanel.add(cancelChangesButton);
 		this.add(confirmationButtonsPanel);
-
-		final int numberOfInputRows = 5;
 
 		//Data
 		switch (category) {
@@ -455,7 +457,13 @@ public class MainPanel extends JPanel {
 				viewTable.getColumnModel().getColumn(9).setCellEditor(new MyComboBoxEditor(specJediOptions));
 				viewTable.getColumnModel().getColumn(9).setCellRenderer(specJediOptionsJCBox);
 
+				DefaultTableCellRenderer idColumnRenderer = new DefaultTableCellRenderer();
+
+				idColumnRenderer.setHorizontalAlignment(JLabel.CENTER);
+				idColumnRenderer.setBackground(Color.decode("#eeeeee"));
+
 				viewTable.setRowHeight(25);
+				viewTable.getColumnModel().getColumn(0).setCellRenderer(idColumnRenderer);
 				viewTable.getColumnModel().getColumn(0).setPreferredWidth(20);
 				viewTable.getColumnModel().getColumn(1).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
 				viewTable.getColumnModel().getColumn(4).setPreferredWidth(this.inputTable.getColumnModel().getColumn(4).getWidth());
@@ -476,17 +484,23 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public void clearInputTable () {
+	public void clearInputTableOrRemoveChanges () throws Exception {
 
-		for (int i = 0; i < inputTable.getRowCount(); i++) {
-			for (int j = 0; j < inputTable.getColumnCount(); j++) {
-				if (inputTable.getModel().getValueAt(i, j) != "") {
-					inputTable.getModel().setValueAt("", i, j);
+		if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD) {
+			for (int i = 0; i < inputTable.getRowCount(); i++) {
+				for (int j = 0; j < inputTable.getColumnCount(); j++) {
+					if (inputTable.getModel().getValueAt(i, j) != "") {
+						inputTable.getModel().setValueAt("", i, j);
+					}
 				}
 			}
-		}
 
-		this.confirmationLabel.setText("");
+			this.confirmationLabel.setText("");
+		} else if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_EDIT) {
+			setPanelToJMEdit("jediEdit");
+			this.confirmationLabel.setForeground(Color.yellow);
+			this.confirmationLabel.setText("changes cancelled");
+		}
 
 		repaint();
 

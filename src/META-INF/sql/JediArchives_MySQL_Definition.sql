@@ -4,7 +4,7 @@ USE jediarchives;
 
 CREATE TABLE Beings (
 	beingID BIGINT NOT NULL AUTO_INCREMENT,
-	LastName VARCHAR(30) NOT NULL,
+	LastName VARCHAR(30) UNIQUE NOT NULL,
 	FirstName VARCHAR(250),
 	BirthDate VARCHAR(250),
 	BirthPlace VARCHAR(250),
@@ -17,8 +17,8 @@ CREATE TABLE Beings (
 
 CREATE TABLE Jedi (
 	JediID BIGINT NOT NULL AUTO_INCREMENT,
-	JediRank ENUM('Grand Master', 'Master', 'Knight', 'Padawan'),
-	JediSpecialization ENUM ('Guardian', 'Consular', 'Sentinel'),
+	JediRank ENUM('Grand Master', 'Master', 'Knight', 'Padawan') NOT NULL,
+	JediSpecialization ENUM ('Guardian', 'Consular', 'Sentinel') NOT NULL,
 	SaberType VARCHAR(30) NOT NULL,
 	SaberColor VARCHAR(30) NOT NULL,
     beingRefID BIGINT NOT NULL,

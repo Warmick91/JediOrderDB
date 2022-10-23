@@ -5,6 +5,8 @@ delete from beings where LastName = "bbb";
 delete from beings where LastName = "ccc";
 delete from beings where LastName = "ddd";
 delete from beings where LastName = "eee";
+delete from beings where LastName = "fff";
+delete from beings where LastName = "ggg";
 
 select * from jedi;
 select * from beings;

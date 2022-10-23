@@ -19,7 +19,7 @@ CREATE PROCEDURE insertIntoJediAndBeings(
 )
 BEGIN
 		INSERT INTO Beings VALUES (NULL, lastName, firstName, bd, bp, dd, dp, speci, 'Jedi');
-		INSERT INTO Jedi SELECT NULL, 'Master', 'Guardian', 'aaa', 'aaa', MAX(beings.beingID) FROM beings;
+		INSERT INTO Jedi SELECT NULL, jRank, jSpec, saberT, saberC, MAX(beings.beingID) FROM beings;
 END //
 DELIMITER ;
 

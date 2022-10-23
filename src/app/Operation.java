@@ -2,6 +2,9 @@ package app;
 
 import java.awt.Color;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JTable;
 import GUI_JediDB.Frame;
 import GUI_JediDB.MainPanel;
@@ -16,7 +19,7 @@ public class Operation {
 
 
 	public static final String SELECT_ALL_BEINGS = "SELECT * FROM Beings ORDER BY beingID";
-	
+
 	public static final String SELECT_ALL_JEDI = "SELECT j.jediid, b.lastname, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM jedi AS j, beings AS b WHERE b.beingclass = 'jedi' AND j.beingRefID = b.beingid ORDER BY JediID";
 	public static final String SELECT_ALL_JEDI_FOR_EDIT = "SELECT j.JediID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor, j.beingRefId FROM beings AS b, jedi AS j WHERE beingID = JediID ORDER BY beingID";
 	public static final String SELECT_ALL_SITH = "SELECT s.sithid, b.lastname, s.titleatdeath, s.sithspecialization, s.sabertype, s.sabercolor FROM sith as s, beings as b WHERE b.beingclass = 'sith' AND s.beingRefID = b.beingid ORDER BY SithID";
@@ -27,7 +30,7 @@ public class Operation {
 
 	public static final String INSERT_INTO_JEDI_CALL = "CALL insertIntoJediAndBeings (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	public static final String EDIT_JEDI_CALL = "CALL editJediAndBeings(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	
+
 	private static PreparedStatement ps;
 	private static CallableStatement cs;
 	private static ResultSet rs;
@@ -46,6 +49,7 @@ public class Operation {
 
 	//counter
 	private static int i;
+	private static int numberOfSuccessfulOperations = 0;
 
 
 	public static JTable readQuery (OperationType operationType, Connection con) throws SQLException {
@@ -111,7 +115,7 @@ public class Operation {
 			return;
 		}
 
-		int numberOfSuccessfulOperations = 0;
+		numberOfSuccessfulOperations = 0;
 		con.setAutoCommit(false);
 		switch (operationType) {
 			case INSERT_INTO_JEDI_CALL:
@@ -136,16 +140,15 @@ public class Operation {
 							cs.setString(10, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 9))); //Saber type
 							cs.setString(11, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 10))); //Saber color
 
-	
 							cs.addBatch();
 
 							numberOfSuccessfulOperations++;
-
+							
 						} catch (SQLException sqle) {
 							Frame.gui.confirmationLabel.setForeground(Color.red);
 							Frame.gui.confirmationLabel.setText("input error");
 							sqle.printStackTrace();
-							throw new SQLException("Something went wrong with adding to the batch");
+							throw new SQLException("Something went wrong with adding to the insert batch");
 						}
 					}
 
@@ -161,13 +164,14 @@ public class Operation {
 						cs.clearBatch();
 						con.rollback();
 						Frame.gui.confirmationLabel.setForeground(Color.red);
-						Frame.gui.confirmationLabel.setText("possible duplicates");
+						Frame.gui.confirmationLabel.setText("Duplicates/error");
 						throw new BatchUpdateException("Something went wrong with the batch execution", null);
 					}
 
 					break;
 
 				}
+
 			default:
 				System.out.println("insertData() didn't work. Default called.");
 				break;
@@ -179,57 +183,86 @@ public class Operation {
 	public static void editData (OperationType operationType, Connection con, String[][] origArray) throws SQLException {
 
 		//new Array
-//		String[][] editedArray = new String[Frame.gui.savedOriginalArray.length][Frame.gui.savedOriginalArray[0].length];
-//		for (int i = 0; i < editedArray.length; i++) {
-//			for (int j = 0; j < editedArray[0].length; j++) {
-//				editedArray[i][j] = (String) Frame.gui.viewTable.getValueAt(i, j);
-//			}
-//		}
+		String[][] editedArray = new String[Frame.gui.savedOriginalArray.length][Frame.gui.savedOriginalArray[0].length];
+		for (int i = 0; i < editedArray.length; i++) {
+			for (int j = 0; j < editedArray[0].length; j++) {
+				editedArray[i][j] = (String) Frame.gui.viewTable.getValueAt(i, j);
+			}
+		}
+
+		//Comparing two arrays and saving results to the bool table
+		//If cells differ, the result is true
+		int checkInt = 0;
+		boolean[][] isCellDifferent = new boolean[Frame.gui.savedOriginalArray.length][Frame.gui.savedOriginalArray[0].length];
+		for (int i = 0; i < isCellDifferent.length; i++) {
+			for (int j = 0; j < isCellDifferent[0].length; j++) {
+				if (editedArray[i][j] != Frame.gui.savedOriginalArray[i][j]) {
+					isCellDifferent[i][j] = true;
+					checkInt = 1;
+				}
+			}
+		}
+		
+		//If no changes within the table, quit the method
+		if(checkInt == 0) {
+			Frame.gui.confirmationLabel.setForeground(Color.red);
+			Frame.gui.confirmationLabel.setText("No changed data");
+			return;
+		}
+		
+
+		numberOfSuccessfulOperations = 0;
 
 		switch (operationType) {
 			case EDIT_JEDI_CALL:
-				//Comparing two arrays and saving results to the bool table
-				//If cells are different than the result is true		
-//				boolean[][] isCellDifferent = new boolean[Frame.gui.savedOriginalArray.length][Frame.gui.savedOriginalArray[0].length];
-//				for (int i = 0; i < isCellDifferent.length; i++) {
-//					for (int j = 0; j < isCellDifferent[0].length; j++) {
-//						if (editedArray[i][j] != Frame.gui.savedOriginalArray[i][j]) {
-//							isCellDifferent[i][j] = true;
-//						}
-//					}
-//				}
 
-				//				for (int i = 0; i < isCellDifferent.length; i++) {
-				//					for (int j = 0; j < isCellDifferent[0].length; j++) {
-				//						System.out.println(isCellDifferent[i][j]);
-				//					}
-				//				}
-				//				
-				//				System.out.println(isCellDifferent.length * isCellDifferent[0].length);
-				
 				con.setAutoCommit(false);
 				cs = con.prepareCall(EDIT_JEDI_CALL);
-				
-				//cs.setInt(1, (int) Frame.gui.viewTable.getModel().getValueAt(0, 12)); //ID SHOULD BE
-				cs.setInt(1, 1); //AUX
-				cs.setString(2, (String) Frame.gui.viewTable.getModel().getValueAt(0, 1));  //Last Name
-				cs.setString(3, (String) Frame.gui.viewTable.getModel().getValueAt(0, 2));  //First Name
-				cs.setString(4, (String) Frame.gui.viewTable.getModel().getValueAt(0, 3));  //Birthdate
-				cs.setString(5, (String) Frame.gui.viewTable.getModel().getValueAt(0, 4));  //Birthplace
-				cs.setString(6, (String) Frame.gui.viewTable.getModel().getValueAt(0, 5)); 	//Deathdate
-				cs.setString(7, (String) Frame.gui.viewTable.getModel().getValueAt(0, 6)); 	//Deathplace
-				cs.setString(8, (String) Frame.gui.viewTable.getModel().getValueAt(0, 7));	//Species
-				cs.setString(9, (String) Frame.gui.viewTable.getModel().getValueAt(0, 9)); 	//Rank
-				cs.setString(10, (String) Frame.gui.viewTable.getModel().getValueAt(0, 9)); //Specialization
-				cs.setString(11, (String) Frame.gui.viewTable.getModel().getValueAt(0, 10));//Saber Type
-				cs.setString(12, (String) Frame.gui.viewTable.getModel().getValueAt(0, 11));//Saber Color
-				
-				cs.addBatch();
-				
-				cs.executeBatch();
-				con.commit();
-				
-				break;
+
+				for (int i = 0; i < Frame.gui.viewTable.getRowCount(); i++) {
+
+					try {
+						cs.setInt(1, Integer.parseInt((String) Frame.gui.viewTable.getModel().getValueAt(i, 12))); //ID SHOULD BE
+						cs.setString(2, (String) Frame.gui.viewTable.getModel().getValueAt(i, 1));  //Last Name
+						cs.setString(3, (String) Frame.gui.viewTable.getModel().getValueAt(i, 2));  //First Name
+						cs.setString(4, (String) Frame.gui.viewTable.getModel().getValueAt(i, 4));  //Birthdate
+						cs.setString(5, (String) Frame.gui.viewTable.getModel().getValueAt(i, 5));  //Birthplace
+						cs.setString(6, (String) Frame.gui.viewTable.getModel().getValueAt(i, 6)); 	//Deathdate
+						cs.setString(7, (String) Frame.gui.viewTable.getModel().getValueAt(i, 7)); 	//Deathplace
+						cs.setString(8, (String) Frame.gui.viewTable.getModel().getValueAt(i, 3));	//Species
+						cs.setString(9, (String) Frame.gui.viewTable.getModel().getValueAt(i, 8)); 	//Rank
+						cs.setString(10, (String) Frame.gui.viewTable.getModel().getValueAt(i, 9)); //Specialization
+						cs.setString(11, (String) Frame.gui.viewTable.getModel().getValueAt(i, 10));//Saber Type
+						cs.setString(12, (String) Frame.gui.viewTable.getModel().getValueAt(i, 11));//Saber Color
+
+						cs.addBatch();
+
+						numberOfSuccessfulOperations++;
+					} catch (SQLException sqle) {
+						Frame.gui.confirmationLabel.setForeground(Color.red);
+						Frame.gui.confirmationLabel.setText("Edit error");
+						sqle.printStackTrace();
+						throw new SQLException("Something went wrong with adding to the edit batch");
+					}
+				}
+
+				if (numberOfSuccessfulOperations == Frame.gui.viewTable.getRowCount()) {
+					try {
+						cs.executeBatch();
+						con.commit();
+						Frame.gui.confirmationLabel.setForeground(Color.yellow);
+						Frame.gui.confirmationLabel.setText("Jedi info updated");
+					} catch (BatchUpdateException bue) {
+						cs.clearBatch();
+						con.rollback();
+						Frame.gui.confirmationLabel.setForeground(Color.red);
+						Frame.gui.confirmationLabel.setText("Possible wrong inputs");
+						throw new BatchUpdateException("Something went wrong with the batch execution", null);
+					}
+
+					break;
+
+				}
 
 			default:
 				System.out.println("editData() didn't work. Default called.");
@@ -274,8 +307,8 @@ public class Operation {
 			data[i][7] = rs.getString(8);
 			data[i][8] = rs.getString(9);
 			i++;
-		}		
-		
+		}
+
 		switch (MainPanel.getPanelCheck()) {
 			case JMA_MENU:
 			case START_PANEL:
@@ -369,7 +402,7 @@ public class Operation {
 				}
 			}
 		};
-		
+
 		queryTable.removeColumn(queryTable.getColumnModel().getColumn(12)); // removes ONLY the display of the beingRefID column
 		queryTable.getColumnModel().getColumn(0).setPreferredWidth(25);
 	}
