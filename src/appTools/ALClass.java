@@ -21,14 +21,15 @@ public class ALClass {
 	public ActionListener showAllBattlesListener;
 
 	public ActionListener toModifiedSearchListener;
-	public ActionListener backToStartPanelListener;
+	public ActionListener toBackStartPanelListener;
 	public ActionListener toJMAccessListener;
 	public ActionListener toAddJediListener;
-	public ActionListener confirmButtonListener;
-	public ActionListener cancelOrEmptyListener;
-	public ActionListener addDataListener;
 	public ActionListener toEditDataListener;
-	public ActionListener removeDataListener;
+	public ActionListener toRemoveDataListener;
+	public ActionListener addDataListener;
+	public ActionListener confirmJediButtonListener;
+	public ActionListener cancelOrEmptyListener;
+	public ActionListener unselectAllFieldsListener;
 
 
 	public ALClass () {
@@ -137,18 +138,6 @@ public class ALClass {
 			}
 		};
 
-		backToStartPanelListener = new ActionListener() {
-			@Override
-			public void actionPerformed (ActionEvent e) {
-				try {
-					Frame.gui.setPanelToStart();
-					System.out.println("BUTTON -> to StartPanel");
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		};
-
 		toJMAccessListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
@@ -165,7 +154,7 @@ public class ALClass {
 		toAddJediListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if ((e.getSource() == MainPanel.updateJediButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_MENU) || (e.getSource() == MainPanel.addDataButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT || MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_REMOVE)) {
+				if ((e.getSource() == MainPanel.updateJediButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_MENU) || (e.getSource() == MainPanel.toAddDataButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT || MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_REMOVE)) {
 					try {
 						Frame.gui.setPanelToJMAdd("jedi");
 						System.out.println("BUTTON -> to JMA_ADD");
@@ -176,7 +165,51 @@ public class ALClass {
 			}
 		};
 
-		confirmButtonListener = new ActionListener() {
+		toEditDataListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				if (e.getSource() == MainPanel.toEditDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_REMOVE) {
+					try {
+						Frame.gui.setPanelToJMEdit("jediEdit");
+						System.out.println("BUTTON -> to JMA_EDIT");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+
+			}
+
+		};
+
+		toRemoveDataListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				if (e.getSource() == MainPanel.toRemoveDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_EDIT);
+				try {
+					Frame.gui.setPanelToJMRemove("jediRemove");
+					System.out.println("BUTTON -> to JMA_REMOVE");
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		};
+
+		toBackStartPanelListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					Frame.gui.setPanelToStart();
+					System.out.println("BUTTON -> to StartPanel");
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		};
+
+		confirmJediButtonListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_ADD) {
@@ -195,6 +228,16 @@ public class ALClass {
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
+
+				} else if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_REMOVE) {
+					try {
+						Operation.removeData(Operation.OperationType.REMOVE_JEDI, ConnectionFactory.getConnection());
+						System.out.println("JMA_CONFIRM/REMOVE_BUTTON working");
+					} catch (Exception e1) {
+
+						e1.printStackTrace();
+					}
+
 				}
 			}
 		};
@@ -204,7 +247,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				if (e.getSource() == MainPanel.emptyFieldsButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD) {
 					try {
-						Frame.gui.clearInputTableOrRemoveChanges();
+						Frame.gui.clearInputTable();
 						System.out.println("JMA_REMOVE_ADDS_BUTTON working");
 					} catch (Exception e1) {
 						System.out.println("cancelOrEmptyListener AL failed ");
@@ -213,7 +256,7 @@ public class ALClass {
 
 				} else if (e.getSource() == MainPanel.cancelChangesButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_EDIT) {
 					try {
-						Frame.gui.clearInputTableOrRemoveChanges();
+						Frame.gui.removeChanges();
 						System.out.println("JMA_UNDO_CHANGES_BUTTON working");
 					} catch (Exception e1) {
 						System.out.println("cancelOrEmptyListener AL failed");
@@ -224,19 +267,14 @@ public class ALClass {
 			}
 		};
 
-		toEditDataListener = new ActionListener() {
+		unselectAllFieldsListener = new ActionListener() {
 
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if (e.getSource() == MainPanel.editDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_REMOVE) {
-					try {
-						Frame.gui.setPanelToJMEdit("jediEdit");
-						System.out.println("BUTTON -> to JMA_EDIT");
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
+				if (e.getSource() == MainPanel.unselectAllFieldsButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_REMOVE) {
+					Frame.gui.viewTable.clearSelection();
+					System.out.println("UNSELECT_BUTTON working");
 				}
-
 			}
 
 		};

@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import GUI_JediDB.Frame;
 import GUI_JediDB.MainPanel;
@@ -14,14 +15,14 @@ import GUI_JediDB.MainPanel.PanelCheckEnum;
 public class Operation {
 
 	public enum OperationType {
-		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL
+		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL, REMOVE_JEDI
 	}
 
 
 	public static final String SELECT_ALL_BEINGS = "SELECT * FROM Beings ORDER BY beingID";
 
 	public static final String SELECT_ALL_JEDI = "SELECT j.jediid, b.lastname, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM jedi AS j, beings AS b WHERE b.beingclass = 'jedi' AND j.beingRefID = b.beingid ORDER BY JediID";
-	public static final String SELECT_ALL_JEDI_FOR_EDIT = "SELECT j.JediID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor, j.beingRefId FROM beings AS b, jedi AS j WHERE beingID = JediID ORDER BY beingID";
+	public static final String SELECT_ALL_JEDI_FOR_EDIT = "SELECT j.JediID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor, j.beingRefId FROM beings AS b, jedi AS j WHERE b.beingID = j.beingRefID ORDER BY beingID";
 	public static final String SELECT_ALL_SITH = "SELECT s.sithid, b.lastname, s.titleatdeath, s.sithspecialization, s.sabertype, s.sabercolor FROM sith as s, beings as b WHERE b.beingclass = 'sith' AND s.beingRefID = b.beingid ORDER BY SithID";
 	public static final String SELECT_ALL_BOUNTYHUNTERS = "SELECT * FROM BountyHunters ORDER BY HunterID";
 	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
@@ -30,6 +31,7 @@ public class Operation {
 
 	public static final String INSERT_INTO_JEDI_CALL = "CALL insertIntoJediAndBeings (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	public static final String EDIT_JEDI_CALL = "CALL editJediAndBeings(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	public static final String DELETE_BEINGS = "DELETE FROM Beings WHERE beingID = ?";
 
 	private static PreparedStatement ps;
 	private static CallableStatement cs;
@@ -45,7 +47,7 @@ public class Operation {
 	private static final String[] smugglersColumns = { "ID", "Last Name", "Organisation" };
 	private static final String[] battlesColumns = { "ID", "Location", "Event Date", "Opponent A1", "Opponent A2", "Opponent B1", "Opponent B2", "Outcome" };
 
-	static JTable queryTable = null;
+	private static JTable queryTable = null;
 
 	//counter
 	private static int i;
@@ -143,12 +145,12 @@ public class Operation {
 							cs.addBatch();
 
 							numberOfSuccessfulOperations++;
-							
+
 						} catch (SQLException sqle) {
 							Frame.gui.confirmationLabel.setForeground(Color.red);
 							Frame.gui.confirmationLabel.setText("input error");
+							System.out.println("Something went wrong with adding to the insert batch");
 							sqle.printStackTrace();
-							throw new SQLException("Something went wrong with adding to the insert batch");
 						}
 					}
 
@@ -202,14 +204,13 @@ public class Operation {
 				}
 			}
 		}
-		
+
 		//If no changes within the table, quit the method
-		if(checkInt == 0) {
+		if (checkInt != 1) {
 			Frame.gui.confirmationLabel.setForeground(Color.red);
 			Frame.gui.confirmationLabel.setText("No changed data");
 			return;
 		}
-		
 
 		numberOfSuccessfulOperations = 0;
 
@@ -238,11 +239,12 @@ public class Operation {
 						cs.addBatch();
 
 						numberOfSuccessfulOperations++;
+
 					} catch (SQLException sqle) {
 						Frame.gui.confirmationLabel.setForeground(Color.red);
 						Frame.gui.confirmationLabel.setText("Edit error");
+						System.out.println("Something went wrong with adding to the edit batch");
 						sqle.printStackTrace();
-						throw new SQLException("Something went wrong with adding to the edit batch");
 					}
 				}
 
@@ -257,7 +259,8 @@ public class Operation {
 						con.rollback();
 						Frame.gui.confirmationLabel.setForeground(Color.red);
 						Frame.gui.confirmationLabel.setText("Possible wrong inputs");
-						throw new BatchUpdateException("Something went wrong with the batch execution", null);
+						System.out.println("Something went wrong with the batch execution");
+						bue.printStackTrace();
 					}
 
 					break;
@@ -282,6 +285,61 @@ public class Operation {
 		}
 
 		return arrayOriginal;
+	}
+
+
+	public static void removeData (OperationType operationType, Connection con) throws SQLException {
+
+		int answer = JOptionPane.showConfirmDialog(null, "Are you certain you wish to proceed, Master Jedi?", "The Force is asking:", JOptionPane.YES_NO_OPTION);
+
+		if (answer == 1) {
+			Frame.gui.confirmationLabel.setForeground(Color.yellow);
+			Frame.gui.confirmationLabel.setText("Remove cancelled");
+			return;
+		}
+
+		int[] selectedRows = Frame.gui.viewTable.getSelectedRows();
+
+		numberOfSuccessfulOperations = 0;
+
+		switch (operationType) {
+			case REMOVE_JEDI:
+				con.setAutoCommit(false);
+				ps = con.prepareStatement(DELETE_BEINGS);
+				if (selectedRows.length != 0) {
+					for (int i = 0; i < selectedRows.length; i++) {
+						ps.setInt(1, Integer.parseInt((String) Frame.gui.viewTable.getModel().getValueAt(selectedRows[i], 12)));
+						ps.addBatch();
+						numberOfSuccessfulOperations++;
+					}
+				} else {
+					Frame.gui.confirmationLabel.setForeground(Color.red);
+					Frame.gui.confirmationLabel.setText("no rows selected");
+				}
+
+				if (selectedRows.length == numberOfSuccessfulOperations) {
+					try {
+						ps.executeBatch();
+						con.commit();
+						//Frame.gui.viewTable.revalidate();
+						Frame.gui.confirmationLabel.setForeground(Color.yellow);
+						Frame.gui.confirmationLabel.setText("Jedi deleted");
+					} catch (BatchUpdateException bue) {
+						ps.clearBatch();
+						con.rollback();
+					}
+				} else {
+					Frame.gui.confirmationLabel.setForeground(Color.red);
+					Frame.gui.confirmationLabel.setText("Remove failed");
+					throw new SQLException("Problem adding to the remove batch");
+				}
+
+				break;
+
+			default:
+				System.out.println("No OperationType in Operation.removeData()");
+		}
+
 	}
 
 
@@ -392,19 +450,27 @@ public class Operation {
 			i++;
 		}
 
-		queryTable = new JTable(data, jediToEditColumns) {
-			@Override
-			public boolean isCellEditable (int row, int col) {
-				if (col == 0) {
-					return false;
-				} else {
-					return true;
+		if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_EDIT) {
+			queryTable = new JTable(data, jediToEditColumns) {
+				@Override
+				public boolean isCellEditable (int row, int col) {
+					if (col == 0) {
+						return false;
+					} else {
+						return true;
+					}
 				}
-			}
-		};
+			};
+		} else if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_REMOVE) {
+			queryTable = new JTable(data, jediToEditColumns) {
+				public boolean editCellAt (int row, int column, java.util.EventObject e) {
+					return false;
+				}
+			};
+		}
 
 		queryTable.removeColumn(queryTable.getColumnModel().getColumn(12)); // removes ONLY the display of the beingRefID column
-		queryTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+		//queryTable.getColumnModel().getColumn(0).setPreferredWidth(25);
 	}
 
 
@@ -505,6 +571,7 @@ public class Operation {
 			data[i][7] = rs.getString(8);
 			i++;
 		}
+
 		queryTable = new JTable(data, battlesColumns) {
 			public boolean editCellAt (int row, int column, java.util.EventObject e) {
 				return false;

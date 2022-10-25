@@ -53,14 +53,15 @@ public class MainPanel extends JPanel {
 	//Data table structure
 	private JPanel inputTablePanel;
 	public JScrollPane scrollPane = new JScrollPane();
-	private JPanel tablePanel = new JPanel();
+	private JPanel tablePanel = new JPanel(new GridLayout());
 	public JTable inputTable;
 	public JTable editTable;
 	private String[][] inputs;
 	public JTable viewTable;
 	public String[][] savedOriginalArray;
 	private JPanel counterPanel;
-
+	private DefaultTableCellRenderer idColumnRenderer = new DefaultTableCellRenderer();;
+	
 	public static JLabel textTitle = new JLabel("", SwingConstants.CENTER);
 	public JLabel confirmationLabel = new JLabel("", SwingConstants.CENTER);
 	public JPanel confirmationButtonsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
@@ -121,9 +122,10 @@ public class MainPanel extends JPanel {
 	//General buttons
 	public static JButton cancelChangesButton = new JButton("Cancel changes X");
 	public static JButton emptyFieldsButton = new JButton("Empty all fields []");
-	public static JButton addDataButton = new JButton("add");
-	public static JButton editDataButton = new JButton("edit");
-	public static JButton removeDataButton = new JButton("remove");
+	public static JButton unselectAllFieldsButton = new JButton("Unselect all fields []");
+	public static JButton toAddDataButton = new JButton("add");
+	public static JButton toEditDataButton = new JButton("edit");
+	public static JButton toRemoveDataButton = new JButton("remove");
 
 
 	public MainPanel () throws Exception {
@@ -151,10 +153,13 @@ public class MainPanel extends JPanel {
 		editTypeButtonsLabel.setLayout(new GridLayout(1, 3, 5, 0));
 		editTypeButtonsLabel.setSize(250, 25);
 		editTypeButtonsLabel.setLocation(Frame.FRAME_WIDTH - editTypeButtonsLabel.getWidth() - 30, 15);
-		editTypeButtonsLabel.add(MainPanel.addDataButton);
-		editTypeButtonsLabel.add(MainPanel.editDataButton);
-		editTypeButtonsLabel.add(MainPanel.removeDataButton);
-
+		editTypeButtonsLabel.add(MainPanel.toAddDataButton);
+		editTypeButtonsLabel.add(MainPanel.toEditDataButton);
+		editTypeButtonsLabel.add(MainPanel.toRemoveDataButton);
+		
+		idColumnRenderer.setHorizontalAlignment(JLabel.CENTER);
+		idColumnRenderer.setBackground(Color.decode("#eeeeee"));
+		
 		addAllButtonListeners();
 		setPanelToStart();
 
@@ -171,14 +176,16 @@ public class MainPanel extends JPanel {
 		battlesButton.addActionListener(alClass.showAllBattlesListener);
 		modifiedSearchButton.addActionListener(alClass.toModifiedSearchListener);
 		manipulateButton.addActionListener(alClass.toJMAccessListener);
-		goBackButtonToMain.addActionListener(alClass.backToStartPanelListener);
+		goBackButtonToMain.addActionListener(alClass.toBackStartPanelListener);
 		goBackButtonToUpdateCategory.addActionListener(alClass.toJMAccessListener);
+		toAddDataButton.addActionListener(alClass.toAddJediListener);
+		toEditDataButton.addActionListener(alClass.toEditDataListener);
+		toRemoveDataButton.addActionListener(alClass.toRemoveDataListener);
 		updateJediButton.addActionListener(alClass.toAddJediListener);
-		confirmJediUpdateButton.addActionListener(alClass.confirmButtonListener);
-		emptyFieldsButton.addActionListener(alClass.cancelOrEmptyListener);
-		addDataButton.addActionListener(alClass.toAddJediListener);
-		editDataButton.addActionListener(alClass.toEditDataListener);
+		confirmJediUpdateButton.addActionListener(alClass.confirmJediButtonListener);
+		emptyFieldsButton.addActionListener(alClass.cancelOrEmptyListener);		
 		cancelChangesButton.addActionListener(alClass.cancelOrEmptyListener);
+		unselectAllFieldsButton.addActionListener(alClass.unselectAllFieldsListener);		
 	}
 
 
@@ -193,7 +200,7 @@ public class MainPanel extends JPanel {
 				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_JEDI, con);
 				scrollPane.getViewport().add(viewTable);
 				break;
-			case "jediEdit":
+			case "jediEditOrRemove":
 				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_JEDI_FOR_EDIT, con);
 				scrollPane.getViewport().add(viewTable);
 				break;
@@ -218,7 +225,7 @@ public class MainPanel extends JPanel {
 
 	public void setPanelToStart () throws IOException {
 
-		panelCheck = PanelCheckEnum.START_PANEL;
+		setPanelCheck(PanelCheckEnum.START_PANEL);
 
 		Connection connection = null;
 		try {
@@ -274,7 +281,7 @@ public class MainPanel extends JPanel {
 
 	public void setPanelToCustomSearch () {
 
-		panelCheck = PanelCheckEnum.CUSTOM_SEARCH;
+		setPanelCheck(PanelCheckEnum.CUSTOM_SEARCH);
 
 		removeAll();
 		revalidate();
@@ -288,7 +295,7 @@ public class MainPanel extends JPanel {
 
 	public void setPanelToJMAccess () throws IOException {
 
-		panelCheck = PanelCheckEnum.JMA_MENU;
+		setPanelCheck(PanelCheckEnum.JMA_MENU);
 
 		this.setBackgroundTo("root");
 
@@ -325,22 +332,52 @@ public class MainPanel extends JPanel {
 
 		removeAll();
 		revalidate();
+		
 
+		final int numberOfInputRows = 7;
+		String[] columnNames;
+		
+		inputTablePanel = new JPanel(new GridLayout());
+		inputTablePanel.setSize(900, 200);
+		inputTablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
+		
+		//Counter on the left side
+		counterPanel = new JPanel(new GridLayout(numberOfInputRows, 1));
+		for (int i = 1; i <= numberOfInputRows; i++) {
+			counterPanel.add(new JLabel(String.valueOf(i), SwingConstants.CENTER));
+		}
+		counterPanel.setSize(25, inputTablePanel.getHeight() - 20);
+		counterPanel.setLocation(inputTablePanel.getX() - counterPanel.getWidth(), inputTablePanel.getY() + 20);
+		counterPanel.setOpaque(true);
+		this.add(counterPanel);
+
+		confirmationButtonsPanel.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
+		confirmationButtonsPanel.setOpaque(false);
+		confirmationButtonsPanel.remove(cancelChangesButton);
+		confirmationButtonsPanel.remove(unselectAllFieldsButton);
+		confirmationButtonsPanel.add(confirmJediUpdateButton);
+		confirmationButtonsPanel.add(emptyFieldsButton);
+		this.add(confirmationButtonsPanel);
+
+		confirmationLabel.setSize(confirmationButtonsPanel.getWidth() / 2, 40);
+		confirmationLabel.setLocation(Frame.FRAME_WIDTH / 2 - confirmationLabel.getWidth() / 2, confirmationButtonsPanel.getY() + confirmationButtonsPanel.getHeight() + 25);
+		confirmationLabel.setFont(swFont);
+		confirmationLabel.setOpaque(false);
+		this.add(confirmationLabel);
+		
 		this.confirmationLabel.setText("");
 		this.add(goBackButtonToUpdateCategory);
 		this.add(textTitle);
 		this.add(editTypeButtonsLabel);
 
-		final int numberOfInputRows = 7;
-		String[] columnNames;
 
 		//Data
 		switch (category) {
 			case "jedi":
 
-				panelCheck = PanelCheckEnum.JMA_JEDI_ADD;
+				setPanelCheck(PanelCheckEnum.JMA_JEDI_ADD);
 
-				textTitle.setText("Jedi to add (1 - 5):");
+				textTitle.setText("Jedi to add (1 - 7):");
 
 				//Table's attributes for the specific class' input				
 				columnNames = new String[11];
@@ -365,9 +402,7 @@ public class MainPanel extends JPanel {
 					}
 				}
 
-				inputTablePanel = new JPanel(new GridLayout());
-				inputTablePanel.setSize(900, 200);
-				inputTablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
+				
 
 				inputTable = new JTable(inputs, columnNames);
 				inputTable.setRowHeight(25);
@@ -387,29 +422,6 @@ public class MainPanel extends JPanel {
 				inputTablePanel.add(new JScrollPane(inputTable));
 
 				this.add(inputTablePanel);
-
-				//Counter on the left side
-				counterPanel = new JPanel(new GridLayout(numberOfInputRows, 1));
-				for (int i = 1; i <= numberOfInputRows; i++) {
-					counterPanel.add(new JLabel(String.valueOf(i), SwingConstants.CENTER));
-				}
-				counterPanel.setSize(25, inputTablePanel.getHeight() - 20);
-				counterPanel.setLocation(inputTablePanel.getX() - counterPanel.getWidth(), inputTablePanel.getY() + 20);
-				counterPanel.setOpaque(true);
-				this.add(counterPanel);
-
-				confirmationButtonsPanel.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
-				confirmationButtonsPanel.setOpaque(false);
-				confirmationButtonsPanel.remove(cancelChangesButton);
-				confirmationButtonsPanel.add(confirmJediUpdateButton);
-				confirmationButtonsPanel.add(emptyFieldsButton);
-				this.add(confirmationButtonsPanel);
-
-				confirmationLabel.setSize(confirmationButtonsPanel.getWidth() / 2, 40);
-				confirmationLabel.setLocation(Frame.FRAME_WIDTH / 2 - confirmationLabel.getWidth() / 2, confirmationButtonsPanel.getY() + confirmationButtonsPanel.getHeight() + 25);
-				confirmationLabel.setFont(swFont);
-				confirmationLabel.setOpaque(false);
-				this.add(confirmationLabel);
 
 				repaint();
 				break;
@@ -431,23 +443,24 @@ public class MainPanel extends JPanel {
 
 		confirmationButtonsPanel.setOpaque(false);
 		confirmationButtonsPanel.remove(emptyFieldsButton);
+		confirmationButtonsPanel.remove(unselectAllFieldsButton);
 		confirmationButtonsPanel.add(cancelChangesButton);
 		this.add(confirmationButtonsPanel);
-
+		
+		
+		tablePanel.setSize(900 + this.counterPanel.getWidth(), 200);
+		tablePanel.setLocation(this.counterPanel.getX(), this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
+		tablePanel.add(scrollPane, BorderLayout.CENTER);
+		
 		//Data
 		switch (category) {
 			case "jediEdit":
 
-				panelCheck = PanelCheckEnum.JMA_JEDI_EDIT;
-
+				setPanelCheck(PanelCheckEnum.JMA_JEDI_EDIT);
 				textTitle.setText("Edit Jedi:");
+			
 
-				tablePanel = new JPanel(new GridLayout());
-				tablePanel.setSize(900 + this.counterPanel.getWidth(), 200);
-				tablePanel.setLocation(this.counterPanel.getX(), this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
-				tablePanel.add(scrollPane, BorderLayout.CENTER);
-
-				this.setScrollPane("jediEdit", ConnectionFactory.getConnection());
+				this.setScrollPane("jediEditOrRemove", ConnectionFactory.getConnection());
 				this.add(tablePanel);
 
 				//JComboBoxes for editing
@@ -457,15 +470,11 @@ public class MainPanel extends JPanel {
 				viewTable.getColumnModel().getColumn(9).setCellEditor(new MyComboBoxEditor(specJediOptions));
 				viewTable.getColumnModel().getColumn(9).setCellRenderer(specJediOptionsJCBox);
 
-				DefaultTableCellRenderer idColumnRenderer = new DefaultTableCellRenderer();
-
-				idColumnRenderer.setHorizontalAlignment(JLabel.CENTER);
-				idColumnRenderer.setBackground(Color.decode("#eeeeee"));
-
 				viewTable.setRowHeight(25);
 				viewTable.getColumnModel().getColumn(0).setCellRenderer(idColumnRenderer);
 				viewTable.getColumnModel().getColumn(0).setPreferredWidth(20);
 				viewTable.getColumnModel().getColumn(1).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
+				viewTable.getColumnModel().getColumn(2).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
 				viewTable.getColumnModel().getColumn(4).setPreferredWidth(this.inputTable.getColumnModel().getColumn(4).getWidth());
 				viewTable.getColumnModel().getColumn(6).setPreferredWidth(this.inputTable.getColumnModel().getColumn(6).getWidth());
 
@@ -479,12 +488,57 @@ public class MainPanel extends JPanel {
 	}
 
 
-	public void setPanelToJMRemove (String category) {
-		panelCheck = PanelCheckEnum.JMA_JEDI_REMOVE;
+	public void setPanelToJMRemove (String category) throws Exception {
+		
+		removeAll();
+		revalidate();
+
+		this.confirmationLabel.setText("");
+		this.add(goBackButtonToUpdateCategory);
+		this.add(textTitle);
+		this.add(editTypeButtonsLabel);
+		this.add(confirmationLabel);
+		
+		
+		confirmationButtonsPanel.setOpaque(false);
+		confirmationButtonsPanel.remove(emptyFieldsButton);
+		confirmationButtonsPanel.remove(cancelChangesButton);
+		confirmationButtonsPanel.add(unselectAllFieldsButton);
+		this.add(confirmationButtonsPanel);
+		
+		
+		tablePanel.setSize(900 + this.counterPanel.getWidth(), 200);
+		tablePanel.setLocation(this.counterPanel.getX(), this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
+		tablePanel.add(scrollPane, BorderLayout.CENTER);
+	
+		
+		switch(category) {
+			case "jediRemove":
+					
+				setPanelCheck(PanelCheckEnum.JMA_JEDI_REMOVE);
+				textTitle.setText(("Remove Jedi: "));
+				
+				
+				this.setScrollPane("jediEditOrRemove", ConnectionFactory.getConnection());
+				this.add(tablePanel);
+				
+				
+				viewTable.setRowHeight(25);
+				viewTable.getColumnModel().getColumn(0).setCellRenderer(idColumnRenderer);
+				viewTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+				viewTable.getColumnModel().getColumn(1).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
+				viewTable.getColumnModel().getColumn(2).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
+				viewTable.getColumnModel().getColumn(4).setPreferredWidth(this.inputTable.getColumnModel().getColumn(4).getWidth());
+				viewTable.getColumnModel().getColumn(6).setPreferredWidth(this.inputTable.getColumnModel().getColumn(6).getWidth());		
+		
+				repaint();					
+				break;
+		}
+		
 	}
 
 
-	public void clearInputTableOrRemoveChanges () throws Exception {
+	public void clearInputTable () throws Exception {
 
 		if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD) {
 			for (int i = 0; i < inputTable.getRowCount(); i++) {
@@ -495,15 +549,21 @@ public class MainPanel extends JPanel {
 				}
 			}
 
-			this.confirmationLabel.setText("");
-		} else if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_EDIT) {
-			setPanelToJMEdit("jediEdit");
-			this.confirmationLabel.setForeground(Color.yellow);
-			this.confirmationLabel.setText("changes cancelled");
+			repaint();
+
 		}
 
-		repaint();
+	}
 
+
+	public void removeChanges () {
+		try {
+			setPanelToJMEdit("jediEdit");
+			this.confirmationLabel.setForeground(Color.yellow);
+			this.confirmationLabel.setText("Changes cancelled");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 
