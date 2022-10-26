@@ -290,7 +290,15 @@ public class Operation {
 
 	public static void removeData (OperationType operationType, Connection con) throws SQLException {
 
-		int answer = JOptionPane.showConfirmDialog(null, "Are you certain you wish to proceed, Master Jedi?", "The Force is asking:", JOptionPane.YES_NO_OPTION);
+		int[] selectedRows = Frame.gui.viewTable.getSelectedRows();
+
+		if (selectedRows.length == 0) {
+			Frame.gui.confirmationLabel.setForeground(Color.red);
+			Frame.gui.confirmationLabel.setText("no rows selected");
+			return;
+		}
+
+		int answer = JOptionPane.showConfirmDialog(null, "Are you certain you wish to proceed, Master Jedi?", "The Force is asking:", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, MainPanel.orderIcon);
 
 		if (answer == 1) {
 			Frame.gui.confirmationLabel.setForeground(Color.yellow);
@@ -298,35 +306,32 @@ public class Operation {
 			return;
 		}
 
-		int[] selectedRows = Frame.gui.viewTable.getSelectedRows();
-
 		numberOfSuccessfulOperations = 0;
 
 		switch (operationType) {
 			case REMOVE_JEDI:
+
 				con.setAutoCommit(false);
 				ps = con.prepareStatement(DELETE_BEINGS);
-				if (selectedRows.length != 0) {
-					for (int i = 0; i < selectedRows.length; i++) {
-						ps.setInt(1, Integer.parseInt((String) Frame.gui.viewTable.getModel().getValueAt(selectedRows[i], 12)));
-						ps.addBatch();
-						numberOfSuccessfulOperations++;
-					}
-				} else {
-					Frame.gui.confirmationLabel.setForeground(Color.red);
-					Frame.gui.confirmationLabel.setText("no rows selected");
+
+				for (int i = 0; i < selectedRows.length; i++) {
+					ps.setInt(1, Integer.parseInt((String) Frame.gui.viewTable.getModel().getValueAt(selectedRows[i], 12)));
+					ps.addBatch();
+					numberOfSuccessfulOperations++;
 				}
 
+				
 				if (selectedRows.length == numberOfSuccessfulOperations) {
 					try {
 						ps.executeBatch();
 						con.commit();
-						//Frame.gui.viewTable.revalidate();
+						Frame.gui.viewTable.getModel();
 						Frame.gui.confirmationLabel.setForeground(Color.yellow);
 						Frame.gui.confirmationLabel.setText("Jedi deleted");
 					} catch (BatchUpdateException bue) {
 						ps.clearBatch();
 						con.rollback();
+						bue.printStackTrace();
 					}
 				} else {
 					Frame.gui.confirmationLabel.setForeground(Color.red);

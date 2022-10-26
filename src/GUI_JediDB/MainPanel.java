@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -48,6 +49,7 @@ public class MainPanel extends JPanel {
 	static File bountyHuntersBG = new File("images/BountyHunters.jpg");
 	static File smugglersBG = new File("images/milleniumFalcon.jpg");
 	static File battlesBG = new File("images/sabersCrossed.jpg");
+	public static ImageIcon orderIcon = new ImageIcon("images/orderIconLarge.png");
 	public static Image bgImage;
 
 	//Data table structure
@@ -521,8 +523,7 @@ public class MainPanel extends JPanel {
 				
 				this.setScrollPane("jediEditOrRemove", ConnectionFactory.getConnection());
 				this.add(tablePanel);
-				
-				
+							
 				viewTable.setRowHeight(25);
 				viewTable.getColumnModel().getColumn(0).setCellRenderer(idColumnRenderer);
 				viewTable.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -642,8 +643,13 @@ public class MainPanel extends JPanel {
 	public static PanelCheckEnum getPanelCheck () {
 		return panelCheck;
 	}
+	
+	
+	public static void configureViewTable() {
+		
+	}
 
-
+	
 	public static void setPanelCheck (PanelCheckEnum panelCheck) {
 		MainPanel.panelCheck = panelCheck;
 	}
