@@ -15,7 +15,7 @@ import GUI_JediDB.MainPanel.PanelCheckEnum;
 public class Operation {
 
 	public enum OperationType {
-		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL, REMOVE_JEDI
+		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_SITH_FOR_EDIT, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL, REMOVE_JEDI, INSERT_INTO_SITH_CALL
 	}
 
 
@@ -24,12 +24,14 @@ public class Operation {
 	public static final String SELECT_ALL_JEDI = "SELECT j.jediid, b.lastname, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor FROM jedi AS j, beings AS b WHERE b.beingclass = 'jedi' AND j.beingRefID = b.beingid ORDER BY JediID";
 	public static final String SELECT_ALL_JEDI_FOR_EDIT = "SELECT j.JediID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, j.jedirank, j.jedispecialization, j.sabertype, j.sabercolor, j.beingRefId FROM beings AS b, jedi AS j WHERE b.beingID = j.beingRefID ORDER BY beingID";
 	public static final String SELECT_ALL_SITH = "SELECT s.sithid, b.lastname, s.titleatdeath, s.sithspecialization, s.sabertype, s.sabercolor FROM sith as s, beings as b WHERE b.beingclass = 'sith' AND s.beingRefID = b.beingid ORDER BY SithID";
+	public static final String SELECT_ALL_SITH_FOR_EDIT = "SELECT s.SithID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, s.titleAtDeath, s.sithspecialization, s.sabertype, s.sabercolor, s.beingRefId FROM beings AS b, sith AS s WHERE b.beingID = s.beingRefID ORDER BY beingID";
 	public static final String SELECT_ALL_BOUNTYHUNTERS = "SELECT * FROM BountyHunters ORDER BY HunterID";
 	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
 	public static final String SELECT_ALL_BATTLES = "SELECT * FROM Battles ORDER BY BattleID";
 	public static final String SELECT_CUSTOM = "";
 
 	public static final String INSERT_INTO_JEDI_CALL = "CALL insertIntoJediAndBeings (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	public static final String INSERT_INTO_SITH_CALL = "CALL insertIntoSithAndBeings (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	public static final String EDIT_JEDI_CALL = "CALL editJediAndBeings(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	public static final String DELETE_BEINGS = "DELETE FROM Beings WHERE beingID = ?";
 
@@ -43,6 +45,7 @@ public class Operation {
 	private static final String[] jediColumns = { "ID", "Last Name", "Rank", "Specialization", "Saber Type", "Saber Color" };
 	private static final String[] jediToEditColumns = { "ID", "Last name", "First name", "Species", "Birthdate", "Birthplace", "Death date", "Deathplace", "Rank", "Specialization", "Saber type", "Saber color", "beingRefID" };
 	private static final String[] sithColumns = { "ID", "Last Name", "Title at death", "Specialization", "Saber Type", "Saber Color" };
+	private static final String[] sithToEditColumns = { "ID", "Last Name", "First name", "Species", "Birthdate", "Birthplace", "Death date", "Deathplace", "Title at Death", "Specialitation", "Saber type", "Saber color", "beingRedIF" };
 	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation" };
 	private static final String[] smugglersColumns = { "ID", "Last Name", "Organisation" };
 	private static final String[] battlesColumns = { "ID", "Location", "Event Date", "Opponent A1", "Opponent A2", "Opponent B1", "Opponent B2", "Outcome" };
@@ -76,7 +79,12 @@ public class Operation {
 				selectAllSith(con);
 
 				break;
-
+				
+			case SELECT_ALL_SITH_FOR_EDIT:
+				selectAllSithForEdit(con);
+				
+				break;
+				
 			case SELECT_ALL_BOUNTYHUNTERS:
 				selectAllBountyHunters(con);
 
@@ -119,6 +127,7 @@ public class Operation {
 
 		numberOfSuccessfulOperations = 0;
 		con.setAutoCommit(false);
+		
 		switch (operationType) {
 			case INSERT_INTO_JEDI_CALL:
 
@@ -149,7 +158,7 @@ public class Operation {
 						} catch (SQLException sqle) {
 							Frame.gui.confirmationLabel.setForeground(Color.red);
 							Frame.gui.confirmationLabel.setText("input error");
-							System.out.println("Something went wrong with adding to the insert batch");
+							System.out.println("Something went wrong while adding to the insert batch");
 							sqle.printStackTrace();
 						}
 					}
@@ -168,12 +177,68 @@ public class Operation {
 						Frame.gui.confirmationLabel.setForeground(Color.red);
 						Frame.gui.confirmationLabel.setText("Duplicates/error");
 						throw new BatchUpdateException("Something went wrong with the batch execution", null);
-					}
-
-					break;
+					}					
 
 				}
+				
+				break;
+				
+				
+			case INSERT_INTO_SITH_CALL:
+				
+				cs = con.prepareCall(INSERT_INTO_SITH_CALL);
+				
+				for (int i = 0; i < filledRowsNumberCheck; i++) {
+					if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "" && Frame.gui.inputTable.getModel().getValueAt(i, 0).toString().trim().length() != 0) {
 
+						try {
+
+							cs.setString(1, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 0))); //LastName
+							cs.setString(2, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 1))); //FirstName
+							cs.setString(3, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 3))); //Birthday
+							cs.setString(4, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 4))); //Birthplace
+							cs.setString(5, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 5))); //Deathday
+							cs.setString(6, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 6))); //Deathplace
+							cs.setString(7, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 2))); //Species							
+
+							cs.setString(8, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 7))); //Rank
+							cs.setString(9, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 8))); //Specialization
+							cs.setString(10, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 9))); //Saber type
+							cs.setString(11, (String) (Frame.gui.inputTable.getModel().getValueAt(i, 10))); //Saber color
+
+							cs.addBatch();
+
+							numberOfSuccessfulOperations++;
+
+						} catch (SQLException sqle) {
+							Frame.gui.confirmationLabel.setForeground(Color.red);
+							Frame.gui.confirmationLabel.setText("input error");
+							System.out.println("Something went wrong while adding to the insert batch");
+							sqle.printStackTrace();
+						}
+					}
+
+				}
+				
+				if (numberOfSuccessfulOperations == filledRowsNumberCheck) {
+					try {
+						cs.executeBatch();
+						con.commit();
+						Frame.gui.confirmationLabel.setForeground(Color.yellow);
+						Frame.gui.confirmationLabel.setText("New Sith added");
+					} catch (BatchUpdateException bue) {
+						cs.clearBatch();
+						con.rollback();
+						Frame.gui.confirmationLabel.setForeground(Color.red);
+						Frame.gui.confirmationLabel.setText("Duplicates/error");
+						throw new BatchUpdateException("Something went wrong with the batch execution", null);
+					}					
+
+				}
+				
+				
+				break;
+				
 			default:
 				System.out.println("insertData() didn't work. Default called.");
 				break;
@@ -505,7 +570,57 @@ public class Operation {
 		};
 	}
 
+	
+	private static void selectAllSithForEdit (Connection con) throws SQLException {
+		ps = con.prepareStatement("SELECT COUNT(*) FROM Sith");
+		rs = ps.executeQuery();
+		if (rs.next()) {
+			data = new String[rs.getInt(1)][13];
+		}
 
+		ps = con.prepareStatement(SELECT_ALL_SITH_FOR_EDIT);
+		rs = ps.executeQuery();
+		i = 0;
+		while (rs.next()) {
+			data[i][0] = rs.getString(1);
+			data[i][1] = rs.getString(2);
+			data[i][2] = rs.getString(3);
+			data[i][3] = rs.getString(4);
+			data[i][4] = rs.getString(5);
+			data[i][5] = rs.getString(6);
+			data[i][6] = rs.getString(7);
+			data[i][7] = rs.getString(8);
+			data[i][8] = rs.getString(9);
+			data[i][9] = rs.getString(10);
+			data[i][10] = rs.getString(11);
+			data[i][11] = rs.getString(12);
+			data[i][12] = rs.getString(13); // beingRefID
+			i++;
+		}
+
+		if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_EDIT) {
+			queryTable = new JTable(data, sithToEditColumns) {
+				@Override
+				public boolean isCellEditable (int row, int col) {
+					if (col == 0) {
+						return false;
+					} else {
+						return true;
+					}
+				}
+			};
+		} else if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_REMOVE) {
+			queryTable = new JTable(data, sithToEditColumns) {
+				public boolean editCellAt (int row, int column, java.util.EventObject e) {
+					return false;
+				}
+			};
+		}
+
+		queryTable.removeColumn(queryTable.getColumnModel().getColumn(12)); // removes ONLY the display of the beingRefID column
+		//queryTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+	}
+	
 	private static void selectAllBountyHunters (Connection con) throws SQLException {
 		ps = con.prepareStatement("SELECT COUNT(*) FROM Bountyhunters");
 		rs = ps.executeQuery();

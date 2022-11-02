@@ -23,13 +23,16 @@ public class ALClass {
 	public ActionListener toModifiedSearchListener;
 	public ActionListener toBackStartPanelListener;
 	public ActionListener toJMAccessListener;
-	public ActionListener toAddJediListener;
+	public ActionListener toAddListener;
 	public ActionListener toEditDataListener;
 	public ActionListener toRemoveDataListener;
 	public ActionListener addDataListener;
 	public ActionListener confirmJediButtonListener;
+	public ActionListener confirmSithButtonListener;
 	public ActionListener cancelOrEmptyListener;
 	public ActionListener unselectAllFieldsListener;
+
+	public ActionListener goBackListener;
 
 
 	public ALClass () {
@@ -151,16 +154,19 @@ public class ALClass {
 			}
 		};
 
-		toAddJediListener = new ActionListener() {
+		toAddListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				if ((e.getSource() == MainPanel.updateJediButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_MENU) || (e.getSource() == MainPanel.toAddDataButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT || MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_REMOVE)) {
 					try {
 						Frame.gui.setPanelToJMAdd("jedi");
-						System.out.println("BUTTON -> to JMA_ADD");
+						System.out.println("updateJediButton/toAddDataButton -> setPanelToJMAdd(\"jedi\")");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
+				} else if ((e.getSource() == MainPanel.updateSithButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_MENU) || (e.getSource() == MainPanel.toAddDataButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_SITH_EDIT || MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_SITH_REMOVE)) {
+					Frame.gui.setPanelToJMAdd("sith");
+					System.out.println("updateSithButton/toAddDataButton -> setPanelToJMAdd(\"sith\")");
 				}
 			}
 		};
@@ -171,8 +177,15 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				if (e.getSource() == MainPanel.toEditDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_REMOVE) {
 					try {
-						Frame.gui.setPanelToJMEdit("jediEdit");
-						System.out.println("BUTTON -> to JMA_EDIT");
+						Frame.gui.setPanelToJMEdit("jedi");
+						System.out.println("toEditDataButton -> setPanelToJMEdit(\"jedi\")");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				} else if (e.getSource() == MainPanel.toEditDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_REMOVE) {
+					try {
+						Frame.gui.setPanelToJMEdit("sith");
+						System.out.println("toEditDataButton -> setPanelToJMEdit(\"sith\")");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -188,7 +201,7 @@ public class ALClass {
 			public void actionPerformed (ActionEvent e) {
 				if (e.getSource() == MainPanel.toRemoveDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_EDIT);
 				try {
-					Frame.gui.setPanelToJMRemove("jediRemove");
+					Frame.gui.setPanelToJMRemove("jedi");
 					System.out.println("BUTTON -> to JMA_REMOVE");
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -242,6 +255,25 @@ public class ALClass {
 			}
 		};
 
+		confirmSithButtonListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed (ActionEvent e) {
+
+				if (e.getSource() == MainPanel.confirmSithUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_SITH_ADD) {
+					try {
+						Operation.insertData(Operation.OperationType.INSERT_INTO_SITH_CALL, ConnectionFactory.getConnection());
+						System.out.println("JMA_CONFIRM/ADD_BUTTON button working");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+
+					}
+
+				}
+			}
+
+		};
+
 		cancelOrEmptyListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
@@ -279,5 +311,29 @@ public class ALClass {
 
 		};
 
+		goBackListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				if (e.getSource() == MainPanel.goBackButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_MENU) {
+					try {
+						Frame.gui.setPanelToStart();
+						System.out.println("goBackButton -> Frame.gui.setPanelToStart()");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
+				} else if (e.getSource() == MainPanel.goBackButton && (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_EDIT || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_REMOVE || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_EDIT || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_REMOVE)) {
+					try {
+						Frame.gui.setPanelToJMAccess();
+						System.out.println("goBackButton -> Frame.gui.setPanelToJMAccess()");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+
+			}
+
+		};
 	}
 }

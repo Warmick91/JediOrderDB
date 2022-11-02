@@ -28,8 +28,8 @@ CREATE TABLE Jedi (
 
 CREATE TABLE Sith (
 	SithID BIGINT NOT NULL AUTO_INCREMENT,
-	TitleAtDeath ENUM ('Master', 'Apprentice'),
-	SithSpecialization ENUM ('Marauder', 'Assassin', 'Lord'),
+	TitleAtDeath ENUM ('Master', 'Apprentice') NOT NULL,
+	SithSpecialization ENUM ('Marauder', 'Assassin', 'Lord') NOT NULL,
 	SaberType VARCHAR(30) NOT NULL,
 	SaberColor VARCHAR(25) NOT NULL,
     beingRefID BIGINT NOT NULL,

@@ -7,6 +7,7 @@ delete from beings where LastName = "ddd";
 delete from beings where LastName = "eee";
 delete from beings where LastName = "fff";
 delete from beings where LastName = "ggg";
+delete from beings where LastName = "dupa";
 
 select * from jedi;
 select * from beings;
@@ -66,10 +67,17 @@ select * from sith;
 
 
 INSERT INTO Jedi SELECT NULL, 'Master', 'Guardian', 'aaa', 'aaa', MAX(beings.beingID) FROM beings;
+INSERT INTO Sith SELECT NULL, 'Master', 'Marauder', 'aaa', 'aaa', MAX(beings.beingID) FROM beings;
+
+CALL insertIntoSithAndBeings ('dupa', 'dupa', '1', '2', '3', '4', 'dziwak', 'Master', 'Marauder', 'double', 'red');
 
 describe jedi;
 describe beings;
+describe sith;
 
 SELECT beingRefID FROM jedi WHERE beingReFID = 2;
 
 delete from beings Where beingID BETWEEN 23 AND 40;
+
+
+SELECT s.SithID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, s.titleAtDeath, s.sithspecialization, s.sabertype, s.sabercolor, s.beingRefId FROM beings AS b, sith AS s WHERE b.beingID = s.beingRefID ORDER BY beingID;

@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
@@ -36,7 +37,7 @@ import appTools.ALClass;
 public class MainPanel extends JPanel {
 
 	public enum PanelCheckEnum {
-		START_PANEL, CUSTOM_SEARCH, JMA_MENU, JMA_JEDI_ADD, JMA_JEDI_EDIT, JMA_JEDI_REMOVE
+		START_PANEL, CUSTOM_SEARCH, JMA_MENU, JMA_JEDI_ADD, JMA_JEDI_EDIT, JMA_JEDI_REMOVE, JMA_SITH_ADD, JMA_SITH_EDIT, JMA_SITH_REMOVE
 	}
 
 
@@ -63,16 +64,20 @@ public class MainPanel extends JPanel {
 	public String[][] savedOriginalArray;
 	private JPanel counterPanel;
 	private DefaultTableCellRenderer idColumnRenderer = new DefaultTableCellRenderer();;
-	
+
 	public static JLabel textTitle = new JLabel("", SwingConstants.CENTER);
 	public JLabel confirmationLabel = new JLabel("", SwingConstants.CENTER);
 	public JPanel confirmationButtonsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
 
 	private final String[] rankJediOptions = { "", "Padawan", "Knight", "Master", "Grand Master" };
 	private final String[] specJediOptions = { "", "Guardian", "Consular", "Sentinel" };
-
 	private final MyComboBoxRenderer rankJediOptionsJCBox = new MyComboBoxRenderer(rankJediOptions); //The actual JComboBox
 	private final MyComboBoxRenderer specJediOptionsJCBox = new MyComboBoxRenderer(specJediOptions); //The actual JComboBox
+
+	private final String[] titleSithOptions = { "", "Master", "Apprentice" };
+	private final String[] specSithOptions = { "", "Marauder", "Assassin", "Lord" };
+	private final MyComboBoxRenderer titleSithOptionsJCBox = new MyComboBoxRenderer(titleSithOptions); //The actual JComboBox
+	private final MyComboBoxRenderer specSithOptionsJCBox = new MyComboBoxRenderer(specSithOptions); //The actual JComboBox
 
 	//SW font
 	Font swFont;
@@ -90,11 +95,12 @@ public class MainPanel extends JPanel {
 	public static JButton manipulateButton = new JButton("Jedi Master Access");
 	public static JButton goBackButtonToMain = new JButton("Back <<<");
 	public static JButton goBackButtonToUpdateCategory = new JButton("Back <<<");
+	public static JButton goBackButton = new JButton("Back <<<");
 
 	//Buttons labels and panels
 	public static JLabel buttonsLabel = new JLabel();
 	public static JLabel advancedButtons = new JLabel();
-	public static JLabel editTypeButtonsLabel = new JLabel();
+	public static JLabel manageTypeButtonsLabel = new JLabel();
 
 	//Update buttons
 	//Jedi
@@ -146,22 +152,20 @@ public class MainPanel extends JPanel {
 		this.setLayout(null);
 
 		//Reused Back Buttons
-		goBackButtonToMain.setSize(100, 25);
-		goBackButtonToMain.setLocation(15, 15);
-		goBackButtonToUpdateCategory.setSize(100, 25);
-		goBackButtonToUpdateCategory.setLocation(15, 15);
+		goBackButton.setSize(100, 25);
+		goBackButton.setLocation(15, 15);
 
-		//Reused edit type buttons
-		editTypeButtonsLabel.setLayout(new GridLayout(1, 3, 5, 0));
-		editTypeButtonsLabel.setSize(250, 25);
-		editTypeButtonsLabel.setLocation(Frame.FRAME_WIDTH - editTypeButtonsLabel.getWidth() - 30, 15);
-		editTypeButtonsLabel.add(MainPanel.toAddDataButton);
-		editTypeButtonsLabel.add(MainPanel.toEditDataButton);
-		editTypeButtonsLabel.add(MainPanel.toRemoveDataButton);
-		
+		//Reused manage type buttons
+		manageTypeButtonsLabel.setLayout(new GridLayout(1, 3, 5, 0));
+		manageTypeButtonsLabel.setSize(250, 25);
+		manageTypeButtonsLabel.setLocation(Frame.FRAME_WIDTH - manageTypeButtonsLabel.getWidth() - 30, 15);
+		manageTypeButtonsLabel.add(MainPanel.toAddDataButton);
+		manageTypeButtonsLabel.add(MainPanel.toEditDataButton);
+		manageTypeButtonsLabel.add(MainPanel.toRemoveDataButton);
+
 		idColumnRenderer.setHorizontalAlignment(JLabel.CENTER);
 		idColumnRenderer.setBackground(Color.decode("#eeeeee"));
-		
+
 		addAllButtonListeners();
 		setPanelToStart();
 
@@ -178,16 +182,20 @@ public class MainPanel extends JPanel {
 		battlesButton.addActionListener(alClass.showAllBattlesListener);
 		modifiedSearchButton.addActionListener(alClass.toModifiedSearchListener);
 		manipulateButton.addActionListener(alClass.toJMAccessListener);
-		goBackButtonToMain.addActionListener(alClass.toBackStartPanelListener);
-		goBackButtonToUpdateCategory.addActionListener(alClass.toJMAccessListener);
-		toAddDataButton.addActionListener(alClass.toAddJediListener);
+		toAddDataButton.addActionListener(alClass.toAddListener);
 		toEditDataButton.addActionListener(alClass.toEditDataListener);
 		toRemoveDataButton.addActionListener(alClass.toRemoveDataListener);
-		updateJediButton.addActionListener(alClass.toAddJediListener);
+
+		updateJediButton.addActionListener(alClass.toAddListener);
 		confirmJediUpdateButton.addActionListener(alClass.confirmJediButtonListener);
-		emptyFieldsButton.addActionListener(alClass.cancelOrEmptyListener);		
+
+		updateSithButton.addActionListener(alClass.toAddListener);
+		confirmSithUpdateButton.addActionListener(alClass.confirmSithButtonListener);
+
+		emptyFieldsButton.addActionListener(alClass.cancelOrEmptyListener);
 		cancelChangesButton.addActionListener(alClass.cancelOrEmptyListener);
-		unselectAllFieldsButton.addActionListener(alClass.unselectAllFieldsListener);		
+		unselectAllFieldsButton.addActionListener(alClass.unselectAllFieldsListener);
+		goBackButton.addActionListener(alClass.goBackListener);
 	}
 
 
@@ -208,6 +216,10 @@ public class MainPanel extends JPanel {
 				break;
 			case "sith":
 				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_SITH, con);
+				scrollPane.getViewport().add(viewTable);
+				break;
+			case "sithEditOrRemove":
+				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_SITH_FOR_EDIT, con);
 				scrollPane.getViewport().add(viewTable);
 				break;
 			case "bountyHunters":
@@ -306,7 +318,7 @@ public class MainPanel extends JPanel {
 		removeAll();
 		revalidate();
 
-		this.add(goBackButtonToMain);
+		this.add(goBackButton);
 
 		buttons.setSize(600, 200);
 		buttons.setLocation(this.getWidth() / 2 - buttons.getWidth() / 2, this.getHeight() / 2 - buttons.getHeight() / 2);
@@ -334,15 +346,14 @@ public class MainPanel extends JPanel {
 
 		removeAll();
 		revalidate();
-		
 
 		final int numberOfInputRows = 7;
-		String[] columnNames;
-		
+		ArrayList<String> columnNames = new ArrayList<String>();
+
 		inputTablePanel = new JPanel(new GridLayout());
 		inputTablePanel.setSize(900, 200);
 		inputTablePanel.setLocation(this.getWidth() / 2 - inputTablePanel.getWidth() / 2 + 10, this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
-		
+
 		//Counter on the left side
 		counterPanel = new JPanel(new GridLayout(numberOfInputRows, 1));
 		for (int i = 1; i <= numberOfInputRows; i++) {
@@ -355,23 +366,18 @@ public class MainPanel extends JPanel {
 
 		confirmationButtonsPanel.setBounds(inputTablePanel.getX(), inputTablePanel.getY() + inputTablePanel.getHeight() + 10, inputTablePanel.getWidth(), 40);
 		confirmationButtonsPanel.setOpaque(false);
-		confirmationButtonsPanel.remove(cancelChangesButton);
-		confirmationButtonsPanel.remove(unselectAllFieldsButton);
-		confirmationButtonsPanel.add(confirmJediUpdateButton);
-		confirmationButtonsPanel.add(emptyFieldsButton);
-		this.add(confirmationButtonsPanel);
+		confirmationButtonsPanel.removeAll();
 
 		confirmationLabel.setSize(confirmationButtonsPanel.getWidth() / 2, 40);
 		confirmationLabel.setLocation(Frame.FRAME_WIDTH / 2 - confirmationLabel.getWidth() / 2, confirmationButtonsPanel.getY() + confirmationButtonsPanel.getHeight() + 25);
 		confirmationLabel.setFont(swFont);
 		confirmationLabel.setOpaque(false);
 		this.add(confirmationLabel);
-		
-		this.confirmationLabel.setText("");
-		this.add(goBackButtonToUpdateCategory);
-		this.add(textTitle);
-		this.add(editTypeButtonsLabel);
 
+		this.confirmationLabel.setText("");
+		this.add(goBackButton);
+		this.add(textTitle);
+		this.add(manageTypeButtonsLabel);
 
 		//Data
 		switch (category) {
@@ -381,32 +387,33 @@ public class MainPanel extends JPanel {
 
 				textTitle.setText("Jedi to add (1 - 7):");
 
-				//Table's attributes for the specific class' input				
-				columnNames = new String[11];
-				columnNames[0] = "Last name";
-				columnNames[1] = "First name";
-				columnNames[2] = "Species";
-				columnNames[3] = "Birthdate";
-				columnNames[4] = "Birthplace";
-				columnNames[5] = "Death date";
-				columnNames[6] = "Deathplace";
-				columnNames[7] = "Rank";
-				columnNames[8] = "Specialization";
-				columnNames[9] = "Saber type";
-				columnNames[10] = "Saber color";
+				confirmationButtonsPanel.add(confirmJediUpdateButton);
+				confirmationButtonsPanel.add(emptyFieldsButton);
+				this.add(confirmationButtonsPanel);
 
-				inputs = new String[numberOfInputRows][columnNames.length];
+				//Table's attributes for the specific class' input								
+				columnNames.add("Last name");
+				columnNames.add("First name");
+				columnNames.add("Species");
+				columnNames.add("Birthdate");
+				columnNames.add("Birthplace");
+				columnNames.add("Death date");
+				columnNames.add("Deathplace");
+				columnNames.add("Rank");
+				columnNames.add("Specialization");
+				columnNames.add("Saber type");
+				columnNames.add("Saber color");
+
+				inputs = new String[numberOfInputRows][columnNames.size()];
 				for (int i = 0; i < numberOfInputRows; i++) {
-					for (int j = 0; j < columnNames.length; j++) {
+					for (int j = 0; j < columnNames.size(); j++) {
 						if (j != 7 && j != 8) { //not sure if needed - ComboBoxes have to be added for these cells
 							inputs[i][j] = "";
 						}
 					}
 				}
 
-				
-
-				inputTable = new JTable(inputs, columnNames);
+				inputTable = new JTable(inputs, columnNames.toArray());
 				inputTable.setRowHeight(25);
 				inputTable.getColumnModel().getColumn(1).setPreferredWidth(65);
 				inputTable.getColumnModel().getColumn(4).setPreferredWidth(65);
@@ -427,6 +434,62 @@ public class MainPanel extends JPanel {
 
 				repaint();
 				break;
+
+			case "sith":
+
+				setPanelCheck(PanelCheckEnum.JMA_SITH_ADD);
+
+				textTitle.setText("Sith to add (1 - 7):");
+
+				confirmationButtonsPanel.add(confirmSithUpdateButton);
+				confirmationButtonsPanel.add(emptyFieldsButton);
+				this.add(confirmationButtonsPanel);
+
+				//Table's attributes for the specific class' input								
+				columnNames.add("Last name");
+				columnNames.add("First name");
+				columnNames.add("Species");
+				columnNames.add("Birthdate");
+				columnNames.add("Birthplace");
+				columnNames.add("Death date");
+				columnNames.add("Deathplace");
+				columnNames.add("Title at death");
+				columnNames.add("Specialization");
+				columnNames.add("Saber type");
+				columnNames.add("Saber color");
+
+				inputs = new String[numberOfInputRows][columnNames.size()];
+				for (int i = 0; i < numberOfInputRows; i++) {
+					for (int j = 0; j < columnNames.size(); j++) {
+						if (j != 7 && j != 8) { //not sure if needed - ComboBoxes have to be added for these cells
+							inputs[i][j] = "";
+						}
+					}
+				}
+
+				inputTable = new JTable(inputs, columnNames.toArray());
+				inputTable.setRowHeight(25);
+				inputTable.getColumnModel().getColumn(1).setPreferredWidth(65);
+				inputTable.getColumnModel().getColumn(4).setPreferredWidth(65);
+				inputTable.getColumnModel().getColumn(6).setPreferredWidth(65);
+
+				//Combo boxes for insert
+				rankJediOptionsJCBox.setSelectedIndex(0);
+				inputTable.getColumnModel().getColumn(7).setCellEditor(new MyComboBoxEditor(titleSithOptions));
+				inputTable.getColumnModel().getColumn(7).setCellRenderer(titleSithOptionsJCBox);
+
+				specJediOptionsJCBox.setSelectedIndex(0);
+				inputTable.getColumnModel().getColumn(8).setCellEditor(new MyComboBoxEditor(specSithOptions));
+				inputTable.getColumnModel().getColumn(8).setCellRenderer(specSithOptionsJCBox);
+
+				inputTablePanel.add(new JScrollPane(inputTable));
+
+				this.add(inputTablePanel);
+
+				repaint();
+
+				break;
+
 		}
 
 	}
@@ -438,9 +501,9 @@ public class MainPanel extends JPanel {
 		revalidate();
 
 		this.confirmationLabel.setText("");
-		this.add(goBackButtonToUpdateCategory);
+		this.add(goBackButton);
 		this.add(textTitle);
-		this.add(editTypeButtonsLabel);
+		this.add(manageTypeButtonsLabel);
 		this.add(confirmationLabel);
 
 		confirmationButtonsPanel.setOpaque(false);
@@ -448,19 +511,17 @@ public class MainPanel extends JPanel {
 		confirmationButtonsPanel.remove(unselectAllFieldsButton);
 		confirmationButtonsPanel.add(cancelChangesButton);
 		this.add(confirmationButtonsPanel);
-		
-		
+
 		tablePanel.setSize(900 + this.counterPanel.getWidth(), 200);
 		tablePanel.setLocation(this.counterPanel.getX(), this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
 		tablePanel.add(scrollPane, BorderLayout.CENTER);
-		
+
 		//Data
 		switch (category) {
-			case "jediEdit":
+			case "jedi":
 
 				setPanelCheck(PanelCheckEnum.JMA_JEDI_EDIT);
 				textTitle.setText("Edit Jedi:");
-			
 
 				this.setScrollPane("jediEditOrRemove", ConnectionFactory.getConnection());
 				this.add(tablePanel);
@@ -482,7 +543,10 @@ public class MainPanel extends JPanel {
 
 				repaint();
 				break;
-
+				
+			case "sith":
+				
+				break;
 		}
 
 		//Saving the originally displayed table for further use
@@ -491,51 +555,68 @@ public class MainPanel extends JPanel {
 
 
 	public void setPanelToJMRemove (String category) throws Exception {
-		
+
 		removeAll();
 		revalidate();
 
 		this.confirmationLabel.setText("");
-		this.add(goBackButtonToUpdateCategory);
+		this.add(goBackButton);
 		this.add(textTitle);
-		this.add(editTypeButtonsLabel);
+		this.add(manageTypeButtonsLabel);
 		this.add(confirmationLabel);
-		
-		
+
 		confirmationButtonsPanel.setOpaque(false);
 		confirmationButtonsPanel.remove(emptyFieldsButton);
 		confirmationButtonsPanel.remove(cancelChangesButton);
 		confirmationButtonsPanel.add(unselectAllFieldsButton);
 		this.add(confirmationButtonsPanel);
-		
-		
+
 		tablePanel.setSize(900 + this.counterPanel.getWidth(), 200);
 		tablePanel.setLocation(this.counterPanel.getX(), this.getHeight() / 2 - inputTablePanel.getHeight() / 2);
 		tablePanel.add(scrollPane, BorderLayout.CENTER);
-	
-		
-		switch(category) {
-			case "jediRemove":
-					
+
+		switch (category) {
+			case "jedi":
+
 				setPanelCheck(PanelCheckEnum.JMA_JEDI_REMOVE);
 				textTitle.setText(("Remove Jedi: "));
-				
-				
+
 				this.setScrollPane("jediEditOrRemove", ConnectionFactory.getConnection());
 				this.add(tablePanel);
-							
+
 				viewTable.setRowHeight(25);
 				viewTable.getColumnModel().getColumn(0).setCellRenderer(idColumnRenderer);
 				viewTable.getColumnModel().getColumn(0).setPreferredWidth(20);
 				viewTable.getColumnModel().getColumn(1).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
 				viewTable.getColumnModel().getColumn(2).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
 				viewTable.getColumnModel().getColumn(4).setPreferredWidth(this.inputTable.getColumnModel().getColumn(4).getWidth());
-				viewTable.getColumnModel().getColumn(6).setPreferredWidth(this.inputTable.getColumnModel().getColumn(6).getWidth());		
-		
-				repaint();					
+				viewTable.getColumnModel().getColumn(6).setPreferredWidth(this.inputTable.getColumnModel().getColumn(6).getWidth());
+
+				repaint();
 				break;
+				
+			case "sith":
+				
+				setPanelCheck(PanelCheckEnum.JMA_SITH_REMOVE);
+				textTitle.setText(("Remove Sith: "));
+
+				this.setScrollPane("sithEditOrRemove", ConnectionFactory.getConnection());
+				this.add(tablePanel);
+
+				viewTable.setRowHeight(25);
+				viewTable.getColumnModel().getColumn(0).setCellRenderer(idColumnRenderer);
+				viewTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+				viewTable.getColumnModel().getColumn(1).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
+				viewTable.getColumnModel().getColumn(2).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
+				viewTable.getColumnModel().getColumn(4).setPreferredWidth(this.inputTable.getColumnModel().getColumn(4).getWidth());
+				viewTable.getColumnModel().getColumn(6).setPreferredWidth(this.inputTable.getColumnModel().getColumn(6).getWidth());
+
+				repaint();
+				break;				
+				
+				
 		}
-		
+
 	}
 
 
@@ -626,6 +707,8 @@ public class MainPanel extends JPanel {
 
 
 
+	
+
 	class MyComboBoxEditor extends DefaultCellEditor {
 		public MyComboBoxEditor (String[] items) {
 			super(new JComboBox<Object>(items));
@@ -643,13 +726,13 @@ public class MainPanel extends JPanel {
 	public static PanelCheckEnum getPanelCheck () {
 		return panelCheck;
 	}
-	
-	
-	public static void configureViewTable() {
-		
+
+
+	public static void configureViewTable () {
+
 	}
 
-	
+
 	public static void setPanelCheck (PanelCheckEnum panelCheck) {
 		MainPanel.panelCheck = panelCheck;
 	}
