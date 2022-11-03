@@ -572,6 +572,12 @@ public class MainPanel extends JPanel {
 		
 		//Saving the originally displayed table for further use
 		savedOriginalArray = Operation.saveOriginalTable();
+//		for(int i = 0; i < savedOriginalArray.length; i++) {
+//			System.out.println("");
+//			for(int j= 0; j < savedOriginalArray[i].length; j++) {
+//				System.out.print(savedOriginalArray[i][j] + " ");
+//			}
+//		}
 	}
 
 

@@ -332,7 +332,7 @@ public class Operation {
 				break;
 
 			case EDIT_SITH_CALL:
-
+				
 				con.setAutoCommit(false);
 				cs = con.prepareCall(EDIT_SITH_CALL);
 
