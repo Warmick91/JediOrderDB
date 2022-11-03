@@ -15,7 +15,7 @@ import GUI_JediDB.MainPanel.PanelCheckEnum;
 public class Operation {
 
 	public enum OperationType {
-		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_SITH_FOR_EDIT, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL, REMOVE_JEDI, INSERT_INTO_SITH_CALL
+		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_SITH_FOR_EDIT, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL, EDIT_SITH_CALL, REMOVE_JEDI, INSERT_INTO_SITH_CALL
 	}
 
 
@@ -33,6 +33,7 @@ public class Operation {
 	public static final String INSERT_INTO_JEDI_CALL = "CALL insertIntoJediAndBeings (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	public static final String INSERT_INTO_SITH_CALL = "CALL insertIntoSithAndBeings (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	public static final String EDIT_JEDI_CALL = "CALL editJediAndBeings(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	public static final String EDIT_SITH_CALL = "CALL editSithAndBeings(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	public static final String DELETE_BEINGS = "DELETE FROM Beings WHERE beingID = ?";
 
 	private static PreparedStatement ps;
@@ -79,12 +80,12 @@ public class Operation {
 				selectAllSith(con);
 
 				break;
-				
+
 			case SELECT_ALL_SITH_FOR_EDIT:
 				selectAllSithForEdit(con);
-				
+
 				break;
-				
+
 			case SELECT_ALL_BOUNTYHUNTERS:
 				selectAllBountyHunters(con);
 
@@ -127,7 +128,7 @@ public class Operation {
 
 		numberOfSuccessfulOperations = 0;
 		con.setAutoCommit(false);
-		
+
 		switch (operationType) {
 			case INSERT_INTO_JEDI_CALL:
 
@@ -177,17 +178,16 @@ public class Operation {
 						Frame.gui.confirmationLabel.setForeground(Color.red);
 						Frame.gui.confirmationLabel.setText("Duplicates/error");
 						throw new BatchUpdateException("Something went wrong with the batch execution", null);
-					}					
+					}
 
 				}
-				
+
 				break;
-				
-				
+
 			case INSERT_INTO_SITH_CALL:
-				
+
 				cs = con.prepareCall(INSERT_INTO_SITH_CALL);
-				
+
 				for (int i = 0; i < filledRowsNumberCheck; i++) {
 					if (Frame.gui.inputTable.getModel().getValueAt(i, 0) != null && Frame.gui.inputTable.getModel().getValueAt(i, 0) != "" && Frame.gui.inputTable.getModel().getValueAt(i, 0).toString().trim().length() != 0) {
 
@@ -219,7 +219,7 @@ public class Operation {
 					}
 
 				}
-				
+
 				if (numberOfSuccessfulOperations == filledRowsNumberCheck) {
 					try {
 						cs.executeBatch();
@@ -232,13 +232,12 @@ public class Operation {
 						Frame.gui.confirmationLabel.setForeground(Color.red);
 						Frame.gui.confirmationLabel.setText("Duplicates/error");
 						throw new BatchUpdateException("Something went wrong with the batch execution", null);
-					}					
+					}
 
 				}
-				
-				
+
 				break;
-				
+
 			default:
 				System.out.println("insertData() didn't work. Default called.");
 				break;
@@ -288,7 +287,7 @@ public class Operation {
 				for (int i = 0; i < Frame.gui.viewTable.getRowCount(); i++) {
 
 					try {
-						cs.setInt(1, Integer.parseInt((String) Frame.gui.viewTable.getModel().getValueAt(i, 12))); //ID SHOULD BE
+						cs.setInt(1, Integer.parseInt((String) Frame.gui.viewTable.getModel().getValueAt(i, 12))); //ID
 						cs.setString(2, (String) Frame.gui.viewTable.getModel().getValueAt(i, 1));  //Last Name
 						cs.setString(3, (String) Frame.gui.viewTable.getModel().getValueAt(i, 2));  //First Name
 						cs.setString(4, (String) Frame.gui.viewTable.getModel().getValueAt(i, 4));  //Birthdate
@@ -328,9 +327,61 @@ public class Operation {
 						bue.printStackTrace();
 					}
 
-					break;
+				}
+
+				break;
+
+			case EDIT_SITH_CALL:
+
+				con.setAutoCommit(false);
+				cs = con.prepareCall(EDIT_SITH_CALL);
+
+				for (int i = 0; i < Frame.gui.viewTable.getRowCount(); i++) {
+
+					try {
+						cs.setInt(1, Integer.parseInt((String) Frame.gui.viewTable.getModel().getValueAt(i, 12))); //ID
+						cs.setString(2, (String) Frame.gui.viewTable.getModel().getValueAt(i, 1));  //Last Name
+						cs.setString(3, (String) Frame.gui.viewTable.getModel().getValueAt(i, 2));  //First Name
+						cs.setString(4, (String) Frame.gui.viewTable.getModel().getValueAt(i, 4));  //Birthdate
+						cs.setString(5, (String) Frame.gui.viewTable.getModel().getValueAt(i, 5));  //Birthplace
+						cs.setString(6, (String) Frame.gui.viewTable.getModel().getValueAt(i, 6)); 	//Deathdate
+						cs.setString(7, (String) Frame.gui.viewTable.getModel().getValueAt(i, 7)); 	//Deathplace
+						cs.setString(8, (String) Frame.gui.viewTable.getModel().getValueAt(i, 3));	//Species
+						cs.setString(9, (String) Frame.gui.viewTable.getModel().getValueAt(i, 8)); 	//Title
+						cs.setString(10, (String) Frame.gui.viewTable.getModel().getValueAt(i, 9)); //Specialization
+						cs.setString(11, (String) Frame.gui.viewTable.getModel().getValueAt(i, 10));//Saber Type
+						cs.setString(12, (String) Frame.gui.viewTable.getModel().getValueAt(i, 11));//Saber Color
+
+						cs.addBatch();
+
+						numberOfSuccessfulOperations++;
+
+					} catch (SQLException sqle) {
+						Frame.gui.confirmationLabel.setForeground(Color.red);
+						Frame.gui.confirmationLabel.setText("Edit error");
+						System.out.println("Something went wrong with adding to the edit batch");
+						sqle.printStackTrace();
+					}
+				}
+				
+				if (numberOfSuccessfulOperations == Frame.gui.viewTable.getRowCount()) {
+					try {
+						cs.executeBatch();
+						con.commit();
+						Frame.gui.confirmationLabel.setForeground(Color.yellow);
+						Frame.gui.confirmationLabel.setText("Sith info updated");
+					} catch (BatchUpdateException bue) {
+						cs.clearBatch();
+						con.rollback();
+						Frame.gui.confirmationLabel.setForeground(Color.red);
+						Frame.gui.confirmationLabel.setText("Possible wrong inputs");
+						System.out.println("Something went wrong with the batch execution");
+						bue.printStackTrace();
+					}
 
 				}
+
+				break;
 
 			default:
 				System.out.println("editData() didn't work. Default called.");
@@ -385,7 +436,6 @@ public class Operation {
 					numberOfSuccessfulOperations++;
 				}
 
-				
 				if (selectedRows.length == numberOfSuccessfulOperations) {
 					try {
 						ps.executeBatch();
@@ -570,7 +620,7 @@ public class Operation {
 		};
 	}
 
-	
+
 	private static void selectAllSithForEdit (Connection con) throws SQLException {
 		ps = con.prepareStatement("SELECT COUNT(*) FROM Sith");
 		rs = ps.executeQuery();
@@ -620,7 +670,8 @@ public class Operation {
 		queryTable.removeColumn(queryTable.getColumnModel().getColumn(12)); // removes ONLY the display of the beingRefID column
 		//queryTable.getColumnModel().getColumn(0).setPreferredWidth(25);
 	}
-	
+
+
 	private static void selectAllBountyHunters (Connection con) throws SQLException {
 		ps = con.prepareStatement("SELECT COUNT(*) FROM Bountyhunters");
 		rs = ps.executeQuery();

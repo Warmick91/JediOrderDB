@@ -93,8 +93,6 @@ public class MainPanel extends JPanel {
 	public static JButton planetsButton = new JButton("Planets");
 	public static JButton modifiedSearchButton = new JButton("Modified search");
 	public static JButton manipulateButton = new JButton("Jedi Master Access");
-	public static JButton goBackButtonToMain = new JButton("Back <<<");
-	public static JButton goBackButtonToUpdateCategory = new JButton("Back <<<");
 	public static JButton goBackButton = new JButton("Back <<<");
 
 	//Buttons labels and panels
@@ -299,9 +297,8 @@ public class MainPanel extends JPanel {
 
 		removeAll();
 		revalidate();
-		goBackButtonToMain.setSize(100, 25);
-		goBackButtonToMain.setLocation(15, 15);
-		this.add(goBackButtonToMain);
+
+		this.add(goBackButton);
 
 		repaint();
 	}
@@ -546,9 +543,33 @@ public class MainPanel extends JPanel {
 				
 			case "sith":
 				
-				break;
-		}
+				setPanelCheck(PanelCheckEnum.JMA_SITH_EDIT);
+				textTitle.setText("Edit Sith:");
 
+				this.setScrollPane("sithEditOrRemove", ConnectionFactory.getConnection());
+				this.add(tablePanel);
+
+				//JComboBoxes for editing
+				viewTable.getColumnModel().getColumn(8).setCellEditor(new MyComboBoxEditor(titleSithOptions));
+				viewTable.getColumnModel().getColumn(8).setCellRenderer(titleSithOptionsJCBox);
+
+				viewTable.getColumnModel().getColumn(9).setCellEditor(new MyComboBoxEditor(specSithOptions));
+				viewTable.getColumnModel().getColumn(9).setCellRenderer(specSithOptionsJCBox);
+
+				viewTable.setRowHeight(25);
+				viewTable.getColumnModel().getColumn(0).setCellRenderer(idColumnRenderer);
+				viewTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+				viewTable.getColumnModel().getColumn(1).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
+				viewTable.getColumnModel().getColumn(2).setPreferredWidth(this.inputTable.getColumnModel().getColumn(1).getWidth());
+				viewTable.getColumnModel().getColumn(4).setPreferredWidth(this.inputTable.getColumnModel().getColumn(4).getWidth());
+				viewTable.getColumnModel().getColumn(6).setPreferredWidth(this.inputTable.getColumnModel().getColumn(6).getWidth());
+
+				repaint();
+				break;
+				
+				
+		}
+		
 		//Saving the originally displayed table for further use
 		savedOriginalArray = Operation.saveOriginalTable();
 	}
@@ -704,8 +725,6 @@ public class MainPanel extends JPanel {
 			return this;
 		}
 	}
-
-
 
 	
 

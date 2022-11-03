@@ -263,12 +263,19 @@ public class ALClass {
 				if (e.getSource() == MainPanel.confirmSithUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_SITH_ADD) {
 					try {
 						Operation.insertData(Operation.OperationType.INSERT_INTO_SITH_CALL, ConnectionFactory.getConnection());
-						System.out.println("JMA_CONFIRM/ADD_BUTTON button working");
+						System.out.println("confirmSithUpdateButton working");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 
 					}
 
+				} else if (e.getSource() == MainPanel.confirmSithUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_SITH_EDIT) {
+					try {
+						Operation.editData(Operation.OperationType.EDIT_SITH_CALL, ConnectionFactory.getConnection(), Frame.gui.savedOriginalArray);
+						System.out.println("confirmSithUpdateButton working");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 
@@ -327,6 +334,14 @@ public class ALClass {
 					try {
 						Frame.gui.setPanelToJMAccess();
 						System.out.println("goBackButton -> Frame.gui.setPanelToJMAccess()");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
+				} else if (e.getSource() == MainPanel.goBackButton && MainPanel.getPanelCheck() == PanelCheckEnum.CUSTOM_SEARCH) {
+					try {
+						Frame.gui.setPanelToStart();
+						System.out.println("goBackButton -> Frame.gui.setPanelToStart()");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
