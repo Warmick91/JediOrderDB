@@ -15,7 +15,7 @@ import GUI_JediDB.MainPanel.PanelCheckEnum;
 public class Operation {
 
 	public enum OperationType {
-		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_SITH_FOR_EDIT, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL, EDIT_SITH_CALL, REMOVE_JEDI, INSERT_INTO_SITH_CALL
+		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_SITH_FOR_EDIT, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL, EDIT_SITH_CALL, REMOVE_JEDI, INSERT_INTO_SITH_CALL, REMOVE_SITH
 	}
 
 
@@ -248,7 +248,10 @@ public class Operation {
 
 	public static void editData (OperationType operationType, Connection con, String[][] origArray) throws SQLException {
 
-		//new Array
+		
+		//The original, unedited array (table) gets saved at the end of the setPanelToJMEdit(String s) method
+
+		//new, edited array (table)
 		String[][] editedArray = new String[Frame.gui.savedOriginalArray.length][Frame.gui.savedOriginalArray[0].length];
 		for (int i = 0; i < editedArray.length; i++) {
 			for (int j = 0; j < editedArray[0].length; j++) {
@@ -269,7 +272,7 @@ public class Operation {
 			}
 		}
 
-		//If no changes within the table, quit the method
+		//If no changes were made in reference to the original table, quit the method
 		if (checkInt != 1) {
 			Frame.gui.confirmationLabel.setForeground(Color.red);
 			Frame.gui.confirmationLabel.setText("No changed data");
@@ -332,7 +335,7 @@ public class Operation {
 				break;
 
 			case EDIT_SITH_CALL:
-				
+
 				con.setAutoCommit(false);
 				cs = con.prepareCall(EDIT_SITH_CALL);
 
@@ -363,6 +366,7 @@ public class Operation {
 						sqle.printStackTrace();
 					}
 				}
+				
 				
 				if (numberOfSuccessfulOperations == Frame.gui.viewTable.getRowCount()) {
 					try {
@@ -443,6 +447,37 @@ public class Operation {
 						Frame.gui.viewTable.getModel();
 						Frame.gui.confirmationLabel.setForeground(Color.yellow);
 						Frame.gui.confirmationLabel.setText("Jedi deleted");
+					} catch (BatchUpdateException bue) {
+						ps.clearBatch();
+						con.rollback();
+						bue.printStackTrace();
+					}
+				} else {
+					Frame.gui.confirmationLabel.setForeground(Color.red);
+					Frame.gui.confirmationLabel.setText("Remove failed");
+					throw new SQLException("Problem adding to the remove batch");
+				}
+
+				break;
+
+			case REMOVE_SITH:
+
+				con.setAutoCommit(false);
+				ps = con.prepareStatement(DELETE_BEINGS);
+
+				for (int i = 0; i < selectedRows.length; i++) {
+					ps.setInt(1, Integer.parseInt((String) Frame.gui.viewTable.getModel().getValueAt(selectedRows[i], 12)));
+					ps.addBatch();
+					numberOfSuccessfulOperations++;
+				}
+
+				if (selectedRows.length == numberOfSuccessfulOperations) {
+					try {
+						ps.executeBatch();
+						con.commit();
+						Frame.gui.viewTable.getModel();
+						Frame.gui.confirmationLabel.setForeground(Color.yellow);
+						Frame.gui.confirmationLabel.setText("Sith deleted");
 					} catch (BatchUpdateException bue) {
 						ps.clearBatch();
 						con.rollback();
@@ -659,7 +694,7 @@ public class Operation {
 					}
 				}
 			};
-		} else if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_REMOVE) {
+		} else if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_REMOVE) {
 			queryTable = new JTable(data, sithToEditColumns) {
 				public boolean editCellAt (int row, int column, java.util.EventObject e) {
 					return false;

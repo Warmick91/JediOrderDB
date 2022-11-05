@@ -622,6 +622,7 @@ public class MainPanel extends JPanel {
 				repaint();
 				break;
 				
+				
 			case "sith":
 				
 				setPanelCheck(PanelCheckEnum.JMA_SITH_REMOVE);

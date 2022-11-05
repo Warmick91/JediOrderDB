@@ -182,6 +182,7 @@ public class ALClass {
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
+
 				} else if (e.getSource() == MainPanel.toEditDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_REMOVE) {
 					try {
 						Frame.gui.setPanelToJMEdit("sith");
@@ -199,12 +200,21 @@ public class ALClass {
 
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				if (e.getSource() == MainPanel.toRemoveDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_EDIT);
-				try {
-					Frame.gui.setPanelToJMRemove("jedi");
-					System.out.println("BUTTON -> to JMA_REMOVE");
-				} catch (Exception e1) {
-					e1.printStackTrace();
+				if (e.getSource() == MainPanel.toRemoveDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_EDIT) {
+					try {
+						Frame.gui.setPanelToJMRemove("jedi");
+						System.out.println("toRemoveDataButton -> setPanelToJMRemove(\"jedi\")");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
+				} else if (e.getSource() == MainPanel.toRemoveDataButton && MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_ADD || MainPanel.getPanelCheck() == PanelCheckEnum.JMA_SITH_EDIT) {
+					try {
+						Frame.gui.setPanelToJMRemove("sith");
+						System.out.println("toRemoveDataButton -> setPanelToJMRemove(\"sith\")");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 
@@ -228,7 +238,7 @@ public class ALClass {
 				if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_ADD) {
 					try {
 						Operation.insertData(Operation.OperationType.INSERT_INTO_JEDI_CALL, ConnectionFactory.getConnection());
-						System.out.println("JMA_CONFIRM/ADD_BUTTON button working");
+						System.out.println("confirmJediUpdateButton -> INSERT_INTO_JEDI_CALL");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 
@@ -237,7 +247,7 @@ public class ALClass {
 				} else if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_EDIT) {
 					try {
 						Operation.editData(OperationType.EDIT_JEDI_CALL, ConnectionFactory.getConnection(), Frame.gui.savedOriginalArray);
-						System.out.println("JMA_CONFIRM/EDIT_BUTTON working");
+						System.out.println("confirmJediUpdateButton -> EDIT_JEDI_CALL");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -245,9 +255,8 @@ public class ALClass {
 				} else if (e.getSource() == MainPanel.confirmJediUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_JEDI_REMOVE) {
 					try {
 						Operation.removeData(Operation.OperationType.REMOVE_JEDI, ConnectionFactory.getConnection());
-						System.out.println("JMA_CONFIRM/REMOVE_BUTTON working");
+						System.out.println("confirmJediUpdateButton -> REMOVE_JEDI");
 					} catch (Exception e1) {
-
 						e1.printStackTrace();
 					}
 
@@ -263,7 +272,7 @@ public class ALClass {
 				if (e.getSource() == MainPanel.confirmSithUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_SITH_ADD) {
 					try {
 						Operation.insertData(Operation.OperationType.INSERT_INTO_SITH_CALL, ConnectionFactory.getConnection());
-						System.out.println("confirmSithUpdateButton working");
+						System.out.println("confirmSithUpdateButton -> INSERT_INTO_SITH_CALL");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 
@@ -272,7 +281,15 @@ public class ALClass {
 				} else if (e.getSource() == MainPanel.confirmSithUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_SITH_EDIT) {
 					try {
 						Operation.editData(Operation.OperationType.EDIT_SITH_CALL, ConnectionFactory.getConnection(), Frame.gui.savedOriginalArray);
-						System.out.println("confirmSithUpdateButton working");
+						System.out.println("confirmSithUpdateButton -> EDIT_SITH_CALL");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
+				} else if (e.getSource() == MainPanel.confirmSithUpdateButton && MainPanel.getPanelCheck() == MainPanel.PanelCheckEnum.JMA_SITH_REMOVE) {
+					try {
+						Operation.removeData(Operation.OperationType.REMOVE_SITH, ConnectionFactory.getConnection());
+						System.out.println("confirmSithUpdateButton -> REMOVE_SITH");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
