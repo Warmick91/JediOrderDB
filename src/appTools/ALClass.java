@@ -19,6 +19,7 @@ public class ALClass {
 	public ActionListener showAllBHListener;
 	public ActionListener showAllSmugglersListener;
 	public ActionListener showAllBattlesListener;
+	public ActionListener showAllPlanetsListener;
 
 	public ActionListener toModifiedSearchListener;
 	public ActionListener toBackStartPanelListener;
@@ -128,6 +129,23 @@ public class ALClass {
 			}
 		};
 
+		showAllPlanetsListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				try {
+					MainPanel.textTitle.setText("Planets");
+					//Frame.gui.setBackgroundTo("planets");
+					Frame.gui.setScrollPane("planets", ConnectionFactory.getConnection());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				System.out.println("STAR WARS PLANETS ARE AWESOME");
+				
+			}
+			
+		};
+		
 		toModifiedSearchListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {

@@ -28,6 +28,7 @@ public class Operation {
 	public static final String SELECT_ALL_BOUNTYHUNTERS = "SELECT * FROM BountyHunters ORDER BY HunterID";
 	public static final String SELECT_ALL_SMUGGLERS = "SELECT * FROM Smugglers ORDER BY SmugglerID";
 	public static final String SELECT_ALL_BATTLES = "SELECT * FROM Battles ORDER BY BattleID";
+	public static final String SELECT_ALL_PLANETS = "SELECT * FROM Planets ORDER BY planetID";
 	public static final String SELECT_CUSTOM = "";
 
 	public static final String INSERT_INTO_JEDI_CALL = "CALL insertIntoJediAndBeings (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -50,7 +51,8 @@ public class Operation {
 	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation" };
 	private static final String[] smugglersColumns = { "ID", "Last Name", "Organisation" };
 	private static final String[] battlesColumns = { "ID", "Location", "Event Date", "Opponent A1", "Opponent A2", "Opponent B1", "Opponent B2", "Outcome" };
-
+	private static final String[] planetsColumns = {"ID", "Name", "Region", "Sector", "Suns", "Diameter", "Atmosphere", "Climate", "Native species"};
+	
 	private static JTable queryTable = null;
 
 	//counter
@@ -788,6 +790,8 @@ public class Operation {
 				return false;
 			}
 		};
+		
+		queryTable.getColumnModel().getColumn(0).setPreferredWidth(25);
 	}
 
 	
@@ -795,22 +799,32 @@ public class Operation {
 		ps = con.prepareStatement("SELECT COUNT(*) FROM Planets");
 		rs = ps.executeQuery();
 		if (rs.next()) {
-			data = new String[rs.getInt(1)][8];
+			data = new String[rs.getInt(1)][9];
 		}
 		
-		//ps = con.prepareStatement(SELECT_ALL_PLANETS);
+		ps = con.prepareStatement(SELECT_ALL_PLANETS);
 		rs = ps.executeQuery();
 		i = 0;
 		while (rs.next()) {
-			data[i][0] = rs.getString(1);
+			data[i][0] = Integer.toString(rs.getInt(1));
 			data[i][1] = rs.getString(2);
 			data[i][2] = rs.getString(3);
 			data[i][3] = rs.getString(4);
-			data[i][4] = rs.getString(5);
-			data[i][5] = rs.getString(6);
+			data[i][4] = Integer.toString(rs.getInt(5));
+			data[i][5] = Integer.toString(rs.getInt(6));
 			data[i][6] = rs.getString(7);
 			data[i][7] = rs.getString(8);
+			data[i][8] = rs.getString(9);
 			i++;
 		}
+		
+		queryTable = new JTable(data, planetsColumns) {
+			public boolean editCellAt (int row, int column, java.util.EventObject e) {
+				return false;
+			}		
+		};
+		
+		queryTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+		queryTable.getColumnModel().getColumn(4).setPreferredWidth(25);
 	}
 }

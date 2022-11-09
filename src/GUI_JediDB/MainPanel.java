@@ -178,6 +178,7 @@ public class MainPanel extends JPanel {
 		bhButton.addActionListener(alClass.showAllBHListener);
 		smugglersButton.addActionListener(alClass.showAllSmugglersListener);
 		battlesButton.addActionListener(alClass.showAllBattlesListener);
+		planetsButton.addActionListener(alClass.showAllPlanetsListener);
 		modifiedSearchButton.addActionListener(alClass.toModifiedSearchListener);
 		manipulateButton.addActionListener(alClass.toJMAccessListener);
 		toAddDataButton.addActionListener(alClass.toAddListener);
