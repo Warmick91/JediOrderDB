@@ -7,7 +7,7 @@ VALUES
 (NULL, 'Mundi', 'Ki-Adi', 'Unknown', 'Unknown', '19 BBY', 'Mygeeto', 'Cerean','Jedi'),
 (NULL, 'Bridger', 'Ezra', '19 BBY', 'Lothal', NULL, NULL, 'Human','Jedi'),
 (NULL, 'Tano', 'Ahsoka', '36 BBY', 'Shili', NULL, NULL, 'Togruta', 'Jedi'),
-(NULL, 'Kenobi', 'Obi-Wan', '57 BBY', 'Stewjon', '0 BBY', 'Death Start', 'Human','Jedi'),
+(NULL, 'Kenobi', 'Obi-Wan', '57 BBY', 'Stewjon', '0 BBY', 'Death Star', 'Human','Jedi'),
 (NULL, 'Jinn', 'Qui-Gon', '80 BBY', 'Coruscant', '32 BBY', 'Naboo', 'Human','Jedi'), 
 
 (NULL, 'Maul', 'Unknown', '54 BBY', 'Dathomir', '2 BBY', 'Tatooine', 'Zabrak','Sith'),
@@ -57,5 +57,19 @@ INSERT INTO Battles
 VALUES
 (NULL, 'Naboo', '32 BBY', 7, 6, 8, NULL, 'Death of Qui-Gon and Darth Maul'),
 (NULL, 'Tatooine', '4 ABY', 14, NULL, 11, NULL, 'Apparent death of Boba Fett');
+
+INSERT INTO Planets
+VALUES
+(NULL, 'Tatooine', 'Outer Rim', 'Arkanis', 2, 10465, 'type 1', 'hot and arid', 'Jawa, Tusken Raider'),
+(NULL, 'Alderaan', 'Core Worlds', 'Alderaan', 1, 12500, 'type 1', 'temperate', NULL),
+(NULL, 'Haruun Kal', 'Mid Rim', 'Al\'Har', 1, 10120, 'type 3', 'temperate', 'Human'),
+(NULL, 'Coruscant', 'Core Worlds', 'Corusca', 1, 12240, 'type 1', 'temperate (artificial)', 'Taung, Zhell, Human'),
+(NULL, 'Dagobah', 'Outer Rim', 'Sluis', 1, 8900, 'type 1', 'hot and humid', 'Hepsalum Tash'),
+(NULL, 'Mygeeto', 'Outer Rim', 'Albarrio', 1, 10088, 'type 1', 'frigid', 'Lurmen'),
+(NULL, 'Lothal', 'Outer Rim', 'Lothal', 1, 9670,'type 1', 'temperate', 'Loth-wolf'),
+(NULL, 'Shili', 'Expansion Region', 'Ehosiq', 1, 8567, 'type 1', 'temperate', 'Togruta'),
+(NULL, 'Stewjon', 'Stewjon', 'Stewjon', 1, 10367 ,'type 1', 'temperate', 'unknown'),
+(NULL, 'Naboo', 'Mid Rim', 'Chommell', 1, 12120, 'type 1', 'temperate', 'Gungan' ),
+(NULL, 'Death Star I', 'movable', 'movable', NULL, 120, 'type 1 (artificial)', 'artificial', NULL);
 
 -- proba

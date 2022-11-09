@@ -15,7 +15,7 @@ import GUI_JediDB.MainPanel.PanelCheckEnum;
 public class Operation {
 
 	public enum OperationType {
-		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_SITH_FOR_EDIT, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL, EDIT_SITH_CALL, REMOVE_JEDI, INSERT_INTO_SITH_CALL, REMOVE_SITH
+		SELECT_ALL_BEINGS, SELECT_ALL_JEDI, SELECT_ALL_JEDI_FOR_EDIT, SELECT_ALL_SITH, SELECT_ALL_SITH_FOR_EDIT, SELECT_ALL_BOUNTYHUNTERS, SELECT_ALL_SMUGGLERS, SELECT_ALL_BATTLES, SELECT_ALL_PLANETS, SELECT_CUSTOM, INSERT_INTO_JEDI_CALL, EDIT_JEDI_CALL, EDIT_SITH_CALL, REMOVE_JEDI, INSERT_INTO_SITH_CALL, REMOVE_SITH
 	}
 
 
@@ -100,7 +100,12 @@ public class Operation {
 				selectAllBattles(con);
 
 				break;
-
+			
+			case SELECT_ALL_PLANETS:
+				selectAllPlanets(con);
+				
+				break;
+				
 			default:
 				System.out.println("readQuery() didn't work. Default called.");
 				break;
@@ -785,4 +790,27 @@ public class Operation {
 		};
 	}
 
+	
+	private static void selectAllPlanets (Connection con) throws SQLException {
+		ps = con.prepareStatement("SELECT COUNT(*) FROM Planets");
+		rs = ps.executeQuery();
+		if (rs.next()) {
+			data = new String[rs.getInt(1)][8];
+		}
+		
+		//ps = con.prepareStatement(SELECT_ALL_PLANETS);
+		rs = ps.executeQuery();
+		i = 0;
+		while (rs.next()) {
+			data[i][0] = rs.getString(1);
+			data[i][1] = rs.getString(2);
+			data[i][2] = rs.getString(3);
+			data[i][3] = rs.getString(4);
+			data[i][4] = rs.getString(5);
+			data[i][5] = rs.getString(6);
+			data[i][6] = rs.getString(7);
+			data[i][7] = rs.getString(8);
+			i++;
+		}
+	}
 }

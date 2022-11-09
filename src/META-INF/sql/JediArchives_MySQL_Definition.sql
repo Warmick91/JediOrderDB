@@ -4,68 +4,81 @@ USE jediarchives;
 
 CREATE TABLE Beings (
 	beingID BIGINT NOT NULL AUTO_INCREMENT,
-	LastName VARCHAR(30) UNIQUE NOT NULL,
-	FirstName VARCHAR(250),
-	BirthDate VARCHAR(250),
-	BirthPlace VARCHAR(250),
-	DeathDate VARCHAR(250),
-	DeathPlace VARCHAR(250),
+	lastName VARCHAR(30) UNIQUE NOT NULL,
+	firstName VARCHAR(250),
+	birthDate VARCHAR(250),
+	birthPlace VARCHAR(250),
+	deathDate VARCHAR(250),
+	deathPlace VARCHAR(250),
 	Species VARCHAR(250),
 	beingClass ENUM('Jedi', 'Sith', 'BountyHunter', 'Smuggler'),
 	PRIMARY KEY (beingID)
 );
 
 CREATE TABLE Jedi (
-	JediID BIGINT NOT NULL AUTO_INCREMENT,
-	JediRank ENUM('Grand Master', 'Master', 'Knight', 'Padawan') NOT NULL,
-	JediSpecialization ENUM ('Guardian', 'Consular', 'Sentinel') NOT NULL,
-	SaberType VARCHAR(30) NOT NULL,
-	SaberColor VARCHAR(30) NOT NULL,
+	jediID BIGINT NOT NULL AUTO_INCREMENT,
+	jediRank ENUM('Grand Master', 'Master', 'Knight', 'Padawan') NOT NULL,
+	jediSpecialization ENUM ('Guardian', 'Consular', 'Sentinel') NOT NULL,
+	saberType VARCHAR(30) NOT NULL,
+	saberColor VARCHAR(30) NOT NULL,
     beingRefID BIGINT NOT NULL,
-	PRIMARY KEY (JediID),
+	PRIMARY KEY (jediID),
     FOREIGN KEY (beingRefID) REFERENCES beings (beingID) ON DELETE CASCADE
 );
 
 CREATE TABLE Sith (
-	SithID BIGINT NOT NULL AUTO_INCREMENT,
-	TitleAtDeath ENUM ('Master', 'Apprentice') NOT NULL,
-	SithSpecialization ENUM ('Marauder', 'Assassin', 'Lord') NOT NULL,
-	SaberType VARCHAR(30) NOT NULL,
-	SaberColor VARCHAR(25) NOT NULL,
+	sithID BIGINT NOT NULL AUTO_INCREMENT,
+	titleAtDeath ENUM ('Master', 'Apprentice') NOT NULL,
+	sithSpecialization ENUM ('Marauder', 'Assassin', 'Lord') NOT NULL,
+	saberType VARCHAR(30) NOT NULL,
+	saberColor VARCHAR(25) NOT NULL,
     beingRefID BIGINT NOT NULL,
 	PRIMARY KEY (SithID),
 	FOREIGN KEY (beingRefID) REFERENCES beings (beingID) ON DELETE CASCADE
 );
 
 CREATE TABLE BountyHunters (
-	HunterID BIGINT NOT NULL AUTO_INCREMENT,
-	Organisation VARCHAR(250) NOT NULL,
+	hunterID BIGINT NOT NULL AUTO_INCREMENT,
+	organisation VARCHAR(250) NOT NULL,
     beingRefID BIGINT NOT NULL,
-	PRIMARY KEY (HunterID),
+	PRIMARY KEY (hunterID),
 	FOREIGN KEY (beingRefID) REFERENCES beings (beingID) ON DELETE CASCADE
 );
 
 CREATE TABLE Smugglers (
-	SmugglerID BIGINT NOT NULL AUTO_INCREMENT,
-	Organisation VARCHAR(250),
+	smugglerID BIGINT NOT NULL AUTO_INCREMENT,
+	organisation VARCHAR(250),
 	beingRefID BIGINT NOT NULL,
-	PRIMARY KEY (SmugglerID),
+	PRIMARY KEY (smugglerID),
 	FOREIGN KEY (beingRefID) REFERENCES beings (beingID) ON DELETE CASCADE
 );
 
 CREATE TABLE Battles (
-	BattleID BIGINT NOT NULL AUTO_INCREMENT,
-	Location VARCHAR(250) NOT NULL,
-	BattleDate VARCHAR(30) NOT NULL,
-	FighterA1 BIGINT,
-	FighterA2 BIGINT,
-	FighterB1 BIGINT,
-	FighterB2 BIGINT,
-	Outcome VARCHAR(250) NOT NULL,
-	PRIMARY KEY (BattleID),
-	FOREIGN KEY (FighterA1) REFERENCES beings (beingID) ON DELETE SET NULL,
-	FOREIGN KEY (FighterA2) REFERENCES beings (beingID) ON DELETE SET NULL,
-	FOREIGN KEY (FighterB1) REFERENCES beings (beingID) ON DELETE SET NULL,
-	FOREIGN KEY (FighterB2) REFERENCES beings (beingID) ON DELETE SET NULL
+	battleID BIGINT NOT NULL AUTO_INCREMENT,
+	location VARCHAR(250) NOT NULL,
+	battleDate VARCHAR(30) NOT NULL,
+	fighterA1 BIGINT,
+	fighterA2 BIGINT,
+	fighterB1 BIGINT,
+	fighterB2 BIGINT,
+	outcome VARCHAR(250) NOT NULL,
+	PRIMARY KEY (battleID),
+	FOREIGN KEY (fighterA1) REFERENCES beings (beingID) ON DELETE SET NULL,
+	FOREIGN KEY (fighterA2) REFERENCES beings (beingID) ON DELETE SET NULL,
+	FOREIGN KEY (fighterB1) REFERENCES beings (beingID) ON DELETE SET NULL,
+	FOREIGN KEY (fighterB2) REFERENCES beings (beingID) ON DELETE SET NULL
+);
+
+CREATE TABLE Planets (
+	planetID BIGINT NOT NULL AUTO_INCREMENT,
+    planetName VARCHAR(32) NOT NULL,
+    region VARCHAR(64) NOT NULL,  
+    sector VARCHAR(64) NOT NULL,
+    suns INT,
+    diameter BIGINT NOT NULL,
+    atmosphere VARCHAR(64) NOT NULL,
+    climate VARCHAR(64) NOT NULL,
+    nativeSpecies VARCHAR(128),
+    PRIMARY KEY (planetID)
 );
 

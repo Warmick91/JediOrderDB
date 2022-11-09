@@ -231,6 +231,11 @@ public class MainPanel extends JPanel {
 			case "battles":
 				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_BATTLES, con);
 				scrollPane.getViewport().add(viewTable);
+				break;
+			case "planets":
+				viewTable = Operation.readQuery(Operation.OperationType.SELECT_ALL_PLANETS, con);
+				scrollPane.getViewport().add(viewTable);
+				break;
 		}
 	}
 
@@ -646,8 +651,8 @@ public class MainPanel extends JPanel {
 		}
 
 	}
-
-
+	
+	
 	public void clearInputTable () throws Exception {
 
 		if (MainPanel.getPanelCheck() == PanelCheckEnum.JMA_JEDI_ADD) {

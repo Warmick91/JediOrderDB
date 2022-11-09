@@ -64,7 +64,7 @@ SELECT s.sithid, b.lastname, s.titleatdeath, s.sithspecialization, s.sabertype, 
 select * FROM beings;
 select * from jedi;     
 select * from sith;
-
+select count(*) from planets;
 
 INSERT INTO Jedi SELECT NULL, 'Master', 'Guardian', 'aaa', 'aaa', MAX(beings.beingID) FROM beings;
 INSERT INTO Sith SELECT NULL, 'Master', 'Marauder', 'aaa', 'aaa', MAX(beings.beingID) FROM beings;
