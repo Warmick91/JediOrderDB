@@ -74,7 +74,7 @@ CREATE TABLE Planets (
     planetName VARCHAR(32) NOT NULL,
     region VARCHAR(64) NOT NULL,  
     sector VARCHAR(64) NOT NULL,
-    suns INT,
+    moons INT,
     diameter BIGINT NOT NULL,
     atmosphere VARCHAR(64) NOT NULL,
     climate VARCHAR(64) NOT NULL,

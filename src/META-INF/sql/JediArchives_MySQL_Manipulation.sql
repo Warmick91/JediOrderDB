@@ -60,16 +60,16 @@ VALUES
 
 INSERT INTO Planets
 VALUES
-(NULL, 'Tatooine', 'Outer Rim', 'Arkanis', 2, 10465, 'type 1', 'hot and arid', 'Jawa, Tusken Raider'),
-(NULL, 'Alderaan', 'Core Worlds', 'Alderaan', 1, 12500, 'type 1', 'temperate', NULL),
-(NULL, 'Haruun Kal', 'Mid Rim', 'Al\'Har', 1, 10120, 'type 3', 'temperate', 'Human'),
-(NULL, 'Coruscant', 'Core Worlds', 'Corusca', 1, 12240, 'type 1', 'temperate (artificial)', 'Taung, Zhell, Human'),
+(NULL, 'Tatooine', 'Outer Rim', 'Arkanis', 3, 10465, 'type 1', 'hot and arid', 'Jawa, Tusken Raider'),
+(NULL, 'Alderaan', 'Core Worlds', 'Alderaan', 0, 12500, 'type 1', 'temperate', NULL),
+(NULL, 'Haruun Kal', 'Mid Rim', 'Al\'Har', 15, 10120, 'type 3', 'temperate', 'Human'),
+(NULL, 'Coruscant', 'Core Worlds', 'Corusca', 4, 12240, 'type 1', 'temperate (artificial)', 'Taung, Zhell, Human'),
 (NULL, 'Dagobah', 'Outer Rim', 'Sluis', 1, 8900, 'type 1', 'hot and humid', 'Hepsalum Tash'),
-(NULL, 'Mygeeto', 'Outer Rim', 'Albarrio', 1, 10088, 'type 1', 'frigid', 'Lurmen'),
-(NULL, 'Lothal', 'Outer Rim', 'Lothal', 1, 9670,'type 1', 'temperate', 'Loth-wolf'),
-(NULL, 'Shili', 'Expansion Region', 'Ehosiq', 1, 8567, 'type 1', 'temperate', 'Togruta'),
+(NULL, 'Mygeeto', 'Outer Rim', 'Albarrio', 2, 10088, 'type 1', 'frigid', 'Lurmen'),
+(NULL, 'Lothal', 'Outer Rim', 'Lothal', 2, 9670,'type 1', 'temperate', 'Loth-wolf'),
+(NULL, 'Shili', 'Expansion Region', 'Ehosiq', 6, 8567, 'type 1', 'temperate', 'Togruta'),
 (NULL, 'Stewjon', 'Stewjon', 'Stewjon', 1, 10367 ,'type 1', 'temperate', 'unknown'),
-(NULL, 'Naboo', 'Mid Rim', 'Chommell', 1, 12120, 'type 1', 'temperate', 'Gungan' ),
+(NULL, 'Naboo', 'Mid Rim', 'Chommell', 3, 12120, 'type 1', 'temperate', 'Gungan' ),
 (NULL, 'Death Star I', 'movable', 'movable', NULL, 120, 'type 1 (artificial)', 'artificial', NULL);
 
 -- proba

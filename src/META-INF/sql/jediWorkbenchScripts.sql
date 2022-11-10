@@ -64,6 +64,7 @@ SELECT s.sithid, b.lastname, s.titleatdeath, s.sithspecialization, s.sabertype, 
 select * FROM beings;
 select * from jedi;     
 select * from sith;
+select * from planets;
 select count(*) from planets;
 
 INSERT INTO Jedi SELECT NULL, 'Master', 'Guardian', 'aaa', 'aaa', MAX(beings.beingID) FROM beings;
@@ -71,9 +72,12 @@ INSERT INTO Sith SELECT NULL, 'Master', 'Marauder', 'aaa', 'aaa', MAX(beings.bei
 
 CALL insertIntoSithAndBeings ('dupa', 'dupa', '1', '2', '3', '4', 'dziwak', 'Master', 'Marauder', 'double', 'red');
 
+CALL editSithAndBeings(17, 'ziomek', 'ziomecki', '13a', '15a', 'x', 'x', 'blah', 'Apprentice', 'Assassin', 'single', 'red');
+
 describe jedi;
 describe beings;
 describe sith;
+describe planets;
 
 SELECT beingRefID FROM jedi WHERE beingReFID = 2;
 

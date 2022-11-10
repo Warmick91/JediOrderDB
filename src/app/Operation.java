@@ -51,7 +51,7 @@ public class Operation {
 	private static final String[] bountyHuntersColumns = { "ID", "Last Name", "Organisation" };
 	private static final String[] smugglersColumns = { "ID", "Last Name", "Organisation" };
 	private static final String[] battlesColumns = { "ID", "Location", "Event Date", "Opponent A1", "Opponent A2", "Opponent B1", "Opponent B2", "Outcome" };
-	private static final String[] planetsColumns = {"ID", "Name", "Region", "Sector", "Suns", "Diameter", "Atmosphere", "Climate", "Native species"};
+	private static final String[] planetsColumns = {"ID", "Name", "Region", "Sector", "Moons", "Diameter", "Atmosphere", "Climate", "Native species"};
 	
 	private static JTable queryTable = null;
 
@@ -361,7 +361,7 @@ public class Operation {
 						cs.setString(10, (String) Frame.gui.viewTable.getModel().getValueAt(i, 9)); //Specialization
 						cs.setString(11, (String) Frame.gui.viewTable.getModel().getValueAt(i, 10));//Saber Type
 						cs.setString(12, (String) Frame.gui.viewTable.getModel().getValueAt(i, 11));//Saber Color
-
+						
 						cs.addBatch();
 
 						numberOfSuccessfulOperations++;
