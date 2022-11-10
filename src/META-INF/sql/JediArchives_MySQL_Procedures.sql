@@ -116,12 +116,12 @@ BEGIN
 			beingID = ID;
             
 		UPDATE Sith
-        SET   TitleAtDeath = title
-            , SithSpecialization = sspec
-            , SaberType = saberT
-            , SaberColor = saberC
+        SET   titleAtDeath = title
+            , sithSpecialization = sSpec
+            , saberType = saberT
+            , saberColor = saberC
 		WHERE
-			SithID = ID;
+			sithID = ID;
             
 END //
 DELIMITER ;
