@@ -59,7 +59,7 @@ BEGIN
             , SaberType = saberT
             , SaberColor = saberC
 		WHERE
-			JediID = ID;
+			beingRefID = ID;
 
 END //
 DELIMITER ;
@@ -121,7 +121,7 @@ BEGIN
             , saberType = saberT
             , saberColor = saberC
 		WHERE
-			sithID = ID;
+			beingRefID = ID;
             
 END //
 DELIMITER ;

@@ -83,5 +83,14 @@ SELECT beingRefID FROM jedi WHERE beingReFID = 2;
 
 delete from beings Where beingID BETWEEN 23 AND 40;
 
+--
+UPDATE Sith
+        SET   titleAtDeath = 'Apprentice'
+            , sithSpecialization = 'Assassin'
+            , saberType = 'double'
+            , saberColor = 'green'
+		WHERE
+			sithID = 17;
+--
 
 SELECT s.SithID, b.LastName, b.firstName, b.species, b.birthdate, b.birthplace, b.deathdate, b.deathplace, s.titleAtDeath, s.sithspecialization, s.sabertype, s.sabercolor, s.beingRefId FROM beings AS b, sith AS s WHERE b.beingID = s.beingRefID ORDER BY beingID;
