@@ -2,7 +2,10 @@ package GUI_JediDB;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class Frame extends JFrame {
 
@@ -17,8 +20,12 @@ public class Frame extends JFrame {
 	ImageIcon lightsabersIcon = new ImageIcon("images/sabers.jpg");
 	public static MainPanel gui;
 
-
+	File cantinaBandFile = new File("Music/CantinaTheme.wav").getAbsoluteFile();
+	AudioInputStream ass = AudioSystem.getAudioInputStream(cantinaBandFile);
+	Clip clip = AudioSystem.getClip();
+	
 	public Frame () throws Exception {
+		
 		super("Jedi Order's Data Archives");
 		this.setIconImage(lightsabersIcon.getImage());
 		gui = new MainPanel();
@@ -31,5 +38,8 @@ public class Frame extends JFrame {
 		setJMenuBar(mBar);
 
 		this.setVisible(true);
+		
+		clip.open(ass);
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 }

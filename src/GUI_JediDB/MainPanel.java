@@ -95,6 +95,7 @@ public class MainPanel extends JPanel {
 	public static JLabel buttonsLabel = new JLabel();
 	public static JLabel advancedButtons = new JLabel();
 	public static JLabel editTypeButtonsLabel = new JLabel();
+	public static JLabel musicControlButtonsLabel = new JLabel();
 
 	//Update buttons
 	//Jedi
@@ -129,6 +130,11 @@ public class MainPanel extends JPanel {
 	public static JButton toEditDataButton = new JButton("edit");
 	public static JButton toRemoveDataButton = new JButton("remove");
 
+	//Music control buttons
+	public static JButton playMusicButton = new JButton("Play music");
+	public static JButton pauseMusicButton = new JButton("Pause music");
+	public static JButton restartMusicButton = new JButton("Restart music");
+	public static JButton stopMusicButton = new JButton("Stop music");
 
 	public MainPanel () throws Exception {
 
@@ -158,6 +164,12 @@ public class MainPanel extends JPanel {
 		editTypeButtonsLabel.add(MainPanel.toAddDataButton);
 		editTypeButtonsLabel.add(MainPanel.toEditDataButton);
 		editTypeButtonsLabel.add(MainPanel.toRemoveDataButton);
+		
+		musicControlButtonsLabel.setLayout(new GridLayout(1, 4, 5, 0));
+		musicControlButtonsLabel.add(MainPanel.playMusicButton);
+		musicControlButtonsLabel.add(MainPanel.pauseMusicButton);
+		musicControlButtonsLabel.add(MainPanel.restartMusicButton);
+		musicControlButtonsLabel.add(MainPanel.stopMusicButton);
 		
 		idColumnRenderer.setHorizontalAlignment(JLabel.CENTER);
 		idColumnRenderer.setBackground(Color.decode("#eeeeee"));
@@ -269,7 +281,12 @@ public class MainPanel extends JPanel {
 		buttonsLabel.add(battlesButton);
 		buttonsLabel.add(planetsButton);
 		this.add(buttonsLabel);
-
+		
+		//TODO (setting up locations)
+		musicControlButtonsLabel.setSize(150, buttonsLabel.getHeight()/3 - 10);
+		musicControlButtonsLabel.setLocation(advancedButtons.getX(), buttonsLabel.getY() + buttonsLabel.getHeight());
+		this.add(musicControlButtonsLabel);
+		
 		this.setBackgroundTo("start");
 
 		try {
