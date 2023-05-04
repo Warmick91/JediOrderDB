@@ -77,7 +77,6 @@ public class MainPanel extends JPanel {
 	//SW font
 	Font swFont;
 
-	ALClass alClass = new ALClass();
 	//Main buttons
 	public static JButton beingsButton = new JButton("Root");
 	public static JButton jediButton = new JButton("Jedi");
@@ -182,29 +181,29 @@ public class MainPanel extends JPanel {
 
 	public void addAllButtonListeners () {
 
-		beingsButton.addActionListener(alClass.showAllBeingsListener);
-		jediButton.addActionListener(alClass.showAllJediListener);
-		sithButton.addActionListener(alClass.showAllSithListener);
-		bhButton.addActionListener(alClass.showAllBHListener);
-		smugglersButton.addActionListener(alClass.showAllSmugglersListener);
-		battlesButton.addActionListener(alClass.showAllBattlesListener);
-		modifiedSearchButton.addActionListener(alClass.toModifiedSearchListener);
-		manipulateButton.addActionListener(alClass.toJMAccessListener);
-		goBackButtonToMain.addActionListener(alClass.toBackStartPanelListener);
-		goBackButtonToUpdateCategory.addActionListener(alClass.toJMAccessListener);
-		toAddDataButton.addActionListener(alClass.toAddJediListener);
-		toEditDataButton.addActionListener(alClass.toEditDataListener);
-		toRemoveDataButton.addActionListener(alClass.toRemoveDataListener);
-		updateJediButton.addActionListener(alClass.toAddJediListener);
-		confirmJediUpdateButton.addActionListener(alClass.confirmJediButtonListener);
-		emptyFieldsButton.addActionListener(alClass.cancelOrEmptyListener);		
-		cancelChangesButton.addActionListener(alClass.cancelOrEmptyListener);
-		unselectAllFieldsButton.addActionListener(alClass.unselectAllFieldsListener);		
+		beingsButton.addActionListener(ALClass.showAllBeingsListener);
+		jediButton.addActionListener(ALClass.showAllJediListener);
+		sithButton.addActionListener(ALClass.showAllSithListener);
+		bhButton.addActionListener(ALClass.showAllBHListener);
+		smugglersButton.addActionListener(ALClass.showAllSmugglersListener);
+		battlesButton.addActionListener(ALClass.showAllBattlesListener);
+		modifiedSearchButton.addActionListener(ALClass.toModifiedSearchListener);
+		manipulateButton.addActionListener(ALClass.toJMAccessListener);
+		goBackButtonToMain.addActionListener(ALClass.toBackStartPanelListener);
+		goBackButtonToUpdateCategory.addActionListener(ALClass.toJMAccessListener);
+		toAddDataButton.addActionListener(ALClass.toAddJediListener);
+		toEditDataButton.addActionListener(ALClass.toEditDataListener);
+		toRemoveDataButton.addActionListener(ALClass.toRemoveDataListener);
+		updateJediButton.addActionListener(ALClass.toAddJediListener);
+		confirmJediUpdateButton.addActionListener(ALClass.confirmJediButtonListener);
+		emptyFieldsButton.addActionListener(ALClass.cancelOrEmptyListener);		
+		cancelChangesButton.addActionListener(ALClass.cancelOrEmptyListener);
+		unselectAllFieldsButton.addActionListener(ALClass.unselectAllFieldsListener);		
 		
-		playMusicButton.addActionListener(alClass.playMusicListener);
-		pauseMusicButton.addActionListener(alClass.pauseMusicListener);
-		restartMusicButton.addActionListener(alClass.restartMusicListener);
-		stopMusicButton.addActionListener(alClass.stopMusicListener);
+		playMusicButton.addActionListener(ALClass.playMusicListener);
+		pauseMusicButton.addActionListener(ALClass.pauseMusicListener);
+		restartMusicButton.addActionListener(ALClass.restartMusicListener);
+		stopMusicButton.addActionListener(ALClass.stopMusicListener);
 	}
 
 

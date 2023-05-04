@@ -15,32 +15,30 @@ import GUI_JediDB.MainPanel.PanelCheckEnum;
 
 public class ALClass {
 
-	public ActionListener showAllBeingsListener;
-	public ActionListener showAllJediListener;
-	public ActionListener showAllSithListener;
-	public ActionListener showAllBHListener;
-	public ActionListener showAllSmugglersListener;
-	public ActionListener showAllBattlesListener;
+	public static ActionListener showAllBeingsListener;
+	public static ActionListener showAllJediListener;
+	public static ActionListener showAllSithListener;
+	public static ActionListener showAllBHListener;
+	public static ActionListener showAllSmugglersListener;
+	public static ActionListener showAllBattlesListener;
 
-	public ActionListener toModifiedSearchListener;
-	public ActionListener toBackStartPanelListener;
-	public ActionListener toJMAccessListener;
-	public ActionListener toAddJediListener;
-	public ActionListener toEditDataListener;
-	public ActionListener toRemoveDataListener;
-	public ActionListener addDataListener;
-	public ActionListener confirmJediButtonListener;
-	public ActionListener cancelOrEmptyListener;
-	public ActionListener unselectAllFieldsListener;
+	public static ActionListener toModifiedSearchListener;
+	public static ActionListener toBackStartPanelListener;
+	public static ActionListener toJMAccessListener;
+	public static ActionListener toAddJediListener;
+	public static ActionListener toEditDataListener;
+	public static ActionListener toRemoveDataListener;
+	public static ActionListener addDataListener;
+	public static ActionListener confirmJediButtonListener;
+	public static ActionListener cancelOrEmptyListener;
+	public static ActionListener unselectAllFieldsListener;
 
-	public ActionListener playMusicListener;
-	public ActionListener pauseMusicListener;
-	public ActionListener restartMusicListener;
-	public ActionListener stopMusicListener;
-
-
-	public ALClass () {
-
+	public static ActionListener playMusicListener;
+	public static ActionListener pauseMusicListener;
+	public static ActionListener restartMusicListener;
+	public static ActionListener stopMusicListener;
+	
+	static {
 		showAllBeingsListener = new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
