@@ -289,7 +289,6 @@ public class MainPanel extends JPanel {
 		//TODO (setting up locations)
 		musicControlButtonsLabel.setSize(advancedButtons.getWidth(), buttonsLabel.getHeight()/3 - 4);
 		musicControlButtonsLabel.setLocation(advancedButtons.getX(), buttonsLabel.getY() + buttonsLabel.getHeight()/3 * 2 + 3);
-		System.out.println(buttonsLabel.getInsets().bottom);
 		this.add(musicControlButtonsLabel);
 		
 		this.setBackgroundTo("start");
