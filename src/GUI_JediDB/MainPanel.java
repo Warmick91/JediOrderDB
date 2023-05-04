@@ -131,10 +131,10 @@ public class MainPanel extends JPanel {
 	public static JButton toRemoveDataButton = new JButton("remove");
 
 	//Music control buttons
-	public static JButton playMusicButton = new JButton("Play music");
-	public static JButton pauseMusicButton = new JButton("Pause music");
-	public static JButton restartMusicButton = new JButton("Restart music");
-	public static JButton stopMusicButton = new JButton("Stop music");
+	public static JButton playMusicButton = new JButton(">");
+	public static JButton pauseMusicButton = new JButton("||");
+	public static JButton restartMusicButton = new JButton("<< >");
+	public static JButton stopMusicButton = new JButton("X");
 
 	public MainPanel () throws Exception {
 
@@ -200,6 +200,11 @@ public class MainPanel extends JPanel {
 		emptyFieldsButton.addActionListener(alClass.cancelOrEmptyListener);		
 		cancelChangesButton.addActionListener(alClass.cancelOrEmptyListener);
 		unselectAllFieldsButton.addActionListener(alClass.unselectAllFieldsListener);		
+		
+		playMusicButton.addActionListener(alClass.playMusicListener);
+		pauseMusicButton.addActionListener(alClass.pauseMusicListener);
+		restartMusicButton.addActionListener(alClass.restartMusicListener);
+		stopMusicButton.addActionListener(alClass.stopMusicListener);
 	}
 
 
@@ -283,8 +288,9 @@ public class MainPanel extends JPanel {
 		this.add(buttonsLabel);
 		
 		//TODO (setting up locations)
-		musicControlButtonsLabel.setSize(150, buttonsLabel.getHeight()/3 - 10);
-		musicControlButtonsLabel.setLocation(advancedButtons.getX(), buttonsLabel.getY() + buttonsLabel.getHeight());
+		musicControlButtonsLabel.setSize(advancedButtons.getWidth(), buttonsLabel.getHeight()/3 - 4);
+		musicControlButtonsLabel.setLocation(advancedButtons.getX(), buttonsLabel.getY() + buttonsLabel.getHeight()/3 * 2 + 3);
+		System.out.println(buttonsLabel.getInsets().bottom);
 		this.add(musicControlButtonsLabel);
 		
 		this.setBackgroundTo("start");
@@ -640,7 +646,6 @@ public class MainPanel extends JPanel {
 			return this;
 		}
 	}
-
 
 
 	class MyComboBoxEditor extends DefaultCellEditor {

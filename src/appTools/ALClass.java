@@ -2,7 +2,9 @@ package appTools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
+import java.io.IOException;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import app.ConnectionFactory;
 import app.Operation;
 import app.Operation.OperationType;
@@ -30,6 +32,11 @@ public class ALClass {
 	public ActionListener confirmJediButtonListener;
 	public ActionListener cancelOrEmptyListener;
 	public ActionListener unselectAllFieldsListener;
+
+	public ActionListener playMusicListener;
+	public ActionListener pauseMusicListener;
+	public ActionListener restartMusicListener;
+	public ActionListener stopMusicListener;
 
 
 	public ALClass () {
@@ -279,5 +286,63 @@ public class ALClass {
 
 		};
 
+		playMusicListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				if (e.getSource() == MainPanel.playMusicButton) {
+
+					if (!Frame.clip.isOpen()) {
+						try {
+							Frame.resetAudioStream();
+							return;
+						} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+					
+					Frame.clip.start();
+
+					System.out.println(Frame.clip.isRunning());
+					System.out.println("Music played");
+
+				}
+			}
+		};
+
+		pauseMusicListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				if (e.getSource() == MainPanel.pauseMusicButton) {
+					Frame.clip.stop();
+					System.out.println("Music paused");
+				}
+			}
+		};
+		
+		restartMusicListener = new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				if (e.getSource() == MainPanel.restartMusicButton) {
+					Frame.clip.stop();
+					Frame.clip.setMicrosecondPosition(0);
+					Frame.clip.start();
+					System.out.println("Music restarted");
+				}
+			}
+		};
+		
+		stopMusicListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				if (e.getSource() == MainPanel.stopMusicButton) {
+					Frame.clip.stop();
+					Frame.clip.close();
+					System.out.println("Music stopped");
+				}
+			}
+		};
 	}
 }
