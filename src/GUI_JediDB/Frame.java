@@ -23,7 +23,7 @@ public class Frame extends JFrame {
 	ImageIcon lightsabersIcon = new ImageIcon("images/sabers.jpg");
 	public static MainPanel gui;
 
-	private static File cantinaBandFile = new File("Music/CantinaTheme.wav").getAbsoluteFile();
+	private static File yodasTheme = new File("Music/YodasTheme.wav").getAbsoluteFile();
 	public static AudioInputStream ass;
 	public static Clip clip;
 	
@@ -46,7 +46,7 @@ public class Frame extends JFrame {
 	}
 	
 	public static void resetAudioStream() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		ass = AudioSystem.getAudioInputStream(cantinaBandFile);
+		ass = AudioSystem.getAudioInputStream(yodasTheme);
 		clip = AudioSystem.getClip();
 		clip.open(ass);
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
